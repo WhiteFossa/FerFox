@@ -16,16 +16,17 @@ int main(int argc, char* argv[])
 	HAL_Init();
 
 	/* Our hardware */
+	L2HAL_Init();
 	HAL_IntiHardware();
 
 	/* Main loop */
 	while(true)
 	{
 		HAL_SwitchLed(true);
-		//HAL_Delay(1000);
+		HAL_Delay(1000);
 
 		HAL_SwitchLed(false);
-		//HAL_Delay(1000);
+		HAL_Delay(1000);
 	}
 }
 

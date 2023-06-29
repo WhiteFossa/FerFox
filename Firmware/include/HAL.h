@@ -10,6 +10,8 @@
 
 #include <stm32f4xx_hal.h>
 #include <stdbool.h>
+#include <l2hal.h>
+#include <Interrupts.h>
 
 /***************
  * PORT C pins *

@@ -9,6 +9,7 @@
 #define INCLUDE_MAIN_H_
 
 #include <stdbool.h>
+#include <GlobalVariables.h>
 
 
 
