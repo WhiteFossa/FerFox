@@ -38,5 +38,65 @@
 
 void L2HAL_InitCustomHardware(void)
 {
-
+	L2HAL_SetupSPI();
 }
+
+
+/* Begin SPI-related stuff */
+
+void L2HAL_SetupSPI(void)
+{
+	SPI1Handle.Instance = SPI1;
+	SPI1Handle.Init.Mode = SPI_MODE_MASTER;
+	SPI1Handle.Init.Direction = SPI_DIRECTION_1LINE;
+	SPI1Handle.Init.DataSize =  SPI_DATASIZE_8BIT;
+	SPI1Handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+	SPI1Handle.Init.CLKPhase = SPI_PHASE_1EDGE;
+	SPI1Handle.Init.CLKPolarity = SPI_POLARITY_LOW;
+	SPI1Handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
+	SPI1Handle.Init.TIMode = SPI_TIMODE_DISABLE ;
+	SPI1Handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+	SPI1Handle.Init.NSS = SPI_NSS_SOFT;
+
+	if(HAL_SPI_Init(&SPI1Handle) != HAL_OK)
+	{
+		/* Initialization Error */
+		L2HAL_Error(Generic);
+	}
+}
+
+void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
+{
+	if (hspi->Instance == SPI1)
+	{
+		/**
+		 * Setting up port and SPI for display
+		 * SPI1 at PA5 (SCK) and PA7 (MOSI)
+		 */
+		__HAL_RCC_GPIOA_CLK_ENABLE();
+		__HAL_RCC_SPI1_CLK_ENABLE();
+
+		GPIO_InitTypeDef GPIO_InitStruct;
+		GPIO_InitStruct.Pin = GPIO_PIN_5;
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+
+		GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_7;
+		GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	}
+}
+
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
+{
+	if (hspi->Instance == SPI1)
+	{
+		HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5 | GPIO_PIN_7);
+	}
+}
+
+/* End of SPI-related stuff */

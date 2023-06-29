@@ -42,9 +42,21 @@
 #ifndef L2HAL_INCLUDE_L2HAL_CUSTOM_H_
 #define L2HAL_INCLUDE_L2HAL_CUSTOM_H_
 
+#include <stm32f4xx_hal.h>
+#include <l2hal_errors.h>
+
+extern SPI_HandleTypeDef SPI1Handle;
+
 /**
  * Put custom hardware initialization stuff here,
  */
 void L2HAL_InitCustomHardware(void);
+
+/**
+ * SPI-related stuff
+ */
+volatile void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi);
+volatile void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi);
+void L2HAL_SetupSPI(void);
 
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */
