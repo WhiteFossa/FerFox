@@ -85,17 +85,12 @@ int main(int argc, char* argv[])
 
 	GC9A01_write_command(0x36);
 
-//	#if ORIENTATION == 0
+	/* Orientation */
 	GC9A01_write_byte(0x18);
-/*
-#elif ORIENTATION == 1
-	GC9A01_write_byte(0x28);
-#elif ORIENTATION == 2
-	GC9A01_write_byte(0x48);
-#else
-	GC9A01_write_byte(0x88);
-#endif
-*/
+	//GC9A01_write_byte(0x28);
+	//GC9A01_write_byte(0x48);
+	//GC9A01_write_byte(0x88);
+	/* End of orientation */
 
 	GC9A01_write_command(0x3A);
 	GC9A01_write_byte(0x06);
@@ -279,58 +274,94 @@ int main(int argc, char* argv[])
 	uint8_t data[3];
 
 	data[0] = 0x00;
-	data[1] = 0x80;
-	data[2] = 0xFF;
+	data[1] = 0x00;
+	data[2] = 0x00;
 
 	GC9A01_write_command(0x2C);
 	GC9A01_write_data(data, 3);
 
+	uint32_t counter = 0;
+
 	/* Main loop */
+	uint8_t fillMode = 1;
+	uint8_t fillR = 0xFF;
+	uint8_t fillG = 0x00;
+	uint8_t fillB = 0x00;
+
+
+	uint8_t line[720]; /* 240 pixels * 3 bytes of color */
+	memset(line, 0x00, 720);
+
 	while(true)
 	{
-		data[0] ++;
-		data[1] ++;
-		data[2] ++;
-
 		GC9A01_write_command(0x3C);
-		GC9A01_write_data(data, 3);
+		//GC9A01_write_data(data, 3);
+		GC9A01_write_data(line, 720);
+
+		counter ++;
+
+		if (counter > 10)
+		{
+			counter = 0;
+
+			if (fillMode == 0)
+			{
+				fillR = 0xFF;
+				fillG = 0x00;
+				fillB = 0x00;
+
+				fillMode = 1;
+			}
+			else if (fillMode == 1)
+			{
+				fillR = 0x00;
+				fillG = 0xFF;
+				fillB = 0x00;
+
+				fillMode = 2;
+			}
+			else if (fillMode == 2)
+			{
+				fillR = 0x00;
+				fillG = 0x00;
+				fillB = 0xFF;
+
+				fillMode = 0;
+			}
+
+			for (int i = 0; i < 240; i++)
+			{
+				int base = i * 3;
+				line[base + 0] = fillR;
+				line[base + 1] = fillG;
+				line[base + 2] = fillB;
+			}
+		}
 	}
 }
 
 void GC9A01_write_command(uint8_t cmd)
 {
-	//HAL_Delay(1);
-
 	HAL_GPIO_WritePin(HAL_DISPLAY_DC_PORT, HAL_DISPLAY_DC_PIN, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_RESET);
-
-	//HAL_Delay(1);
 
     if (HAL_SPI_Transmit(&SPI1Handle, &cmd, 1, 1000) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
 
-    //HAL_Delay(1);
-
     HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_SET);
 }
 
 void GC9A01_write_data(uint8_t *data, size_t len)
 {
-	//HAL_Delay(1);
-
 	HAL_GPIO_WritePin(HAL_DISPLAY_DC_PORT, HAL_DISPLAY_DC_PIN, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_RESET);
-
-	//HAL_Delay(1);
 
     if (HAL_SPI_Transmit(&SPI1Handle, data, len, 1000) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
-
-    //HAL_Delay(1);
 
     HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_SET);
 }
