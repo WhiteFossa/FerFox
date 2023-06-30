@@ -93,6 +93,7 @@
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/encoders/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1306/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1327/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/gc9a01/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/buttons/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/fmgl/charsets/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/fmgl/fonts/include&quot;"/>
@@ -233,11 +234,6 @@
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.printsize.452226193" name="GNU Arm Cross Print Size" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.printsize.2013240183"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1384275345.551212853" name="stm32f4xx_hal_spi.c" rcbsApplicability="disable" resourcePath="system/src/stm32f4-hal/stm32f4xx_hal_spi.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.271029167.2029826171">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.271029167.2029826171" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.271029167">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.215038214" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
-						</tool>
-					</fileInfo>
 					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1384275345.system/src/cmsis/system_stm32f4xx.c" name="system_stm32f4xx.c" rcbsApplicability="disable" resourcePath="system/src/cmsis/system_stm32f4xx.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.502506138.219921914">
 						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.502506138.219921914" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.502506138">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.otherwarnings.1106902555" name="Other warning flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.otherwarnings" value="  -Wno-padded" valueType="string"/>
@@ -348,14 +344,24 @@
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1498218580" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.770279378" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../system/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/encoders/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/internal/crc/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/buttons/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/mcu_dependent&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../system/include/cmsis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../system/include/stm32f4-hal&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/internal/crc/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/bluetooth/hc06/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/dds/ad9835/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/dac/ad5245/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/eeprom/24x/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/encoders/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1306/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1327/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/gc9a01/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/buttons/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/fmgl/charsets/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/fmgl/fonts/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/fmgl/include&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.missingprototypes.125550425" name="Warn if a global function has no prototype (-Wmissing-prototypes)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.missingprototypes" useByScannerDiscovery="true" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.strictprototypes.1548515413" name="Warn if a function has no arg type (-Wstrict-prototypes)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.strictprototypes" useByScannerDiscovery="true" value="true" valueType="boolean"/>
@@ -486,7 +492,9 @@
 						</toolChain>
 					</folderInfo>
 					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1052867881.1558531675" name="stm32f4xx_hal_spi.c" rcbsApplicability="disable" resourcePath="system/src/stm32f4-hal/stm32f4xx_hal_spi.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.518212174.23912337">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.518212174.23912337" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.518212174"/>
+						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.518212174.23912337" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.518212174">
+							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.100598327" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
+						</tool>
 					</fileInfo>
 					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1052867881.system/src/cmsis/system_stm32f4xx.c" name="system_stm32f4xx.c" rcbsApplicability="disable" resourcePath="system/src/cmsis/system_stm32f4xx.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1498218580.1977579794">
 						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1498218580.1977579794" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1498218580">

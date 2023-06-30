@@ -9,6 +9,8 @@
 #include <main.h>
 #include <stm32f4xx_hal.h>
 #include <HAL.h>
+#include <Awesome.h>
+#include <terminusRegular12.h>
 
 int main(int argc, char* argv[])
 {
@@ -19,356 +21,186 @@ int main(int argc, char* argv[])
 	L2HAL_Init();
 	HAL_IntiHardware();
 
-	HAL_GPIO_WritePin(HAL_DISPLAY_BACKLIGHT_PORT, HAL_DISPLAY_BACKLIGHT_PIN, GPIO_PIN_SET);
+	DisplayContext = L2HAL_GC9A01_Init
+	(
+		&SPI1Handle,
 
-	HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_SET);
-	HAL_Delay(5);
+		HAL_DISPLAY_RESET_PORT,
+		HAL_DISPLAY_RESET_PIN,
 
-	HAL_GPIO_WritePin(HAL_DISPLAY_RESET_PORT, HAL_DISPLAY_RESET_PIN, GPIO_PIN_RESET);
-	HAL_Delay(10);
+		HAL_DISPLAY_DC_PORT,
+		HAL_DISPLAY_DC_PIN,
 
-	HAL_GPIO_WritePin(HAL_DISPLAY_RESET_PORT, HAL_DISPLAY_RESET_PIN, GPIO_PIN_SET);
-	HAL_Delay(1000);
+		HAL_DISPLAY_CS_PORT,
+		HAL_DISPLAY_CS_PIN,
 
-	/* Initial Sequence */
-	GC9A01_write_command(0xEF);
+		HAL_DISPLAY_BACKLIGHT_PORT,
+		HAL_DISPLAY_BACKLIGHT_PIN,
 
-	GC9A01_write_command(0xEB);
-	GC9A01_write_byte(0x14);
+		ROTATION_180
+	);
 
-	GC9A01_write_command(0xFE);
-	GC9A01_write_command(0xEF);
+	FMGL_API_ColorStruct OffColor;
+	OffColor.R = 0;
+	OffColor.G = 0;
+	OffColor.B = 0;
 
-	GC9A01_write_command(0xEB);
-	GC9A01_write_byte(0x14);
+	FMGL_API_ColorStruct OnColor;
+	OnColor.R = 0xFF;
+	OnColor.G = 0x00;
+	OnColor.B = 0x00;
 
-	GC9A01_write_command(0x84);
-	GC9A01_write_byte(0x40);
+	FMGL_API_ColorStruct AwesomeColor;
+	AwesomeColor.R = 0x00;
+	AwesomeColor.G = 0xFF;
+	AwesomeColor.B = 0x00;
 
-	GC9A01_write_command(0x85);
-	GC9A01_write_byte(0xFF);
+	/* Attaching FMGL to display */
+	fmglContext = FMGL_API_AttachToDriver
+		(
+			&DisplayContext,
+			&L2HAL_GC9A01_GetWidth,
+			&L2HAL_GC9A01_GetHeight,
+			&L2HAL_GC9A01_SetActiveColor,
+			&L2HAL_GC9A01_DrawPixel,
+			&L2HAL_GC9A01_GetPixel,
+			&L2HAL_GC9A01_PushFramebuffer,
+			OffColor
+		);
 
-	GC9A01_write_command(0x86);
-	GC9A01_write_byte(0xFF);
+	/* Initializing font */
+	FMGL_API_Font font= FMGL_FontTerminusRegular12Init();
+	FMGL_API_XBMTransparencyMode transparencyMode = FMGL_XBMTransparencyModeNormal;
 
-	GC9A01_write_command(0x87);
-	GC9A01_write_byte(0xFF);
+	/* Font settings (normal and inverted) */
+	normalFont.Font = &font;
+	normalFont.Scale = 1;
+	normalFont.CharactersSpacing = 0;
+	normalFont.LinesSpacing = 0;
+	normalFont.FontColor = &OnColor;
+	normalFont.BackgroundColor = &OffColor;
+	normalFont.Transparency = &transparencyMode;
 
-	GC9A01_write_command(0x88);
-	GC9A01_write_byte(0x0A);
+	invertedFont.Font = &font;
+	invertedFont.Scale = 1;
+	invertedFont.CharactersSpacing = 0;
+	invertedFont.LinesSpacing = 0;
+	invertedFont.FontColor = &OffColor;
+	invertedFont.BackgroundColor = &OnColor;
+	invertedFont.Transparency = &transparencyMode;
 
-	GC9A01_write_command(0x89);
-	GC9A01_write_byte(0x21);
+	/* Preparing sprite to draw */
+	sprite.Width = Awesome_width;
+	sprite.Height = Awesome_height;
+	sprite.Raster = Awesome_bits;
 
-	GC9A01_write_command(0x8A);
-	GC9A01_write_byte(0x00);
+	uint16_t maxX = FMGL_API_GetDisplayWidth(&fmglContext) -1;
+	uint16_t maxY = FMGL_API_GetDisplayHeight(&fmglContext) -1;
 
-	GC9A01_write_command(0x8B);
-	GC9A01_write_byte(0x80);
+	uint16_t spriteAreaMaxX = maxX - sprite.Width;
+	uint16_t spriteAreaMaxY = maxY - sprite.Height;
 
-	GC9A01_write_command(0x8C);
-	GC9A01_write_byte(0x01);
+	currentFont = &normalFont;
+	uint32_t fontBlinkingCounter = FONT_BLINKING_INTERVAL + 1; /* +1 to cause immediate redraw */
 
-	GC9A01_write_command(0x8D);
-	GC9A01_write_byte(0x01);
+	int16_t spriteX = 0;
+	int16_t spriteY = 0;
 
-	GC9A01_write_command(0x8E);
-	GC9A01_write_byte(0xFF);
+	int16_t spriteDX = SPRITE_SPEED_X;
+	int16_t spriteDY = SPRITE_SPEED_Y;
 
-	GC9A01_write_command(0x8F);
-	GC9A01_write_byte(0xFF);
-
-
-	GC9A01_write_command(0xB6);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x00);
-
-	GC9A01_write_command(0x36);
-
-	/* Orientation */
-	GC9A01_write_byte(0x18);
-	//GC9A01_write_byte(0x28);
-	//GC9A01_write_byte(0x48);
-	//GC9A01_write_byte(0x88);
-	/* End of orientation */
-
-	GC9A01_write_command(0x3A);
-	GC9A01_write_byte(0x06);
-
-	GC9A01_write_command(0x90);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x08);
-
-	GC9A01_write_command(0xBD);
-	GC9A01_write_byte(0x06);
-
-	GC9A01_write_command(0xBC);
-	GC9A01_write_byte(0x00);
-
-	GC9A01_write_command(0xFF);
-	GC9A01_write_byte(0x60);
-	GC9A01_write_byte(0x01);
-	GC9A01_write_byte(0x04);
-
-	GC9A01_write_command(0xC3);
-	GC9A01_write_byte(0x13);
-	GC9A01_write_command(0xC4);
-	GC9A01_write_byte(0x13);
-
-	GC9A01_write_command(0xC9);
-	GC9A01_write_byte(0x22);
-
-	GC9A01_write_command(0xBE);
-	GC9A01_write_byte(0x11);
-
-	GC9A01_write_command(0xE1);
-	GC9A01_write_byte(0x10);
-	GC9A01_write_byte(0x0E);
-
-	GC9A01_write_command(0xDF);
-	GC9A01_write_byte(0x21);
-	GC9A01_write_byte(0x0c);
-	GC9A01_write_byte(0x02);
-
-	GC9A01_write_command(0xF0);
-	GC9A01_write_byte(0x45);
-	GC9A01_write_byte(0x09);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x26);
-	GC9A01_write_byte(0x2A);
-
-	GC9A01_write_command(0xF1);
-	GC9A01_write_byte(0x43);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x72);
-	GC9A01_write_byte(0x36);
-	GC9A01_write_byte(0x37);
-	GC9A01_write_byte(0x6F);
-
-	GC9A01_write_command(0xF2);
-	GC9A01_write_byte(0x45);
-	GC9A01_write_byte(0x09);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x26);
-	GC9A01_write_byte(0x2A);
-
-	GC9A01_write_command(0xF3);
-	GC9A01_write_byte(0x43);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x72);
-	GC9A01_write_byte(0x36);
-	GC9A01_write_byte(0x37);
-	GC9A01_write_byte(0x6F);
-
-	GC9A01_write_command(0xED);
-	GC9A01_write_byte(0x1B);
-	GC9A01_write_byte(0x0B);
-
-	GC9A01_write_command(0xAE);
-	GC9A01_write_byte(0x77);
-
-	GC9A01_write_command(0xCD);
-	GC9A01_write_byte(0x63);
-
-	GC9A01_write_command(0x70);
-	GC9A01_write_byte(0x07);
-	GC9A01_write_byte(0x07);
-	GC9A01_write_byte(0x04);
-	GC9A01_write_byte(0x0E);
-	GC9A01_write_byte(0x0F);
-	GC9A01_write_byte(0x09);
-	GC9A01_write_byte(0x07);
-	GC9A01_write_byte(0x08);
-	GC9A01_write_byte(0x03);
-
-	GC9A01_write_command(0xE8);
-	GC9A01_write_byte(0x34);
-
-	GC9A01_write_command(0x62);
-	GC9A01_write_byte(0x18);
-	GC9A01_write_byte(0x0D);
-	GC9A01_write_byte(0x71);
-	GC9A01_write_byte(0xED);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x18);
-	GC9A01_write_byte(0x0F);
-	GC9A01_write_byte(0x71);
-	GC9A01_write_byte(0xEF);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x70);
-
-	GC9A01_write_command(0x63);
-	GC9A01_write_byte(0x18);
-	GC9A01_write_byte(0x11);
-	GC9A01_write_byte(0x71);
-	GC9A01_write_byte(0xF1);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x18);
-	GC9A01_write_byte(0x13);
-	GC9A01_write_byte(0x71);
-	GC9A01_write_byte(0xF3);
-	GC9A01_write_byte(0x70);
-	GC9A01_write_byte(0x70);
-
-	GC9A01_write_command(0x64);
-	GC9A01_write_byte(0x28);
-	GC9A01_write_byte(0x29);
-	GC9A01_write_byte(0xF1);
-	GC9A01_write_byte(0x01);
-	GC9A01_write_byte(0xF1);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x07);
-
-	GC9A01_write_command(0x66);
-	GC9A01_write_byte(0x3C);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0xCD);
-	GC9A01_write_byte(0x67);
-	GC9A01_write_byte(0x45);
-	GC9A01_write_byte(0x45);
-	GC9A01_write_byte(0x10);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x00);
-
-	GC9A01_write_command(0x67);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x3C);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x01);
-	GC9A01_write_byte(0x54);
-	GC9A01_write_byte(0x10);
-	GC9A01_write_byte(0x32);
-	GC9A01_write_byte(0x98);
-
-	GC9A01_write_command(0x74);
-	GC9A01_write_byte(0x10);
-	GC9A01_write_byte(0x85);
-	GC9A01_write_byte(0x80);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x00);
-	GC9A01_write_byte(0x4E);
-	GC9A01_write_byte(0x00);
-
-	GC9A01_write_command(0x98);
-	GC9A01_write_byte(0x3e);
-	GC9A01_write_byte(0x07);
-
-	GC9A01_write_command(0x35);
-	GC9A01_write_command(0x21);
-
-	GC9A01_write_command(0x11);
-	HAL_Delay(1000);
-	GC9A01_write_command(0x29);
-	HAL_Delay(20);
-
-	/* First pixel*/
-	uint8_t data[3];
-
-	data[0] = 0x00;
-	data[1] = 0x00;
-	data[2] = 0x00;
-
-	GC9A01_write_command(0x2C);
-	GC9A01_write_data(data, 3);
-
-	uint32_t counter = 0;
-
-	/* Main loop */
-	uint8_t fillMode = 1;
-	uint8_t fillR = 0xFF;
-	uint8_t fillG = 0x00;
-	uint8_t fillB = 0x00;
-
-
-	uint8_t line[720]; /* 240 pixels * 3 bytes of color */
-	memset(line, 0x00, 720);
-
+	/* Main cycle */
 	while(true)
 	{
-		GC9A01_write_command(0x3C);
-		//GC9A01_write_data(data, 3);
-		GC9A01_write_data(line, 720);
-
-		counter ++;
-
-		if (counter > 10)
+		/* Blinking */
+		if (fontBlinkingCounter > FONT_BLINKING_INTERVAL)
 		{
-			counter = 0;
+			fontBlinkingCounter = 0;
 
-			if (fillMode == 0)
+			/* Inverting font */
+			if (currentFont == &normalFont)
 			{
-				fillR = 0xFF;
-				fillG = 0x00;
-				fillB = 0x00;
-
-				fillMode = 1;
+				currentFont = &invertedFont;
 			}
-			else if (fillMode == 1)
+			else
 			{
-				fillR = 0x00;
-				fillG = 0xFF;
-				fillB = 0x00;
-
-				fillMode = 2;
-			}
-			else if (fillMode == 2)
-			{
-				fillR = 0x00;
-				fillG = 0x00;
-				fillB = 0xFF;
-
-				fillMode = 0;
-			}
-
-			for (int i = 0; i < 240; i++)
-			{
-				int base = i * 3;
-				line[base + 0] = fillR;
-				line[base + 1] = fillG;
-				line[base + 2] = fillB;
+				currentFont = &normalFont;
 			}
 		}
+		else
+		{
+			fontBlinkingCounter ++;
+		}
+
+		/* Moving sprite */
+		spriteX += spriteDX;
+		spriteY += spriteDY;
+
+		if (spriteX < 0)
+		{
+			spriteX = abs(spriteX);
+			spriteDX *= -1;
+		}
+		else if (spriteX > spriteAreaMaxX)
+		{
+			spriteX = 2 * spriteAreaMaxX - spriteX;
+			spriteDX *= -1;
+		}
+
+		if (spriteY < 0)
+		{
+			spriteY = abs(spriteY);
+			spriteDY *= -1;
+		}
+		else if (spriteY > spriteAreaMaxY)
+		{
+			spriteY = 2 * spriteAreaMaxY - spriteY;
+			spriteDY *= -1;
+		}
+
+		/* Clearing screen */
+		FMGL_API_ClearScreen(&fmglContext);
+
+		/* Drawing background text */
+		DrawBackgroundText(currentFont);
+
+		/* Drawing sprite */
+		FMGL_API_RenderXBM(&fmglContext, &sprite, spriteX, spriteY, 1, 1, AwesomeColor, OffColor, FMGL_XBMTransparencyModeTransparentInactive);
+
+		/* Pushing framebuffer */
+		FMGL_API_PushFramebuffer(&fmglContext);
+
+		/*HAL_Delay(1000);*/
 	}
 }
 
-void GC9A01_write_command(uint8_t cmd)
+void DrawBackgroundText(FMGL_API_FontSettings* fontSettings)
 {
-	HAL_GPIO_WritePin(HAL_DISPLAY_DC_PORT, HAL_DISPLAY_DC_PIN, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_RESET);
+	/* English banner */
+	const char* bannerEng = "\xa5\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa8\n"
+			"\xa1Hello, World!\xa1\n"
+			"\xab\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xae";
 
-    if (HAL_SPI_Transmit(&SPI1Handle, &cmd, 1, 1000) != HAL_OK)
-	{
-		L2HAL_Error(Generic);
-	}
+	uint16_t bannerEngWidth;
+	uint16_t bannerEngHeight;
+	FMGL_API_RenderTextWithLineBreaks(&fmglContext, fontSettings, 0, 0, &bannerEngWidth, &bannerEngHeight, true, bannerEng);
 
-    HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_SET);
-}
+	/* Russian banner*/
+	const char* bannerRus = "\xa5\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa8\n"
+			"\xa1\xf0\xd2\xc9\xd7\xc5\xd4, \xed\xc9\xd2!\xa1\n"
+			"\xab\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xae";
 
-void GC9A01_write_data(uint8_t *data, size_t len)
-{
-	HAL_GPIO_WritePin(HAL_DISPLAY_DC_PORT, HAL_DISPLAY_DC_PIN, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_RESET);
+	uint16_t bannerRusWidth;
+	uint16_t bannerRusHeight;
+	FMGL_API_RenderTextWithLineBreaks(&fmglContext, fontSettings, 0, 0, &bannerRusWidth, &bannerRusHeight, true, bannerRus);
 
-    if (HAL_SPI_Transmit(&SPI1Handle, data, len, 1000) != HAL_OK)
-	{
-		L2HAL_Error(Generic);
-	}
+	uint16_t bannerEngHShift = (FMGL_API_GetDisplayWidth(&fmglContext) - bannerEngWidth) / 2;
+	uint16_t bannerRusHShift = (FMGL_API_GetDisplayWidth(&fmglContext) - bannerRusWidth) / 2;
 
-    HAL_GPIO_WritePin(HAL_DISPLAY_CS_PORT, HAL_DISPLAY_CS_PIN, GPIO_PIN_SET);
-}
-
-void GC9A01_write_byte(uint8_t val)
-{
-    GC9A01_write_data(&val, sizeof(val));
+	/* Actual drawing */
+	uint16_t width, height;
+	FMGL_API_RenderTextWithLineBreaks(&fmglContext, fontSettings, bannerEngHShift, 100, &width, &height, false, bannerEng);
+	FMGL_API_RenderTextWithLineBreaks(&fmglContext, fontSettings, bannerRusHShift, 133, &width, &height, false, bannerRus);
 }
 
 #pragma GCC diagnostic pop
