@@ -22,9 +22,6 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	GPIO_TypeDef* chipSelectPort,
 	uint16_t chipSelectPin,
 
-	GPIO_TypeDef* backlightPort,
-	uint16_t backlightPin,
-
 	enum L2HAL_GC9A01_Orientation orientation
 )
 {
@@ -40,9 +37,6 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 
 	context.ChipSelectPort = chipSelectPort;
 	context.ChipSelectPin = chipSelectPin;
-
-	context.BacklightPort = backlightPort;
-	context.BacklightPin = backlightPin;
 
 	/* Initializing pins */
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -73,15 +67,6 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(context.ChipSelectPort, &GPIO_InitStruct);
 	HAL_GPIO_WritePin(context.ChipSelectPort, context.ChipSelectPin, GPIO_PIN_SET); /* 1 - Not selected */
-
-	/* Backlight */
-	L2HAL_MCU_ClockPortIn(context.BacklightPort);
-	GPIO_InitStruct.Pin = context.BacklightPin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context.BacklightPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context.BacklightPort, context.BacklightPin, GPIO_PIN_RESET); /* 0 - Not lit */
 
 	L2HAL_GC9A01_ResetDisplay(&context);
 
@@ -355,22 +340,7 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	/* Filling display with black */
 	L2HAL_GC9A01_ClearDisplay(&context);
 
-	/* Finally turning backlight on */
-	L2HAL_GC9A01_SwitchBacklight(&context, true);
-
 	return context;
-}
-
-void L2HAL_GC9A01_SwitchBacklight(L2HAL_GC9A01_ContextStruct *context, bool isOn)
-{
-	if (isOn)
-	{
-		HAL_GPIO_WritePin(context->BacklightPort, context->BacklightPin, GPIO_PIN_SET);
-	}
-	else
-	{
-		HAL_GPIO_WritePin(context->BacklightPort, context->BacklightPin, GPIO_PIN_RESET);
-	}
 }
 
 void L2HAL_GC9A01_SelectChip(L2HAL_GC9A01_ContextStruct *context, bool isSelected)

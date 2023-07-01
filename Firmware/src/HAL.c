@@ -35,3 +35,31 @@ void HAL_SwitchLed(bool isOn)
 		HAL_GPIO_WritePin(HAL_LED_PORT, HAL_LED_PIN, GPIO_PIN_RESET);
 	}
 }
+
+void HAL_SetBacklightLevel(uint16_t level)
+{
+	if (level > HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD)
+	{
+		level = HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD;
+	}
+
+	TIM_OC_InitTypeDef sConfig = { 0 };
+	sConfig.OCMode = TIM_OCMODE_PWM1;
+	sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfig.OCFastMode = TIM_OCFAST_DISABLE;
+	sConfig.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+	sConfig.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+	sConfig.OCIdleState = TIM_OCIDLESTATE_RESET;
+	sConfig.Pulse = level;
+
+	if (HAL_OK != HAL_TIM_PWM_ConfigChannel(&BacklightTimerHandle, &sConfig, HAL_DISPLAY_BACKLIGHT_TIMER_CHANNEL))
+	{
+		L2HAL_Error(Generic);
+	}
+
+	/* Start channel 2 */
+	if (HAL_OK != HAL_TIM_PWM_Start(&BacklightTimerHandle, HAL_DISPLAY_BACKLIGHT_TIMER_CHANNEL))
+	{
+		L2HAL_Error(Generic);
+	}
+}

@@ -78,17 +78,9 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	GPIO_TypeDef* chipSelectPort,
 	uint16_t chipSelectPin,
 
-	GPIO_TypeDef* backlightPort,
-	uint16_t backlightPin,
-
 	enum L2HAL_GC9A01_Orientation orientation
 );
 
-
-/**
- * Switch backlight On or Off
- */
-void L2HAL_GC9A01_SwitchBacklight(L2HAL_GC9A01_ContextStruct *context, bool isOn);
 
 /**
  * Set columns range for subsequent memory writes

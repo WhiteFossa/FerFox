@@ -24,6 +24,52 @@
 #define HAL_LED_PORT GPIOC
 
 
+/**
+ * Backlight
+ */
+
+/**
+ * Use this timer for backlight control
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER TIM2
+
+/**
+ * Call this for clocking backlight timer in
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_CLOCK_IN __HAL_RCC_TIM2_CLK_ENABLE
+
+/**
+ * Display backlight timer frequency
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_FREQ 16000000
+
+/**
+ * Display backlight timer period. PWM Frequency is HAL_DISPLAY_BACKLIGHT_TIMER_FREQ / HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD,
+ * in our case 16000000 / 500 = 32 kHz
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD 500
+
+/**
+ * Generage backlight PWM on this channel
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_CHANNEL TIM_CHANNEL_2
+
+/**
+ * Backlight connected to this port (keep synchronized with timer and channel)
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_PORT GPIOB
+
+/**
+ * Backlight connected to this pin (keep synchronized with timer and channel)
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_PIN GPIO_PIN_3
+
+/**
+ * Alternative function for backlight pin  (keep synchronized with timer)
+ */
+#define HAL_DISPLAY_BACKLIGHT_TIMER_PIN_AF GPIO_AF1_TIM2
+
+
 /**********************
  *  DISPLAY - GC9A01  *
  *
@@ -45,9 +91,6 @@
 #define HAL_DISPLAY_CS_PIN GPIO_PIN_2
 #define HAL_DISPLAY_CS_PORT GPIOB
 
-#define HAL_DISPLAY_BACKLIGHT_PIN GPIO_PIN_3
-#define HAL_DISPLAY_BACKLIGHT_PORT GPIOB
-
 
 /**
  * Init project-specific hardware here
@@ -58,6 +101,11 @@ void HAL_IntiHardware(void);
  * Switch LED on of off
  */
 void HAL_SwitchLed(bool isOn);
+
+/**
+ * Set backlight level [0-HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD]
+ */
+void HAL_SetBacklightLevel(uint16_t level);
 
 
 
