@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 #include <l2hal_aux.h>
 #include <l2hal_errors.h>
 

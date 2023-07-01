@@ -42,7 +42,7 @@
 #ifndef L2HAL_INCLUDE_L2HAL_ERRORS_H_
 #define L2HAL_INCLUDE_L2HAL_ERRORS_H_
 
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 #include <stm32f4xx_hal_rcc.h>
 
 /**

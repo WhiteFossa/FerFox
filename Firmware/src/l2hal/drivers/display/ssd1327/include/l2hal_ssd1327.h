@@ -98,7 +98,7 @@
 #define L2HAL_DRIVERS_DISPLAY_SSD1327_INCLUDE_L2HAL_SSD1327_H_
 
 #include <stdint.h>
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 #include <l2hal_aux.h>
 #include <l2hal_ssd1327_commands.h>
 #include <fmgl.h>

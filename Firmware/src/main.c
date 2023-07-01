@@ -7,7 +7,6 @@
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
 #include <main.h>
-#include <stm32f4xx_hal.h>
 #include <HAL.h>
 #include <Awesome.h>
 #include <terminusRegular12.h>

@@ -9,7 +9,7 @@
 #define L2HAL_DRIVERS_DDS_AD9835_INCLUDE_L2HAL_AD9835_PRIVATE_H_
 
 #include <stdint.h>
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 
 #define L2HAL_AD9835_SMALLDELAY 50UL
 

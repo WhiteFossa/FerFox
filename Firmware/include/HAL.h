@@ -8,7 +8,7 @@
 #ifndef INCLUDE_HAL_H_
 #define INCLUDE_HAL_H_
 
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 #include <stdbool.h>
 #include <l2hal.h>
 #include <Interrupts.h>

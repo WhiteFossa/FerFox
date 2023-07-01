@@ -95,7 +95,7 @@
 #define L2HAL_INCLUDE_SSD1306HAL_L2HAL_SSD1306_H_
 
 #include <stdint.h>
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 #include <l2hal_aux.h>
 #include <l2hal_ssd1306_commands.h>
 #include <fmgl.h>

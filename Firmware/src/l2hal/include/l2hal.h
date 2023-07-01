@@ -53,7 +53,6 @@
 #ifndef L2HAL_INCLUDE_L2HAL_H_
 #define L2HAL_INCLUDE_L2HAL_H_
 
-#include <stm32f4xx_hal.h>
 #include <l2hal_errors.h>
 #include <l2hal_custom.h>
 #include <l2hal_systick.h>

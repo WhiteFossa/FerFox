@@ -8,7 +8,7 @@
 #ifndef L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_PRIVATE_H_
 #define L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_PRIVATE_H_
 
-#include <stm32f4xx_hal.h>
+#include <l2hal_mcu.h>
 #include <stdint.h>
 
 /**
