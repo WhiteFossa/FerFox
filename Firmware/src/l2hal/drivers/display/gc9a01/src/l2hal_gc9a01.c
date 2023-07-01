@@ -48,7 +48,7 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	GPIO_InitTypeDef GPIO_InitStruct;
 
 	/* Reset */
-	L2HAL_GC9A01_ClockPortIn(context.ResetPort);
+	L2HAL_MCU_ClockPortIn(context.ResetPort);
 	GPIO_InitStruct.Pin = context.ResetPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -57,6 +57,7 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	HAL_GPIO_WritePin(context.ResetPort, context.ResetPin, GPIO_PIN_RESET); /* Keep display resetted till driver will take control */
 
 	/* D/C */
+	L2HAL_MCU_ClockPortIn(context.DataCommandPort);
 	GPIO_InitStruct.Pin = context.DataCommandPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -65,6 +66,7 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	HAL_GPIO_WritePin(context.DataCommandPort, context.DataCommandPin, GPIO_PIN_RESET); /* 0 - Command mode */
 
 	/* C/S */
+	L2HAL_MCU_ClockPortIn(context.ChipSelectPort);
 	GPIO_InitStruct.Pin = context.ChipSelectPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -73,6 +75,7 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	HAL_GPIO_WritePin(context.ChipSelectPort, context.ChipSelectPin, GPIO_PIN_SET); /* 1 - Not selected */
 
 	/* Backlight */
+	L2HAL_MCU_ClockPortIn(context.BacklightPort);
 	GPIO_InitStruct.Pin = context.BacklightPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -337,9 +340,10 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	L2HAL_GC9A01_WriteCommand(&context, 0x21);
 
 	L2HAL_GC9A01_WriteCommand(&context, 0x11);
-	HAL_Delay(1000);
+	HAL_Delay(L2HAL_GC9A01_DISPLAY_SLEEP_OUT_TIME);
+
 	L2HAL_GC9A01_WriteCommand(&context, 0x29);
-	HAL_Delay(20);
+	HAL_Delay(L2HAL_GC9A01_DISPLAY_AFTER_ON_TIME);
 
 	/* Active color is black */
 	FMGL_API_ColorStruct blackColor;
@@ -355,38 +359,6 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	L2HAL_GC9A01_SwitchBacklight(&context, true);
 
 	return context;
-}
-
-void L2HAL_GC9A01_ClockPortIn(GPIO_TypeDef* port)
-{
-	if (GPIOA == port)
-	{
-		__HAL_RCC_GPIOA_CLK_ENABLE();
-	}
-	else if (GPIOB == port)
-	{
-		__HAL_RCC_GPIOB_CLK_ENABLE();
-	}
-	else if (GPIOC == port)
-	{
-		__HAL_RCC_GPIOC_CLK_ENABLE();
-	}
-	else if (GPIOD == port)
-	{
-		__HAL_RCC_GPIOD_CLK_ENABLE();
-	}
-	else if (GPIOE == port)
-	{
-		__HAL_RCC_GPIOE_CLK_ENABLE();
-	}
-	else if (GPIOH == port)
-	{
-		__HAL_RCC_GPIOH_CLK_ENABLE();
-	}
-	else
-	{
-		L2HAL_Error(Generic);
-	}
 }
 
 void L2HAL_GC9A01_SwitchBacklight(L2HAL_GC9A01_ContextStruct *context, bool isOn)

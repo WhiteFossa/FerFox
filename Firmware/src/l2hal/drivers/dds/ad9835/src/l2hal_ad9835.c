@@ -9,23 +9,7 @@
 
 void L2HAL_AD9835_Init(L2HAL_AD9835_ContextStruct* context)
 {
-	/* Clocking port in */
-	if (GPIOA == context->FSYNCPort)
-	{
-		__HAL_RCC_GPIOA_CLK_ENABLE();
-	}
-	else if (GPIOB == context->FSYNCPort)
-	{
-		__HAL_RCC_GPIOB_CLK_ENABLE();
-	}
-	else if (GPIOC == context->FSYNCPort)
-	{
-		__HAL_RCC_GPIOC_CLK_ENABLE();
-	}
-	else if (GPIOD == context->FSYNCPort)
-	{
-		__HAL_RCC_GPIOD_CLK_ENABLE();
-	}
+	L2HAL_MCU_ClockPortIn(context->FSYNCPort);
 
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.Pin       = context->FSYNCPin;

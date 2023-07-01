@@ -27,6 +27,15 @@
  */
 #define L2HAL_GC9A01_DISPLAY_BOOT_TIME 120
 
+/**
+ * Wait this time after exiting from sleepmode
+ */
+#define L2HAL_GC9A01_DISPLAY_SLEEP_OUT_TIME 120
+
+/**
+ * Wait this time after issuing "Display ON" command
+ */
+#define L2HAL_GC9A01_DISPLAY_AFTER_ON_TIME 20
 
 /**
  * Throw fatal error if data transmit is not completed during this interval
@@ -39,8 +48,6 @@
 #define L2HAL_GC9A01_DISPLAY_WIDTH 240
 #define L2HAL_GC9A01_DISPLAY_HEIGHT 240
 
-
-void L2HAL_GC9A01_ClockPortIn(GPIO_TypeDef* port);
 
 /**
  * Select / deselect chip
