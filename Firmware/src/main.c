@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
 		AwesomeColor.B = b;
 
 		/* Drawing sprite */
-		FMGL_API_RenderXBM(&fmglContext, &sprite, 8, 8, 7, 7, AwesomeColor, OffColor, FMGL_XBMTransparencyModeTransparentInactive);
+		FMGL_API_RenderXBM(&fmglContext, &sprite, 0, 0, 1, 1, AwesomeColor, OffColor, FMGL_XBMTransparencyModeTransparentInactive);
 
 		/* Drawing FPS */
 		/*uint16_t width, height;
