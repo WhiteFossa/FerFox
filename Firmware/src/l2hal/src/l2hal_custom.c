@@ -57,7 +57,7 @@ void L2HAL_SetupSPI(void)
 	SPI1Handle.Init.CLKPhase = SPI_PHASE_1EDGE;
 	SPI1Handle.Init.CLKPolarity = SPI_POLARITY_LOW;
 	SPI1Handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
-	SPI1Handle.Init.TIMode = SPI_TIMODE_DISABLE ;
+	SPI1Handle.Init.TIMode = SPI_TIMODE_DISABLE;
 	SPI1Handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
 	SPI1Handle.Init.NSS = SPI_NSS_SOFT;
 
@@ -84,7 +84,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 		GPIO_InitStruct.Pin = GPIO_PIN_5;
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
 		GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
 		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -190,7 +190,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
 		GPIO_InitTypeDef GPIO_InitStruct;
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 		GPIO_InitStruct.Alternate = HAL_DISPLAY_BACKLIGHT_TIMER_PIN_AF;
 		GPIO_InitStruct.Pin = HAL_DISPLAY_BACKLIGHT_TIMER_PIN;
 		HAL_GPIO_Init(HAL_DISPLAY_BACKLIGHT_TIMER_PORT, &GPIO_InitStruct);
@@ -208,7 +208,7 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim)
 		GPIO_InitStruct.Pin = HAL_DISPLAY_BACKLIGHT_TIMER_PIN;
 		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 		HAL_GPIO_Init(HAL_DISPLAY_BACKLIGHT_TIMER_PORT, &GPIO_InitStruct);
 	}
 }

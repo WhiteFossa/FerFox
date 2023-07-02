@@ -45,36 +45,6 @@ void L2HAL_GC9A01_Init
 
 	context->IsDataTransferInProgress = true;
 
-	/* Initializing pins */
-	GPIO_InitTypeDef GPIO_InitStruct;
-
-	/* Reset */
-	L2HAL_MCU_ClockPortIn(context->ResetPort);
-	GPIO_InitStruct.Pin = context->ResetPin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context->ResetPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context->ResetPort, context->ResetPin, GPIO_PIN_RESET); /* Keep display resetted till driver will take control */
-
-	/* D/C */
-	L2HAL_MCU_ClockPortIn(context->DataCommandPort);
-	GPIO_InitStruct.Pin = context->DataCommandPin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context->DataCommandPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context->DataCommandPort, context->DataCommandPin, GPIO_PIN_RESET); /* 0 - Command mode */
-
-	/* C/S */
-	L2HAL_MCU_ClockPortIn(context->ChipSelectPort);
-	GPIO_InitStruct.Pin = context->ChipSelectPin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context->ChipSelectPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context->ChipSelectPort, context->ChipSelectPin, GPIO_PIN_SET); /* 1 - Not selected */
-
 	L2HAL_GC9A01_ResetDisplay(context);
 
 	/* Initialization sequence */
