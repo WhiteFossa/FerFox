@@ -91,4 +91,9 @@ void L2HAL_GC9A01_WritePixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t
  */
 void L2HAL_GC9A01_PushCacheToDisplay(L2HAL_GC9A01_ContextStruct *context);
 
+/**
+ * Hang till the DMA transfer completed
+ */
+void L2HAL_GC9A01_WaitForDataTransferCompletion(L2HAL_GC9A01_ContextStruct *context);
+
 #endif /* L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_PRIVATE_H_ */

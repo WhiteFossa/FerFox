@@ -66,9 +66,16 @@ typedef struct
 	 */
 	uint8_t PixelsCache[L2HAL_GC9A01_CACHE_SIZE];
 
-	/* Current location of pixels cache */
+	/**
+	 * Current location of pixels cache
+	 */
 	uint16_t PixelsCacheX;
 	uint16_t PixelsCacheY;
+
+	/**
+	 * If true, then data transfer in progress and we must wait for next one
+	 */
+	volatile bool IsDataTransferInProgress;
 }
 L2HAL_GC9A01_ContextStruct;
 
@@ -138,5 +145,10 @@ void L2HAL_GC9A01_SetActiveColor(L2HAL_GC9A01_ContextStruct* context, FMGL_API_C
  * Push framebuffer to display
  */
 void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context);
+
+/**
+ * Call it from SPI DMA TX completion interrupt
+ */
+void L2HAL_GC9A01_MarkDataTransferAsCompleted(L2HAL_GC9A01_ContextStruct *context);
 
 #endif /* L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_H_ */

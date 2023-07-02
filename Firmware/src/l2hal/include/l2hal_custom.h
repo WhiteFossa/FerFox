@@ -59,15 +59,16 @@ void L2HAL_InitCustomHardware(void);
 /**
  * SPI-related stuff
  */
-volatile void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi);
-volatile void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi);
+void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi);
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi);
 void L2HAL_SetupSPI(void);
+void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma); /* Called when transmission via Display SPI is completed */
 
 /**
  * PWM timer-related stuff
  */
-volatile void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim);
-volatile void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim);
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim);
+void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim);
 void L2HAL_SetupBacklighTimer(void);
 
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */

@@ -68,12 +68,11 @@ void L2HAL_SetupClocks(void)
 
 	/* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 clock dividers */
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-	RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
-	RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
-	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+	RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK; /* 84MHz */
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1; /* 84MHz */
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2; /* 42MHz */
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1; /* 84MHz */
 	if (L2HAL_RCC_ClockConfigWithSysTickHighPriority(&RCC_ClkInitStruct, FLASH_LATENCY_5, L2HAL_DEFAULT_SYSTICK_TICKS_COUNT) != HAL_OK)
 	{
 		L2HAL_Error(Generic);

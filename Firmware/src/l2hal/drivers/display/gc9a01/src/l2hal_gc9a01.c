@@ -43,6 +43,8 @@ void L2HAL_GC9A01_Init
 	context->PixelsCacheY = 0;
 	memset(context->PixelsCache, 0x00, L2HAL_GC9A01_CACHE_SIZE);
 
+	context->IsDataTransferInProgress = true;
+
 	/* Initializing pins */
 	GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -372,6 +374,8 @@ void L2HAL_GC9A01_ResetDisplay(L2HAL_GC9A01_ContextStruct *context)
 
 void L2HAL_GC9A01_WriteCommand(L2HAL_GC9A01_ContextStruct *context, uint8_t command)
 {
+	context->IsDataTransferInProgress = true;
+
 	HAL_GPIO_WritePin(context->DataCommandPort, context->DataCommandPin, GPIO_PIN_RESET); /* 0 - Command */
 
 	L2HAL_GC9A01_SelectChip(context, true);
@@ -381,24 +385,25 @@ void L2HAL_GC9A01_WriteCommand(L2HAL_GC9A01_ContextStruct *context, uint8_t comm
 		L2HAL_Error(Generic);
 	}
 
-	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) {}
+	L2HAL_GC9A01_WaitForDataTransferCompletion(context);
 
 	L2HAL_GC9A01_SelectChip(context, false);
 }
 
 void L2HAL_GC9A01_WriteData(L2HAL_GC9A01_ContextStruct *context, uint8_t *data, uint16_t dataSize)
 {
+	context->IsDataTransferInProgress = true;
+
 	HAL_GPIO_WritePin(context->DataCommandPort, context->DataCommandPin, GPIO_PIN_SET); /* 1 - Data */
 
 	L2HAL_GC9A01_SelectChip(context, true);
 
 	if (HAL_SPI_Transmit_DMA(context->SPIHandle, data, dataSize) != HAL_OK)
-	//if (HAL_SPI_Transmit(context->SPIHandle, data, dataSize, 1000) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
 
-	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) {}
+	L2HAL_GC9A01_WaitForDataTransferCompletion(context);
 
 	L2HAL_GC9A01_SelectChip(context, false);
 }
@@ -582,5 +587,16 @@ void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context)
 	 * */
 
 	L2HAL_GC9A01_PushCacheToDisplay(context);
+}
+
+void L2HAL_GC9A01_WaitForDataTransferCompletion(L2HAL_GC9A01_ContextStruct *context)
+{
+	while (context->IsDataTransferInProgress) {} /* First wait for DMA completion */
+	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) { } /* Then wait for SPI ready*/
+}
+
+void L2HAL_GC9A01_MarkDataTransferAsCompleted(L2HAL_GC9A01_ContextStruct *context)
+{
+	context->IsDataTransferInProgress = false;
 }
 

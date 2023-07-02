@@ -13,10 +13,12 @@
 /**
  * SysTick interrupt handler.
  */
-void SysTick_Handler(void);
+volatile void SysTick_Handler(void);
 
-void SPI1_IRQHandler(void);
-void DMA2_Stream3_IRQHandler(void);
+/**
+ * DMA transfer to SPI1 complete
+ */
+volatile void DMA2_Stream3_IRQHandler(void);
 
 
 
