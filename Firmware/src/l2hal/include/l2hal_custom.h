@@ -44,9 +44,12 @@
 
 #include <l2hal_mcu.h>
 #include <l2hal_errors.h>
+#include <l2hal_gc9a01.h>
 
 extern SPI_HandleTypeDef SPI1Handle;
 extern TIM_HandleTypeDef BacklightTimerHandle;
+extern DMA_HandleTypeDef SPI1DmaHandle;
+extern L2HAL_GC9A01_ContextStruct DisplayContext;
 
 /**
  * Put custom hardware initialization stuff here,
@@ -63,8 +66,8 @@ void L2HAL_SetupSPI(void);
 /**
  * PWM timer-related stuff
  */
-/*volatile void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim);
-volatile void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim);*/
+volatile void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim);
+volatile void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim);
 void L2HAL_SetupBacklighTimer(void);
 
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */

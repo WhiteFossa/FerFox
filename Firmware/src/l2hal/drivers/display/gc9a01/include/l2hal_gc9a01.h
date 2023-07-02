@@ -8,10 +8,16 @@
 #ifndef L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_H_
 #define L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_H_
 
-
 #include <l2hal_mcu.h>
 #include <stdbool.h>
 #include <fmgl.h>
+
+/**
+ * Sizes of local pixels cache
+ */
+#define L2HAL_GC9A01_CACHE_WIDTH 240
+#define L2HAL_GC9A01_CACHE_HEIGHT 1
+#define L2HAL_GC9A01_CACHE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * L2HAL_GC9A01_CACHE_HEIGHT * 3)
 
 enum L2HAL_GC9A01_Orientation
 {
@@ -51,13 +57,18 @@ typedef struct
 	uint16_t ChipSelectPin;
 
 	/**
-	 * Backlight pin
+	 * Current drawing color
 	 */
-	GPIO_TypeDef* BacklightPort;
-	uint16_t BacklightPin;
-
-	/* Current drawing color */
 	FMGL_API_ColorStruct ActiveColor;
+
+	/**
+	 * Local (i.e. not in external memory) pixels cache
+	 */
+	uint8_t PixelsCache[L2HAL_GC9A01_CACHE_SIZE];
+
+	/* Current location of pixels cache */
+	uint16_t PixelsCacheX;
+	uint16_t PixelsCacheY;
 }
 L2HAL_GC9A01_ContextStruct;
 
@@ -65,8 +76,9 @@ L2HAL_GC9A01_ContextStruct;
 /**
  * Initialize GC9A01-based display
  */
-L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
+void L2HAL_GC9A01_Init
 (
+	L2HAL_GC9A01_ContextStruct* context,
 	SPI_HandleTypeDef *spiHandle,
 
 	GPIO_TypeDef* resetPort,

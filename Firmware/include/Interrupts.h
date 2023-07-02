@@ -15,5 +15,9 @@
  */
 void SysTick_Handler(void);
 
+void SPI1_IRQHandler(void);
+void DMA2_Stream3_IRQHandler(void);
+
+
 
 #endif /* INCLUDE_INTERRUPTS_H_ */

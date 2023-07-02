@@ -9,8 +9,10 @@
 #include <l2hal_gc9a01_private.h>
 #include <l2hal_errors.h>
 
-L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
+void L2HAL_GC9A01_Init
 (
+	L2HAL_GC9A01_ContextStruct* context,
+
 	SPI_HandleTypeDef *spiHandle,
 
 	GPIO_TypeDef* resetPort,
@@ -25,124 +27,127 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	enum L2HAL_GC9A01_Orientation orientation
 )
 {
-	L2HAL_GC9A01_ContextStruct context;
+	context->SPIHandle = spiHandle;
 
-	context.SPIHandle = spiHandle;
+	context->ResetPort = resetPort;
+	context->ResetPin = resetPin;
 
-	context.ResetPort = resetPort;
-	context.ResetPin = resetPin;
+	context->DataCommandPort = dataCommandPort;
+	context->DataCommandPin = dataCommandPin;
 
-	context.DataCommandPort = dataCommandPort;
-	context.DataCommandPin = dataCommandPin;
+	context->ChipSelectPort = chipSelectPort;
+	context->ChipSelectPin = chipSelectPin;
 
-	context.ChipSelectPort = chipSelectPort;
-	context.ChipSelectPin = chipSelectPin;
+	/* Setting up cache */
+	context->PixelsCacheX = 0;
+	context->PixelsCacheY = 0;
+	memset(context->PixelsCache, 0x00, L2HAL_GC9A01_CACHE_SIZE);
 
 	/* Initializing pins */
 	GPIO_InitTypeDef GPIO_InitStruct;
 
 	/* Reset */
-	L2HAL_MCU_ClockPortIn(context.ResetPort);
-	GPIO_InitStruct.Pin = context.ResetPin;
+	L2HAL_MCU_ClockPortIn(context->ResetPort);
+	GPIO_InitStruct.Pin = context->ResetPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context.ResetPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context.ResetPort, context.ResetPin, GPIO_PIN_RESET); /* Keep display resetted till driver will take control */
+	HAL_GPIO_Init(context->ResetPort, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(context->ResetPort, context->ResetPin, GPIO_PIN_RESET); /* Keep display resetted till driver will take control */
 
 	/* D/C */
-	L2HAL_MCU_ClockPortIn(context.DataCommandPort);
-	GPIO_InitStruct.Pin = context.DataCommandPin;
+	L2HAL_MCU_ClockPortIn(context->DataCommandPort);
+	GPIO_InitStruct.Pin = context->DataCommandPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context.DataCommandPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context.DataCommandPort, context.DataCommandPin, GPIO_PIN_RESET); /* 0 - Command mode */
+	HAL_GPIO_Init(context->DataCommandPort, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(context->DataCommandPort, context->DataCommandPin, GPIO_PIN_RESET); /* 0 - Command mode */
 
 	/* C/S */
-	L2HAL_MCU_ClockPortIn(context.ChipSelectPort);
-	GPIO_InitStruct.Pin = context.ChipSelectPin;
+	L2HAL_MCU_ClockPortIn(context->ChipSelectPort);
+	GPIO_InitStruct.Pin = context->ChipSelectPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	HAL_GPIO_Init(context.ChipSelectPort, &GPIO_InitStruct);
-	HAL_GPIO_WritePin(context.ChipSelectPort, context.ChipSelectPin, GPIO_PIN_SET); /* 1 - Not selected */
+	HAL_GPIO_Init(context->ChipSelectPort, &GPIO_InitStruct);
+	HAL_GPIO_WritePin(context->ChipSelectPort, context->ChipSelectPin, GPIO_PIN_SET); /* 1 - Not selected */
 
-	L2HAL_GC9A01_ResetDisplay(&context);
+	L2HAL_GC9A01_ResetDisplay(context);
 
 	/* Initialization sequence */
-	L2HAL_GC9A01_WriteCommand(&context, 0xEF);
+	L2HAL_GC9A01_WriteCommand(context, 0xEF);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xEB);
-	L2HAL_GC9A01_WriteByteData(&context, 0x14);
+	L2HAL_GC9A01_WriteCommand(context, 0xEB);
+	L2HAL_GC9A01_WriteByteData(context, 0x14);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xFE);
-	L2HAL_GC9A01_WriteCommand(&context, 0xEF);
+	L2HAL_GC9A01_WriteCommand(context, 0xFE);
+	L2HAL_GC9A01_WriteCommand(context, 0xEF);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xEB);
-	L2HAL_GC9A01_WriteByteData(&context, 0x14);
+	L2HAL_GC9A01_WriteCommand(context, 0xEB);
+	L2HAL_GC9A01_WriteByteData(context, 0x14);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x84);
-	L2HAL_GC9A01_WriteByteData(&context, 0x40);
+	L2HAL_GC9A01_WriteCommand(context, 0x84);
+	L2HAL_GC9A01_WriteByteData(context, 0x40);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x85);
-	L2HAL_GC9A01_WriteByteData(&context, 0xFF);
+	L2HAL_GC9A01_WriteCommand(context, 0x85);
+	L2HAL_GC9A01_WriteByteData(context, 0xFF);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x86);
-	L2HAL_GC9A01_WriteByteData(&context, 0xFF);
+	L2HAL_GC9A01_WriteCommand(context, 0x86);
+	L2HAL_GC9A01_WriteByteData(context, 0xFF);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x87);
-	L2HAL_GC9A01_WriteByteData(&context, 0xFF);
+	L2HAL_GC9A01_WriteCommand(context, 0x87);
+	L2HAL_GC9A01_WriteByteData(context, 0xFF);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x88);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0A);
+	L2HAL_GC9A01_WriteCommand(context, 0x88);
+	L2HAL_GC9A01_WriteByteData(context, 0x0A);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x89);
-	L2HAL_GC9A01_WriteByteData(&context, 0x21);
+	L2HAL_GC9A01_WriteCommand(context, 0x89);
+	L2HAL_GC9A01_WriteByteData(context, 0x21);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x8A);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
+	L2HAL_GC9A01_WriteCommand(context, 0x8A);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x8B);
-	L2HAL_GC9A01_WriteByteData(&context, 0x80);
+	L2HAL_GC9A01_WriteCommand(context, 0x8B);
+	L2HAL_GC9A01_WriteByteData(context, 0x80);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x8C);
-	L2HAL_GC9A01_WriteByteData(&context, 0x01);
+	L2HAL_GC9A01_WriteCommand(context, 0x8C);
+	L2HAL_GC9A01_WriteByteData(context, 0x01);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x8D);
-	L2HAL_GC9A01_WriteByteData(&context, 0x01);
+	L2HAL_GC9A01_WriteCommand(context, 0x8D);
+	L2HAL_GC9A01_WriteByteData(context, 0x01);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x8E);
-	L2HAL_GC9A01_WriteByteData(&context, 0xFF);
+	L2HAL_GC9A01_WriteCommand(context, 0x8E);
+	L2HAL_GC9A01_WriteByteData(context, 0xFF);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x8F);
-	L2HAL_GC9A01_WriteByteData(&context, 0xFF);
+	L2HAL_GC9A01_WriteCommand(context, 0x8F);
+	L2HAL_GC9A01_WriteByteData(context, 0xFF);
 
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xB6);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
+	L2HAL_GC9A01_WriteCommand(context, 0xB6);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
 
 	/* Orientation */
-	L2HAL_GC9A01_WriteCommand(&context, 0x36); /* Memory access control */
+	L2HAL_GC9A01_WriteCommand(context, 0x36); /* Memory access control */
 
 	/* Parameters for orientation command: MY MX MV ML BGR MH 0 0 */
 	switch(orientation)
 	{
 		case ROTATION_0:
-			L2HAL_GC9A01_WriteByteData(&context, 0b00011000);
+			L2HAL_GC9A01_WriteByteData(context, 0b00011000);
 			break;
 
 		case ROTATION_90:
-			L2HAL_GC9A01_WriteByteData(&context, 0b00101000);
+			L2HAL_GC9A01_WriteByteData(context, 0b00101000);
 			break;
 
 		case ROTATION_180:
-			L2HAL_GC9A01_WriteByteData(&context, 0b01001000);
+			L2HAL_GC9A01_WriteByteData(context, 0b01001000);
 			break;
 
 		case ROTATION_270:
-			L2HAL_GC9A01_WriteByteData(&context, 0b01101000);
+			L2HAL_GC9A01_WriteByteData(context, 0b01101000);
 			break;
 
 		default:
@@ -151,183 +156,183 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 
 	/* End of orientation */
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x3A); /* Set color mode */
-	L2HAL_GC9A01_WriteByteData(&context, 0b01100110); /* 18 bits per pixel, 3 bytes exchange - RGB */
+	L2HAL_GC9A01_WriteCommand(context, 0x3A); /* Set color mode */
+	L2HAL_GC9A01_WriteByteData(context, 0b01100110); /* 18 bits per pixel, 3 bytes exchange - RGB */
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x90);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
+	L2HAL_GC9A01_WriteCommand(context, 0x90);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xBD);
-	L2HAL_GC9A01_WriteByteData(&context, 0x06);
+	L2HAL_GC9A01_WriteCommand(context, 0xBD);
+	L2HAL_GC9A01_WriteByteData(context, 0x06);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xBC);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
+	L2HAL_GC9A01_WriteCommand(context, 0xBC);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xFF);
-	L2HAL_GC9A01_WriteByteData(&context, 0x60);
-	L2HAL_GC9A01_WriteByteData(&context, 0x01);
-	L2HAL_GC9A01_WriteByteData(&context, 0x04);
+	L2HAL_GC9A01_WriteCommand(context, 0xFF);
+	L2HAL_GC9A01_WriteByteData(context, 0x60);
+	L2HAL_GC9A01_WriteByteData(context, 0x01);
+	L2HAL_GC9A01_WriteByteData(context, 0x04);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xC3);
-	L2HAL_GC9A01_WriteByteData(&context, 0x13);
-	L2HAL_GC9A01_WriteCommand(&context, 0xC4);
-	L2HAL_GC9A01_WriteByteData(&context, 0x13);
+	L2HAL_GC9A01_WriteCommand(context, 0xC3);
+	L2HAL_GC9A01_WriteByteData(context, 0x13);
+	L2HAL_GC9A01_WriteCommand(context, 0xC4);
+	L2HAL_GC9A01_WriteByteData(context, 0x13);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xC9);
-	L2HAL_GC9A01_WriteByteData(&context, 0x22);
+	L2HAL_GC9A01_WriteCommand(context, 0xC9);
+	L2HAL_GC9A01_WriteByteData(context, 0x22);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xBE);
-	L2HAL_GC9A01_WriteByteData(&context, 0x11);
+	L2HAL_GC9A01_WriteCommand(context, 0xBE);
+	L2HAL_GC9A01_WriteByteData(context, 0x11);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xE1);
-	L2HAL_GC9A01_WriteByteData(&context, 0x10);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0E);
+	L2HAL_GC9A01_WriteCommand(context, 0xE1);
+	L2HAL_GC9A01_WriteByteData(context, 0x10);
+	L2HAL_GC9A01_WriteByteData(context, 0x0E);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xDF);
-	L2HAL_GC9A01_WriteByteData(&context, 0x21);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0c);
-	L2HAL_GC9A01_WriteByteData(&context, 0x02);
+	L2HAL_GC9A01_WriteCommand(context, 0xDF);
+	L2HAL_GC9A01_WriteByteData(context, 0x21);
+	L2HAL_GC9A01_WriteByteData(context, 0x0c);
+	L2HAL_GC9A01_WriteByteData(context, 0x02);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xF0);
-	L2HAL_GC9A01_WriteByteData(&context, 0x45);
-	L2HAL_GC9A01_WriteByteData(&context, 0x09);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x26);
-	L2HAL_GC9A01_WriteByteData(&context, 0x2A);
+	L2HAL_GC9A01_WriteCommand(context, 0xF0);
+	L2HAL_GC9A01_WriteByteData(context, 0x45);
+	L2HAL_GC9A01_WriteByteData(context, 0x09);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x26);
+	L2HAL_GC9A01_WriteByteData(context, 0x2A);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xF1);
-	L2HAL_GC9A01_WriteByteData(&context, 0x43);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x72);
-	L2HAL_GC9A01_WriteByteData(&context, 0x36);
-	L2HAL_GC9A01_WriteByteData(&context, 0x37);
-	L2HAL_GC9A01_WriteByteData(&context, 0x6F);
+	L2HAL_GC9A01_WriteCommand(context, 0xF1);
+	L2HAL_GC9A01_WriteByteData(context, 0x43);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x72);
+	L2HAL_GC9A01_WriteByteData(context, 0x36);
+	L2HAL_GC9A01_WriteByteData(context, 0x37);
+	L2HAL_GC9A01_WriteByteData(context, 0x6F);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xF2);
-	L2HAL_GC9A01_WriteByteData(&context, 0x45);
-	L2HAL_GC9A01_WriteByteData(&context, 0x09);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x26);
-	L2HAL_GC9A01_WriteByteData(&context, 0x2A);
+	L2HAL_GC9A01_WriteCommand(context, 0xF2);
+	L2HAL_GC9A01_WriteByteData(context, 0x45);
+	L2HAL_GC9A01_WriteByteData(context, 0x09);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x26);
+	L2HAL_GC9A01_WriteByteData(context, 0x2A);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xF3);
-	L2HAL_GC9A01_WriteByteData(&context, 0x43);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x72);
-	L2HAL_GC9A01_WriteByteData(&context, 0x36);
-	L2HAL_GC9A01_WriteByteData(&context, 0x37);
-	L2HAL_GC9A01_WriteByteData(&context, 0x6F);
+	L2HAL_GC9A01_WriteCommand(context, 0xF3);
+	L2HAL_GC9A01_WriteByteData(context, 0x43);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x72);
+	L2HAL_GC9A01_WriteByteData(context, 0x36);
+	L2HAL_GC9A01_WriteByteData(context, 0x37);
+	L2HAL_GC9A01_WriteByteData(context, 0x6F);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xED);
-	L2HAL_GC9A01_WriteByteData(&context, 0x1B);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0B);
+	L2HAL_GC9A01_WriteCommand(context, 0xED);
+	L2HAL_GC9A01_WriteByteData(context, 0x1B);
+	L2HAL_GC9A01_WriteByteData(context, 0x0B);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xAE);
-	L2HAL_GC9A01_WriteByteData(&context, 0x77);
+	L2HAL_GC9A01_WriteCommand(context, 0xAE);
+	L2HAL_GC9A01_WriteByteData(context, 0x77);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xCD);
-	L2HAL_GC9A01_WriteByteData(&context, 0x63);
+	L2HAL_GC9A01_WriteCommand(context, 0xCD);
+	L2HAL_GC9A01_WriteByteData(context, 0x63);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x07);
-	L2HAL_GC9A01_WriteByteData(&context, 0x07);
-	L2HAL_GC9A01_WriteByteData(&context, 0x04);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0E);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0F);
-	L2HAL_GC9A01_WriteByteData(&context, 0x09);
-	L2HAL_GC9A01_WriteByteData(&context, 0x07);
-	L2HAL_GC9A01_WriteByteData(&context, 0x08);
-	L2HAL_GC9A01_WriteByteData(&context, 0x03);
+	L2HAL_GC9A01_WriteCommand(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x07);
+	L2HAL_GC9A01_WriteByteData(context, 0x07);
+	L2HAL_GC9A01_WriteByteData(context, 0x04);
+	L2HAL_GC9A01_WriteByteData(context, 0x0E);
+	L2HAL_GC9A01_WriteByteData(context, 0x0F);
+	L2HAL_GC9A01_WriteByteData(context, 0x09);
+	L2HAL_GC9A01_WriteByteData(context, 0x07);
+	L2HAL_GC9A01_WriteByteData(context, 0x08);
+	L2HAL_GC9A01_WriteByteData(context, 0x03);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0xE8);
-	L2HAL_GC9A01_WriteByteData(&context, 0x34);
+	L2HAL_GC9A01_WriteCommand(context, 0xE8);
+	L2HAL_GC9A01_WriteByteData(context, 0x34);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x62);
-	L2HAL_GC9A01_WriteByteData(&context, 0x18);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0D);
-	L2HAL_GC9A01_WriteByteData(&context, 0x71);
-	L2HAL_GC9A01_WriteByteData(&context, 0xED);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x18);
-	L2HAL_GC9A01_WriteByteData(&context, 0x0F);
-	L2HAL_GC9A01_WriteByteData(&context, 0x71);
-	L2HAL_GC9A01_WriteByteData(&context, 0xEF);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
+	L2HAL_GC9A01_WriteCommand(context, 0x62);
+	L2HAL_GC9A01_WriteByteData(context, 0x18);
+	L2HAL_GC9A01_WriteByteData(context, 0x0D);
+	L2HAL_GC9A01_WriteByteData(context, 0x71);
+	L2HAL_GC9A01_WriteByteData(context, 0xED);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x18);
+	L2HAL_GC9A01_WriteByteData(context, 0x0F);
+	L2HAL_GC9A01_WriteByteData(context, 0x71);
+	L2HAL_GC9A01_WriteByteData(context, 0xEF);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x63);
-	L2HAL_GC9A01_WriteByteData(&context, 0x18);
-	L2HAL_GC9A01_WriteByteData(&context, 0x11);
-	L2HAL_GC9A01_WriteByteData(&context, 0x71);
-	L2HAL_GC9A01_WriteByteData(&context, 0xF1);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x18);
-	L2HAL_GC9A01_WriteByteData(&context, 0x13);
-	L2HAL_GC9A01_WriteByteData(&context, 0x71);
-	L2HAL_GC9A01_WriteByteData(&context, 0xF3);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
-	L2HAL_GC9A01_WriteByteData(&context, 0x70);
+	L2HAL_GC9A01_WriteCommand(context, 0x63);
+	L2HAL_GC9A01_WriteByteData(context, 0x18);
+	L2HAL_GC9A01_WriteByteData(context, 0x11);
+	L2HAL_GC9A01_WriteByteData(context, 0x71);
+	L2HAL_GC9A01_WriteByteData(context, 0xF1);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x18);
+	L2HAL_GC9A01_WriteByteData(context, 0x13);
+	L2HAL_GC9A01_WriteByteData(context, 0x71);
+	L2HAL_GC9A01_WriteByteData(context, 0xF3);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
+	L2HAL_GC9A01_WriteByteData(context, 0x70);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x64);
-	L2HAL_GC9A01_WriteByteData(&context, 0x28);
-	L2HAL_GC9A01_WriteByteData(&context, 0x29);
-	L2HAL_GC9A01_WriteByteData(&context, 0xF1);
-	L2HAL_GC9A01_WriteByteData(&context, 0x01);
-	L2HAL_GC9A01_WriteByteData(&context, 0xF1);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x07);
+	L2HAL_GC9A01_WriteCommand(context, 0x64);
+	L2HAL_GC9A01_WriteByteData(context, 0x28);
+	L2HAL_GC9A01_WriteByteData(context, 0x29);
+	L2HAL_GC9A01_WriteByteData(context, 0xF1);
+	L2HAL_GC9A01_WriteByteData(context, 0x01);
+	L2HAL_GC9A01_WriteByteData(context, 0xF1);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x07);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x66);
-	L2HAL_GC9A01_WriteByteData(&context, 0x3C);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0xCD);
-	L2HAL_GC9A01_WriteByteData(&context, 0x67);
-	L2HAL_GC9A01_WriteByteData(&context, 0x45);
-	L2HAL_GC9A01_WriteByteData(&context, 0x45);
-	L2HAL_GC9A01_WriteByteData(&context, 0x10);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
+	L2HAL_GC9A01_WriteCommand(context, 0x66);
+	L2HAL_GC9A01_WriteByteData(context, 0x3C);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0xCD);
+	L2HAL_GC9A01_WriteByteData(context, 0x67);
+	L2HAL_GC9A01_WriteByteData(context, 0x45);
+	L2HAL_GC9A01_WriteByteData(context, 0x45);
+	L2HAL_GC9A01_WriteByteData(context, 0x10);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x67);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x3C);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x01);
-	L2HAL_GC9A01_WriteByteData(&context, 0x54);
-	L2HAL_GC9A01_WriteByteData(&context, 0x10);
-	L2HAL_GC9A01_WriteByteData(&context, 0x32);
-	L2HAL_GC9A01_WriteByteData(&context, 0x98);
+	L2HAL_GC9A01_WriteCommand(context, 0x67);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x3C);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x01);
+	L2HAL_GC9A01_WriteByteData(context, 0x54);
+	L2HAL_GC9A01_WriteByteData(context, 0x10);
+	L2HAL_GC9A01_WriteByteData(context, 0x32);
+	L2HAL_GC9A01_WriteByteData(context, 0x98);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x74);
-	L2HAL_GC9A01_WriteByteData(&context, 0x10);
-	L2HAL_GC9A01_WriteByteData(&context, 0x85);
-	L2HAL_GC9A01_WriteByteData(&context, 0x80);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
-	L2HAL_GC9A01_WriteByteData(&context, 0x4E);
-	L2HAL_GC9A01_WriteByteData(&context, 0x00);
+	L2HAL_GC9A01_WriteCommand(context, 0x74);
+	L2HAL_GC9A01_WriteByteData(context, 0x10);
+	L2HAL_GC9A01_WriteByteData(context, 0x85);
+	L2HAL_GC9A01_WriteByteData(context, 0x80);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
+	L2HAL_GC9A01_WriteByteData(context, 0x4E);
+	L2HAL_GC9A01_WriteByteData(context, 0x00);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x98);
-	L2HAL_GC9A01_WriteByteData(&context, 0x3e);
-	L2HAL_GC9A01_WriteByteData(&context, 0x07);
+	L2HAL_GC9A01_WriteCommand(context, 0x98);
+	L2HAL_GC9A01_WriteByteData(context, 0x3e);
+	L2HAL_GC9A01_WriteByteData(context, 0x07);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x35);
-	L2HAL_GC9A01_WriteCommand(&context, 0x21);
+	L2HAL_GC9A01_WriteCommand(context, 0x35);
+	L2HAL_GC9A01_WriteCommand(context, 0x21);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x11);
+	L2HAL_GC9A01_WriteCommand(context, 0x11);
 	HAL_Delay(L2HAL_GC9A01_DISPLAY_SLEEP_OUT_TIME);
 
-	L2HAL_GC9A01_WriteCommand(&context, 0x29);
+	L2HAL_GC9A01_WriteCommand(context, 0x29);
 	HAL_Delay(L2HAL_GC9A01_DISPLAY_AFTER_ON_TIME);
 
 	/* Active color is black */
@@ -335,12 +340,10 @@ L2HAL_GC9A01_ContextStruct L2HAL_GC9A01_Init
 	blackColor.R = 0x00;
 	blackColor.G = 0x00;
 	blackColor.B = 0x00;
-	L2HAL_GC9A01_SetActiveColor(&context, blackColor);
+	L2HAL_GC9A01_SetActiveColor(context, blackColor);
 
 	/* Filling display with black */
-	L2HAL_GC9A01_ClearDisplay(&context);
-
-	return context;
+	L2HAL_GC9A01_ClearDisplay(context);
 }
 
 void L2HAL_GC9A01_SelectChip(L2HAL_GC9A01_ContextStruct *context, bool isSelected)
@@ -373,10 +376,12 @@ void L2HAL_GC9A01_WriteCommand(L2HAL_GC9A01_ContextStruct *context, uint8_t comm
 
 	L2HAL_GC9A01_SelectChip(context, true);
 
-	if (HAL_SPI_Transmit(context->SPIHandle, &command, 1, L2HAL_GC9A01_TRANSMIT_TIMEOUT) != HAL_OK)
+	if (HAL_SPI_Transmit_DMA(context->SPIHandle, &command, 1) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
+
+	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) {}
 
 	L2HAL_GC9A01_SelectChip(context, false);
 }
@@ -387,10 +392,13 @@ void L2HAL_GC9A01_WriteData(L2HAL_GC9A01_ContextStruct *context, uint8_t *data, 
 
 	L2HAL_GC9A01_SelectChip(context, true);
 
-	if (HAL_SPI_Transmit(context->SPIHandle, data, dataSize, L2HAL_GC9A01_TRANSMIT_TIMEOUT) != HAL_OK)
+	if (HAL_SPI_Transmit_DMA(context->SPIHandle, data, dataSize) != HAL_OK)
+	//if (HAL_SPI_Transmit(context->SPIHandle, data, dataSize, 1000) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
+
+	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) {}
 
 	L2HAL_GC9A01_SelectChip(context, false);
 }
@@ -464,20 +472,77 @@ void L2HAL_GC9A01_ClearDisplay(L2HAL_GC9A01_ContextStruct *context)
 
 void L2HAL_GC9A01_DrawPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uint16_t y)
 {
-	L2HAL_GC9A01_SetColumnsRange(context, x, x);
-	L2HAL_GC9A01_SetRowsRange(context, y, y);
+	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
+	{
+		/* Cache hit */
+		L2HAL_GC9A01_WritePixelsCache(context, x, y, context->ActiveColor);
+		return;
+	}
 
-	uint8_t pixelData[3];
-	pixelData[0] = context->ActiveColor.R;
-	pixelData[1] = context->ActiveColor.G;
-	pixelData[2] = context->ActiveColor.B;
+	/*
+	 * TODO: Push cache to external memory, not to display
+	 * Cache miss, pushing cache to display
+	 * */
+	L2HAL_GC9A01_PushCacheToDisplay(context);
 
+	/* Moving cache to new position */
+	context->PixelsCacheX = x;
+	context->PixelsCacheY = y;
+	memset(context->PixelsCache, 0x00, L2HAL_GC9A01_CACHE_SIZE);
+
+	/* TODO: Download cache from external memory */
+
+	/* Writing new pixel to cache */
+	L2HAL_GC9A01_WritePixelsCache(context, x, y, context->ActiveColor);
+}
+
+void L2HAL_GC9A01_PushCacheToDisplay(L2HAL_GC9A01_ContextStruct *context)
+{
+	L2HAL_GC9A01_SetColumnsRange(context, context->PixelsCacheX, context->PixelsCacheX + L2HAL_GC9A01_CACHE_WIDTH - 1);
+	L2HAL_GC9A01_SetRowsRange(context, context->PixelsCacheY, context->PixelsCacheY + L2HAL_GC9A01_CACHE_HEIGHT - 1);
+
+	/* Writing cache to display */
 	L2HAL_GC9A01_WriteCommand(context, 0x2C);
-	L2HAL_GC9A01_WriteData(context, pixelData, 3);
+	L2HAL_GC9A01_WriteData(context, context->PixelsCache, L2HAL_GC9A01_CACHE_SIZE);
+}
 
-	/* Why, gods, why we need to send the pixel again? */
-	L2HAL_GC9A01_WriteCommand(context, 0x3C);
-	L2HAL_GC9A01_WriteData(context, pixelData, 3);
+bool L2HAL_GC9A01_IsPixelsCacheHit(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y)
+{
+	return
+		x >= context->PixelsCacheX
+		&&
+		x < context->PixelsCacheX + L2HAL_GC9A01_CACHE_WIDTH
+		&&
+		y >= context->PixelsCacheY
+		&&
+		y < context->PixelsCacheY + L2HAL_GC9A01_CACHE_HEIGHT;
+}
+
+FMGL_API_ColorStruct L2HAL_GC9A01_ReadPixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y)
+{
+	uint16_t cacheY = y - context->PixelsCacheY;
+	uint16_t cacheX = x - context->PixelsCacheX;
+
+	uint16_t cacheIndex = (cacheY * L2HAL_GC9A01_CACHE_WIDTH + cacheX) * 3;
+
+	FMGL_API_ColorStruct result;
+	result.R = context->PixelsCache[cacheIndex + 0]; // We have RGB sequence
+	result.G = context->PixelsCache[cacheIndex + 1];
+	result.B = context->PixelsCache[cacheIndex + 2];
+
+	return result;
+}
+
+void L2HAL_GC9A01_WritePixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y, FMGL_API_ColorStruct color)
+{
+	uint16_t cacheY = y - context->PixelsCacheY;
+	uint16_t cacheX = x - context->PixelsCacheX;
+
+	uint16_t cacheIndex = (cacheY * L2HAL_GC9A01_CACHE_WIDTH + cacheX) * 3;
+
+	context->PixelsCache[cacheIndex + 0] = color.R;
+	context->PixelsCache[cacheIndex + 1] = color.G;
+	context->PixelsCache[cacheIndex + 2] = color.B;
 }
 
 void L2HAL_GC9A01_SetActiveColor(L2HAL_GC9A01_ContextStruct* context, FMGL_API_ColorStruct color)
@@ -487,17 +552,35 @@ void L2HAL_GC9A01_SetActiveColor(L2HAL_GC9A01_ContextStruct* context, FMGL_API_C
 
 FMGL_API_ColorStruct L2HAL_GC9A01_GetPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uint16_t y)
 {
-	/* Dummy because we have no framebuffer */
-	FMGL_API_ColorStruct color;
-	color.R = 0x00;
-	color.G = 0x00;
-	color.B = 0x00;
+	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
+	{
+		/* Cache hit */
+		return L2HAL_GC9A01_ReadPixelsCache(context, x, y);
+	}
+	else
+	{
+		/* Cache miss, we need to download cache from external memory */
 
-	return color;
+		/*
+		 * TODO: CALL CACHE DOWNLOAD HERE
+		 * Dummy because we have no framebuffer
+		 * */
+		FMGL_API_ColorStruct color;
+		color.R = 0x00;
+		color.G = 0x00;
+		color.B = 0x00;
+
+		return color;
+	}
 }
 
 void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context)
 {
-	/* Do nothing, we have no framebuffer */
+	/*
+	 * TODO: UPLOAD PIXELS CACHE TO FRAMEBUFFER, THEN PUSH FRAMEBUFFER TO DISPLAY
+	 * Do nothing, we have no framebuffer
+	 * */
+
+	L2HAL_GC9A01_PushCacheToDisplay(context);
 }
 

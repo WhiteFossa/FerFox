@@ -34,6 +34,11 @@ L2HAL_SysTick_ContextStruct L2HAL_SysTick_Context = { 0 };
 SPI_HandleTypeDef SPI1Handle = { 0 };
 
 /**
+ * SPI1 DMA handle.
+ */
+DMA_HandleTypeDef SPI1DmaHandle = { 0 };
+
+/**
  * Backlight timer handler
  */
 TIM_HandleTypeDef BacklightTimerHandle = { 0 };
