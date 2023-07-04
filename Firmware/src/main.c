@@ -107,6 +107,18 @@ int main(int argc, char* argv[])
 	pngle_destroy(pngle);
 	/* End of PNG drawing */
 
+//	/* Circels drawing */
+//	FMGL_API_ColorStruct color;
+//	color.R = 0x00;
+//	color.G = 0xFF;
+//	color.B = 0x00;
+//
+//	FMGL_API_SetActiveColor(&fmglContext, color);
+//
+//	FMGL_API_DrawCircle(&fmglContext, 120, 120, 30);
+//
+//	/* End of circles drawing*/
+
 	while(true)
 	{
 		/* Drawing FPS */

@@ -140,7 +140,7 @@ typedef struct
 } FMGL_API_XBMImage;
 
 /**
- * Device driver context. Library works with driver using this context.
+ * Device FMGL context pointer. Library works with driver using this context.
  */
 typedef struct
 {
@@ -314,35 +314,35 @@ FMGL_API_DriverContext FMGL_API_AttachToDriver
 
 /**
  * Returns display width.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @return Display width.
  */
 uint16_t FMGL_API_GetDisplayWidth(FMGL_API_DriverContext* context);
 
 /**
  * Returns display height.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @return Display height.
  */
 uint16_t FMGL_API_GetDisplayHeight(FMGL_API_DriverContext* context);
 
 /**
  * Sets active color.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param color New active color.
  */
 void FMGL_API_SetActiveColor(FMGL_API_DriverContext* context, FMGL_API_ColorStruct color);
 
 /**
  * Returns current active color.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @return Currently selected color.
  */
 FMGL_API_ColorStruct FMGL_API_GetActiveColor(FMGL_API_DriverContext* context);
 
 /**
  * Draws pixel with current active color.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param x X pixel coordinate.
  * @param y Y pixel coordinate.
  */
@@ -350,7 +350,7 @@ void FMGL_API_DrawPixel(FMGL_API_DriverContext* context, uint16_t x, uint16_t y)
 
 /**
  * Returns pixel color. If coordinates are incorrect return undefined color.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param x X pixel coordinate.
  * @param y Y pixel coordinate.
  * @return Pixel color at given coordinates.
@@ -359,27 +359,27 @@ FMGL_API_ColorStruct FMGL_API_GetPixel(FMGL_API_DriverContext* context, uint16_t
 
 /**
  * Sets color for screen clearing.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param color This color will be used for screen cleaning.
  */
 void FMGL_API_SetBlankingColor(FMGL_API_DriverContext* context, FMGL_API_ColorStruct color);
 
 /**
  * Fills framebuffer with given color.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param color Fill framebuffer with this color.
  */
 void FMGL_API_FillScreen(FMGL_API_DriverContext* context, FMGL_API_ColorStruct color);
 
 /**
  * Clears screen (i.e. fills framebuffer with current blanking color).
- * @param context Driver context.
+ * @param context FMGL context pointer.
  */
 void FMGL_API_ClearScreen(FMGL_API_DriverContext* context);
 
 /**
  * Pushes framebuffer to device.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  */
 void FMGL_API_PushFramebuffer (FMGL_API_DriverContext* context);
 
@@ -390,7 +390,7 @@ void FMGL_API_PushFramebuffer (FMGL_API_DriverContext* context);
 
 /**
  * Draws horizontal line.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param x1 Line one end X coordinate.
  * @param x2 Line another end X coordinate.
  * @param y Line Y coordinate.
@@ -399,7 +399,7 @@ void FMGL_API_DrawLineHorizontal(FMGL_API_DriverContext* context, uint16_t x1, u
 
 /**
  * Draws vertical line.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param x Line X coordinate.
  * @param y1 Line one end Y coordinate.
  * @param y2 Line another end Y coordinate.
@@ -413,7 +413,7 @@ void FMGL_API_DrawLineVertical(FMGL_API_DriverContext* context, uint16_t x, uint
 
 /**
  * Draws rectangle without filling it.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param x1 One corner X coordinate.
  * @param y1 One corner Y coordinate.
  * @param x2 Opposite corner X coordinate.
@@ -423,7 +423,7 @@ void FMGL_API_DrawRectangle(FMGL_API_DriverContext* context, uint16_t x1, uint16
 
 /**
  * Draws filled rectangle. Active color didn't change after this function call.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param x1 One corner X coordinate.
  * @param y1 One corner Y coordinate.
  * @param x2 Opposite corner X coordinate.
@@ -434,6 +434,19 @@ void FMGL_API_DrawRectangle(FMGL_API_DriverContext* context, uint16_t x1, uint16
 void FMGL_API_DrawRectangleFilled(FMGL_API_DriverContext* context, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, FMGL_API_ColorStruct borderColor, FMGL_API_ColorStruct fillColor);
 
 
+/********************
+ * Circles and arcs *
+ ********************/
+
+/**
+ * Draw full circle.
+ * @param context FMGL context pointer.
+ * @param centerX Circle center X coordinate.
+ * @param centerY Circle center Y coordinate.
+ * @param radius Circle radius.
+ */
+void FMGL_API_DrawCircle(FMGL_API_DriverContext* context, uint16_t centerX, uint16_t centerY, uint16_t radius);
+
 /***************************
  * XBM rendering functions *
  ***************************/
@@ -441,7 +454,7 @@ void FMGL_API_DrawRectangleFilled(FMGL_API_DriverContext* context, uint16_t x1, 
 /**
  * Renders XBM image such way, that (0,0) pixel of image will be placed at (x,y). Image is being
  * scaled up by scaleX and scaleY. XBM's active pixels will be displayed using activeColor, inactive - using inactiveColor.
- * @param context Driver context.
+ * @param context FMGL context pointer.
  * @param image Pointer to XBM image struct.
  * @param x X coordinate of top left image corner.
  * @param y Y coordinate of top left image corner.

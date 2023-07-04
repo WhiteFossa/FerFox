@@ -432,3 +432,43 @@ void FMGL_API_RenderTextWithLineBreaks(FMGL_API_DriverContext* context, FMGL_API
 
 	*height = y - *height;
 }
+
+void FMGL_API_DrawCircle(FMGL_API_DriverContext* context, uint16_t centerX, uint16_t centerY, uint16_t radius)
+{
+	int32_t x0 = centerX;
+	int32_t y0 = centerY;
+
+	int32_t x = 0;
+	int32_t y = radius;
+
+	int32_t delta = 1 - 2 * radius;
+	int32_t error = 0;
+
+	while(y >= 0)
+	{
+		FMGL_API_DrawPixel(context, (uint16_t)(x0 + x), (uint16_t)(y0 + y));
+		FMGL_API_DrawPixel(context, (uint16_t)(x0 + x), (uint16_t)(y0 - y));
+		FMGL_API_DrawPixel(context, (uint16_t)(x0 - x), (uint16_t)(y0 + y));
+		FMGL_API_DrawPixel(context, (uint16_t)(x0 - x), (uint16_t)(y0 - y));
+
+		error = 2 * (delta + y) - 1;
+		if(delta < 0 && error <= 0)
+		{
+			++x;
+			delta += 2 * x + 1;
+			continue;
+		}
+
+		error = 2 * (delta - x) - 1;
+		if(delta > 0 && error > 0)
+		{
+			--y;
+			delta += 1 - 2 * y;
+			continue;
+		}
+
+		++x;
+		delta += 2 * (x - y);
+		--y;
+	}
+}
