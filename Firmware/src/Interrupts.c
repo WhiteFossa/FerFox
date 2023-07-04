@@ -15,9 +15,9 @@ void SysTick_Handler(void)
 }
 
 
-void DMA2_Stream3_IRQHandler(void)
+void DMA1_Stream4_IRQHandler(void)
 {
-	HAL_DMA_IRQHandler(SPI1Handle.hdmatx);
-	L2HAL_DisplayDmaCompleted(SPI1Handle.hdmatx);
+	HAL_DMA_IRQHandler(SPI2Handle.hdmatx);
+	L2HAL_DisplayDmaCompleted(SPI2Handle.hdmatx);
 }
 

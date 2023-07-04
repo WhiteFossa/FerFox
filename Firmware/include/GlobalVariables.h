@@ -29,14 +29,14 @@
 L2HAL_SysTick_ContextStruct L2HAL_SysTick_Context = { 0 };
 
 /**
- * SPI1 bus handle.
+ * SPI2 bus handle.
  */
-SPI_HandleTypeDef SPI1Handle = { 0 };
+SPI_HandleTypeDef SPI2Handle = { 0 };
 
 /**
- * SPI1 DMA handle.
+ * SPI2 DMA handle.
  */
-DMA_HandleTypeDef SPI1DmaHandle = { 0 };
+DMA_HandleTypeDef SPI2DmaHandle = { 0 };
 
 /**
  * Backlight timer handler

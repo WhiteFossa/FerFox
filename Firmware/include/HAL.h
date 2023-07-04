@@ -73,8 +73,10 @@
 /**********************
  *  DISPLAY - GC9A01  *
  *
- *  PA5 - SCK (SCL)
- *  PA7 - MOSI (SDA)
+ *  SPI 2:
+ *  PB13 - SCK (SCL)
+ *  PB15 - MOSI (SDA)
+ *
  *  PB0 - RESET (Active 0)
  *  PB1 - D/C (1 - data, 0 - command)
  *  PB2 - CS (Active 0)

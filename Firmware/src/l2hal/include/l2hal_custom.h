@@ -46,10 +46,11 @@
 #include <l2hal_errors.h>
 #include <l2hal_gc9a01.h>
 
-extern SPI_HandleTypeDef SPI1Handle;
-extern TIM_HandleTypeDef BacklightTimerHandle;
-extern DMA_HandleTypeDef SPI1DmaHandle;
+extern SPI_HandleTypeDef SPI2Handle;
+extern DMA_HandleTypeDef SPI2DmaHandle;
 extern L2HAL_GC9A01_ContextStruct DisplayContext;
+
+extern TIM_HandleTypeDef BacklightTimerHandle;
 
 /**
  * Put custom hardware initialization stuff here,
