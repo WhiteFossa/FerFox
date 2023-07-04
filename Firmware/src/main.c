@@ -8,7 +8,8 @@
 
 #include <main.h>
 #include <HAL.h>
-#include <Awesome.h>
+//#include <Awesome.h>
+#include <lisessa.h>
 #include <terminusRegular12.h>
 
 int main(int argc, char* argv[])
@@ -62,19 +63,6 @@ int main(int argc, char* argv[])
 		OffColor
 	);
 
-	/* Preparing sprite to draw */
-	sprite.Width = Awesome_width;
-	sprite.Height = Awesome_height;
-	sprite.Raster = Awesome_bits;
-
-	int8_t rSpeed = 32;
-	int8_t gSpeed = 16;
-	int8_t bSpeed = 8;
-
-	int16_t r = 0;
-	int16_t g = 0;
-	int16_t b = 0;
-
 	fpsCounter = 0;
 	fpsHandlerCounter = 0;
 
@@ -97,52 +85,30 @@ int main(int argc, char* argv[])
 
 	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
+	/* Begin of PNG drawing */
+	pngle_t *pngle = pngle_new();
+	pngle_set_draw_callback(pngle, PngleOnDraw);
+
+	uint8_t feedBuffer[1024];
+	uint32_t fed = 0;
+	while (fed < LISESSA_LENGTH)
+	{
+		uint32_t toFeed = LISESSA_LENGTH - fed;
+		if (toFeed > 1024)
+		{
+			toFeed = 1024;
+		}
+
+		memcpy(feedBuffer, &lisessa[fed], toFeed);
+
+		fed += pngle_feed(pngle, feedBuffer, toFeed);
+	}
+
+	pngle_destroy(pngle);
+	/* End of PNG drawing */
+
 	while(true)
 	{
-
-		r += rSpeed;
-		if (r < 0)
-		{
-			r = 0;
-			rSpeed *= -1;
-		}
-		else if (r > 255)
-		{
-			r = 255;
-			rSpeed *= -1;
-		}
-
-		g += gSpeed;
-		if (g < 0)
-		{
-			g = 0;
-			gSpeed *= -1;
-		}
-		else if (g > 255)
-		{
-			g = 255;
-			gSpeed *= -1;
-		}
-
-		b += bSpeed;
-		if (b < 0)
-		{
-			b = 0;
-			bSpeed *= -1;
-		}
-		else if (b > 255)
-		{
-			b = 255;
-			bSpeed *= -1;
-		}
-
-		AwesomeColor.R = r;
-		AwesomeColor.G = g;
-		AwesomeColor.B = b;
-
-		/* Drawing sprite */
-		FMGL_API_RenderXBM(&fmglContext, &sprite, 0, 0, 1, 1, AwesomeColor, OffColor, FMGL_XBMTransparencyModeTransparentInactive);
-
 		/* Drawing FPS */
 		/*uint16_t width, height;
 		char buffer[32];
@@ -154,6 +120,17 @@ int main(int argc, char* argv[])
 
 		fpsCounter ++;
 	}
+}
+
+void PngleOnDraw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+{
+	FMGL_API_ColorStruct color;
+	color.R = rgba[0];
+	color.G = rgba[1];
+	color.B = rgba[2];
+
+	FMGL_API_SetActiveColor(&fmglContext, color);
+	FMGL_API_DrawPixel(&fmglContext, (uint16_t)x, (uint16_t)y);
 }
 
 void FpsHandler(void)

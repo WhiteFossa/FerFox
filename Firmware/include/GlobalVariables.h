@@ -70,11 +70,6 @@ FMGL_API_FontSettings invertedFont;
 FMGL_API_FontSettings* currentFont;
 
 /**
- * Sprite to draw.
- */
-FMGL_API_XBMImage sprite;
-
-/**
  * Draws background text with given font.
  * @param fontSettings Pointer to font settings.
  */
