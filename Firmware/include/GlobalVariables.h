@@ -10,6 +10,7 @@
 
 #include <l2hal_systick.h>
 #include <l2hal_gc9a01.h>
+#include <l2hal_sdcard.h>
 #include <fmgl.h>
 
 /**
@@ -51,29 +52,13 @@ L2HAL_GC9A01_ContextStruct DisplayContext;
 /**
  * FMGL context.
  */
-FMGL_API_DriverContext fmglContext;
-
-/**
- * Normal font (white on black).
- */
-FMGL_API_FontSettings normalFont;
+FMGL_API_DriverContext FmglContext;
 
 
 /**
- * Inverted font (black on white).
+ * SD-card context
  */
-FMGL_API_FontSettings invertedFont;
-
-/**
- * Current font (for text blinking).
- */
-FMGL_API_FontSettings* currentFont;
-
-/**
- * Draws background text with given font.
- * @param fontSettings Pointer to font settings.
- */
-void DrawBackgroundText(FMGL_API_FontSettings* fontSettings);
+L2HAL_SDCard_ContextStruct SDCardContext;
 
 
 #endif /* INCLUDE_GLOBALVARIABLES_H_ */

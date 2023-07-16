@@ -51,7 +51,7 @@ void L2HAL_SetupSPI(void)
 {
 	SPI2Handle.Instance = SPI2;
 	SPI2Handle.Init.Mode = SPI_MODE_MASTER;
-	SPI2Handle.Init.Direction = SPI_DIRECTION_1LINE;
+	SPI2Handle.Init.Direction = SPI_DIRECTION_2LINES;
 	SPI2Handle.Init.DataSize =  SPI_DATASIZE_8BIT;
 	SPI2Handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
 	SPI2Handle.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -86,6 +86,10 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 
 		GPIO_InitStruct.Pin = GPIO_PIN_13;
+		GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
+		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_14;
 		GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
 		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 

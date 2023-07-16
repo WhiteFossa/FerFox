@@ -45,10 +45,12 @@
 #include <l2hal_mcu.h>
 #include <l2hal_errors.h>
 #include <l2hal_gc9a01.h>
+#include <l2hal_sdcard.h>
 
 extern SPI_HandleTypeDef SPI2Handle;
 extern DMA_HandleTypeDef SPI2DmaHandle;
 extern L2HAL_GC9A01_ContextStruct DisplayContext;
+extern L2HAL_SDCard_ContextStruct SDCardContext;
 
 extern TIM_HandleTypeDef BacklightTimerHandle;
 

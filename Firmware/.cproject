@@ -87,6 +87,7 @@
 									<listOptionValue builtIn="false" value="&quot;../system/include/cmsis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../system/include/stm32f4-hal&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/internal/crc/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/sdcard/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/bluetooth/hc06/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/dds/ad9835/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/dac/ad5245/include&quot;"/>
@@ -238,11 +239,6 @@
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.printsize.452226193" name="GNU Arm Cross Print Size" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.printsize.2013240183"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1384275345.1945206875" name="stm32f4xx_hal_dma.c" rcbsApplicability="disable" resourcePath="system/src/stm32f4-hal/stm32f4xx_hal_dma.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.271029167.2061622507">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.271029167.2061622507" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.271029167">
-							<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.706209797" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
-						</tool>
-					</fileInfo>
 					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1384275345.system/src/cmsis/system_stm32f4xx.c" name="system_stm32f4xx.c" rcbsApplicability="disable" resourcePath="system/src/cmsis/system_stm32f4xx.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.502506138.219921914">
 						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.502506138.219921914" name="GNU Arm Cross C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.502506138">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.otherwarnings.1106902555" name="Other warning flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.otherwarnings" value="  -Wno-padded" valueType="string"/>
@@ -361,6 +357,7 @@
 									<listOptionValue builtIn="false" value="&quot;../system/include/cmsis&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../system/include/stm32f4-hal&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/internal/crc/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/sdcard/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/bluetooth/hc06/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/dds/ad9835/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/dac/ad5245/include&quot;"/>

@@ -71,7 +71,7 @@
 
 
 /**********************
- *  DISPLAY - GC9A01  *
+ * DISPLAY - GC9A01 *
  *
  *  SPI 2:
  *  PB13 - SCK (SCL)
@@ -94,6 +94,20 @@
 #define HAL_DISPLAY_CS_PORT GPIOB
 
 
+/**********************
+ *  SD CARD *
+ *
+ *  SPI 2:
+ *  PB13 - SCK (SCL)
+ *  PB15 - MOSI (SDA)
+ *
+ *  PB4 - CS (Active 0)
+ *
+ **********************/
+
+#define HAL_SDCARD_CS_PIN GPIO_PIN_4
+#define HAL_SDCARD_CS_PORT GPIOB
+
 /**
  * Init project-specific hardware here
  */
@@ -108,7 +122,6 @@ void HAL_SwitchLed(bool isOn);
  * Set backlight level [0-HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD]
  */
 void HAL_SetBacklightLevel(uint16_t level);
-
 
 
 #endif /* INCLUDE_HAL_H_ */

@@ -8,7 +8,6 @@
 
 #include <main.h>
 #include <HAL.h>
-//#include <Awesome.h>
 #include <lisessa.h>
 #include <terminusRegular12.h>
 
@@ -21,6 +20,17 @@ int main(int argc, char* argv[])
 	L2HAL_Init();
 	HAL_IntiHardware();
 
+	/* SD Card driver initialization */
+	L2HAL_SDCard_Init
+	(
+		&SDCardContext,
+		&SPI2Handle,
+
+		HAL_SDCARD_CS_PORT,
+		HAL_SDCARD_CS_PIN
+	);
+
+	/* Display driver initialization */
 	L2HAL_GC9A01_Init
 	(
 		&DisplayContext,
@@ -40,18 +50,14 @@ int main(int argc, char* argv[])
 
 	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
 
+
 	FMGL_API_ColorStruct OffColor;
 	OffColor.R = 0;
 	OffColor.G = 0;
 	OffColor.B = 0;
 
-	FMGL_API_ColorStruct AwesomeColor;
-	AwesomeColor.R = 0x00;
-	AwesomeColor.G = 0x00;
-	AwesomeColor.B = 0x00;
-
 	/* Attaching FMGL to display */
-	fmglContext = FMGL_API_AttachToDriver
+	FmglContext = FMGL_API_AttachToDriver
 	(
 		&DisplayContext,
 		&L2HAL_GC9A01_GetWidth,
@@ -128,7 +134,7 @@ int main(int argc, char* argv[])
 		FMGL_API_RenderTextWithLineBreaks(&fmglContext, &font, 50, 50, &width, &height, false, buffer);/*
 
 		/* Pushing framebuffer */
-		FMGL_API_PushFramebuffer(&fmglContext);
+		FMGL_API_PushFramebuffer(&FmglContext);
 
 		fpsCounter ++;
 	}
@@ -141,8 +147,8 @@ void PngleOnDraw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h,
 	color.G = rgba[1];
 	color.B = rgba[2];
 
-	FMGL_API_SetActiveColor(&fmglContext, color);
-	FMGL_API_DrawPixel(&fmglContext, (uint16_t)x, (uint16_t)y);
+	FMGL_API_SetActiveColor(&FmglContext, color);
+	FMGL_API_DrawPixel(&FmglContext, (uint16_t)x, (uint16_t)y);
 }
 
 void FpsHandler(void)
