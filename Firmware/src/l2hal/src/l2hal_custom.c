@@ -97,29 +97,55 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 		GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
 		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-		SPI2DmaHandle.Instance = DMA1_Stream4;
-		SPI2DmaHandle.Init.Channel = DMA_CHANNEL_0;
-		SPI2DmaHandle.Init.Direction = DMA_MEMORY_TO_PERIPH;
-		SPI2DmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
-		SPI2DmaHandle.Init.MemInc = DMA_MINC_ENABLE;
-		SPI2DmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-		SPI2DmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-		SPI2DmaHandle.Init.Mode = DMA_NORMAL;
-		SPI2DmaHandle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-		SPI2DmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-		SPI2DmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
-		SPI2DmaHandle.Init.MemBurst = DMA_MBURST_SINGLE;
-		SPI2DmaHandle.Init.PeriphBurst = DMA_PBURST_SINGLE;
+		/* TX DMA */
+		SPI2TxDmaHandle.Instance = DMA1_Stream4;
+		SPI2TxDmaHandle.Init.Channel = DMA_CHANNEL_0;
+		SPI2TxDmaHandle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+		SPI2TxDmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
+		SPI2TxDmaHandle.Init.MemInc = DMA_MINC_ENABLE;
+		SPI2TxDmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+		SPI2TxDmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+		SPI2TxDmaHandle.Init.Mode = DMA_NORMAL;
+		SPI2TxDmaHandle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+		SPI2TxDmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+		SPI2TxDmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+		SPI2TxDmaHandle.Init.MemBurst = DMA_MBURST_SINGLE;
+		SPI2TxDmaHandle.Init.PeriphBurst = DMA_PBURST_SINGLE;
 
-		if (HAL_DMA_Init(&SPI2DmaHandle) != HAL_OK)
+		if (HAL_DMA_Init(&SPI2TxDmaHandle) != HAL_OK)
 		{
 			L2HAL_Error(Generic);
 		}
 
-		__HAL_LINKDMA(hspi, hdmatx, SPI2DmaHandle);
+		__HAL_LINKDMA(hspi, hdmatx, SPI2TxDmaHandle);
 
 		HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 1);
 		HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
+
+		/* RX DMA */
+		SPI2RxDmaHandle.Instance = DMA1_Stream3;
+		SPI2RxDmaHandle.Init.Channel = DMA_CHANNEL_0;
+		SPI2RxDmaHandle.Init.Direction = DMA_PERIPH_TO_MEMORY;
+		SPI2RxDmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
+		SPI2RxDmaHandle.Init.MemInc = DMA_MINC_ENABLE;
+		SPI2RxDmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+		SPI2RxDmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+		SPI2RxDmaHandle.Init.Mode = DMA_NORMAL;
+		SPI2RxDmaHandle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+		SPI2RxDmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+		SPI2RxDmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+		SPI2RxDmaHandle.Init.MemBurst = DMA_MBURST_SINGLE;
+		SPI2RxDmaHandle.Init.PeriphBurst = DMA_PBURST_SINGLE;
+
+		if (HAL_DMA_Init(&SPI2RxDmaHandle) != HAL_OK)
+		{
+			L2HAL_Error(Generic);
+		}
+
+		__HAL_LINKDMA(hspi, hdmarx, SPI2RxDmaHandle);
+
+		HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 1);
+		HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
 	}
 }
 
@@ -129,14 +155,22 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
 	{
 		HAL_GPIO_DeInit(GPIOB, GPIO_PIN_13 | GPIO_PIN_15);
 
-		HAL_DMA_DeInit(&SPI2DmaHandle);
+		HAL_DMA_DeInit(&SPI2TxDmaHandle);
 		HAL_NVIC_DisableIRQ(DMA1_Stream4_IRQn);
+
+		HAL_DMA_DeInit(&SPI2RxDmaHandle);
+		HAL_NVIC_DisableIRQ(DMA1_Stream3_IRQn);
 	}
 }
 
 void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma)
 {
 	L2HAL_GC9A01_MarkDataTransferAsCompleted(&DisplayContext);
+}
+
+void L2HAL_SDCardDmaCompleted(DMA_HandleTypeDef *hdma)
+{
+	L2HAL_SDCard_MarkDataTransferAsCompleted(&SDCardContext);
 }
 
 /* End of SPI-related stuff */

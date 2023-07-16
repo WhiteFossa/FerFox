@@ -48,7 +48,8 @@
 #include <l2hal_sdcard.h>
 
 extern SPI_HandleTypeDef SPI2Handle;
-extern DMA_HandleTypeDef SPI2DmaHandle;
+extern DMA_HandleTypeDef SPI2TxDmaHandle;
+extern DMA_HandleTypeDef SPI2RxDmaHandle;
 extern L2HAL_GC9A01_ContextStruct DisplayContext;
 extern L2HAL_SDCard_ContextStruct SDCardContext;
 
@@ -66,6 +67,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi);
 void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi);
 void L2HAL_SetupSPI(void);
 void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma); /* Called when transmission via Display SPI is completed */
+void L2HAL_SDCardDmaCompleted(DMA_HandleTypeDef *hdma); /* Called when transmission via SDCard SPI is completed */
 
 /**
  * PWM timer-related stuff

@@ -7,6 +7,8 @@
 
 #include <l2hal_sdcard_private.h>
 #include <l2hal_sdcard.h>
+#include <stdlib.h>
+#include <string.h>
 
 enum L2HAL_SDCard_InitResult  L2HAL_SDCard_Init
 (
@@ -21,6 +23,8 @@ enum L2HAL_SDCard_InitResult  L2HAL_SDCard_Init
 
 	context->ChipSelectPort = chipSelectPort;
 	context->ChipSelectPin = chipSelectPin;
+
+	context->IsDataTransferInProgress = false;
 
 	/*
 	Step 1.
@@ -205,25 +209,30 @@ void L2HAL_SDCard_Select(L2HAL_SDCard_ContextStruct *context, bool isSelected)
 
 void L2HAL_SDCard_WriteDataNoCSControl(L2HAL_SDCard_ContextStruct *context, uint8_t *data, uint16_t dataSize)
 {
-	if (HAL_SPI_Transmit(context->SPIHandle, data, dataSize, 1000) != HAL_OK)
+	context->IsDataTransferInProgress = true;
+	if (HAL_SPI_Transmit_DMA(context->SPIHandle, data, dataSize) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
+
+	L2HAL_SDCard_WaitForDataTransferCompletion(context);
 }
 
 void L2HAL_SDCard_ReadData(L2HAL_SDCard_ContextStruct *context, uint8_t *buffer, uint16_t readSize)
 {
-	uint8_t toTransmit = 0xFF;
-	while(readSize > 0)
-	{
-		if (HAL_SPI_TransmitReceive(context->SPIHandle, &toTransmit, buffer, 1, 1000) != HAL_OK)
-		{
-			L2HAL_Error(Generic);
-		}
+	uint8_t* transmitData = malloc(readSize);
+	memset(transmitData, 0xFF, readSize);
 
-		buffer++;
-		readSize--;
+	context->IsDataTransferInProgress = true;
+	if (HAL_SPI_TransmitReceive_DMA(context->SPIHandle, transmitData, buffer, readSize) != HAL_OK)
+	{
+		free(transmitData);
+		L2HAL_Error(Generic);
 	}
+
+	L2HAL_SDCard_WaitForDataTransferCompletion(context);
+
+	free(transmitData);
 }
 
 void L2HAL_SDCard_WaitForBusyCleared(L2HAL_SDCard_ContextStruct *context)
@@ -370,4 +379,15 @@ void L2HAL_SDCard_ReadSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t 
 	L2HAL_SDCard_ReadData(context, crc, sizeof(crc));
 
 	L2HAL_SDCard_Select(context, false);
+}
+
+void L2HAL_SDCard_WaitForDataTransferCompletion(L2HAL_SDCard_ContextStruct *context)
+{
+	while (context->IsDataTransferInProgress) {} /* First wait for DMA completion */
+	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) { } /* Then wait for SPI ready*/
+}
+
+void L2HAL_SDCard_MarkDataTransferAsCompleted(L2HAL_SDCard_ContextStruct *context)
+{
+	context->IsDataTransferInProgress = false;
 }

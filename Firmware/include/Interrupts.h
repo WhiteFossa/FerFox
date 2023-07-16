@@ -20,6 +20,11 @@ volatile void SysTick_Handler(void);
  */
 volatile void DMA1_Stream4_IRQHandler(void);
 
+/**
+ * DMA transfer from SPI1 complete
+ */
+volatile void DMA1_Stream3_IRQHandler(void);
+
 
 
 #endif /* INCLUDE_INTERRUPTS_H_ */

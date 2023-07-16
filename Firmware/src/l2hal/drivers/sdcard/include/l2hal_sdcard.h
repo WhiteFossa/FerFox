@@ -44,6 +44,11 @@ typedef struct
 	 */
 	GPIO_TypeDef* ChipSelectPort;
 	uint16_t ChipSelectPin;
+
+	/**
+	 * If true, then data transfer in progress and we must wait for next one
+	 */
+	volatile bool IsDataTransferInProgress;
 }
 L2HAL_SDCard_ContextStruct;
 
@@ -73,5 +78,11 @@ uint32_t L2HAL_SDCard_ReadBlocksCount(L2HAL_SDCard_ContextStruct* context);
  * @param buffer Buffer to put data in
  */
 void L2HAL_SDCard_ReadSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t blockNumber, uint8_t* buffer);
+
+/**
+ * Call it from BOTH SPI DMA TX and SPI DMA RX completion interrupts
+ * @param context SD-card context
+ */
+void L2HAL_SDCard_MarkDataTransferAsCompleted(L2HAL_SDCard_ContextStruct *context);
 
 #endif /* L2HAL_DRIVERS_SDCARD_INCLUDE_L2HAL_SDCARD_H_ */

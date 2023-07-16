@@ -64,4 +64,10 @@ bool L2HAL_SDCard_ReadR1(L2HAL_SDCard_ContextStruct *context, uint8_t* response)
  */
 void L2HAL_SDCard_WaitForToken(L2HAL_SDCard_ContextStruct *context, uint8_t token);
 
+/**
+ * Wait for DMA transfer completion
+ * @param context SD-card context
+ */
+void L2HAL_SDCard_WaitForDataTransferCompletion(L2HAL_SDCard_ContextStruct *context);
+
 #endif /* L2HAL_DRIVERS_SDCARD_INCLUDE_L2HAL_SDCARD_PRIVATE_H_ */
