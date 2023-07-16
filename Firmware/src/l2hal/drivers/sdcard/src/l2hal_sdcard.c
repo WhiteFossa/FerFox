@@ -8,7 +8,7 @@
 #include <l2hal_sdcard_private.h>
 #include <l2hal_sdcard.h>
 
-void L2HAL_SDCard_Init
+enum L2HAL_SDCard_InitResult  L2HAL_SDCard_Init
 (
 	L2HAL_SDCard_ContextStruct* context,
 	SPI_HandleTypeDef *spiHandle,
@@ -48,10 +48,18 @@ void L2HAL_SDCard_Init
 	const uint8_t cmd0[] = { 0x40 | 0x00 /* CMD0 */, 0x00, 0x00, 0x00, 0x00 /* ARG = 0 */, (0x4A << 1) | 1 /* CRC7 + end bit */ };
 	L2HAL_SDCard_WriteDataNoCSControl(context, cmd0, sizeof(cmd0));
 
-	if(L2HAL_SDCard_ReadR1(context) != 0x01)
+	uint8_t r1Response;
+	if (!L2HAL_SDCard_ReadR1(context, &r1Response))
+	{
+		// We have no SD-card inserted
+		L2HAL_SDCard_Select(context, false);
+		return NoCardInserted;
+	}
+
+	if (r1Response != 0x01)
 	{
 		L2HAL_SDCard_Select(context, false);
-		L2HAL_Error(Generic);
+		return Error;
 	}
 
 	/*
@@ -61,7 +69,7 @@ void L2HAL_SDCard_Init
 	0x000001AA and correct CRC prior to initialization process. If the CMD8 is
 	rejected with illegal command error (0x05), the card is SDC version 1 or
 	MMC version 3. If accepted, R7 response (R1(0x01) + 32-bit return value)
-	will be returned. The lower 12 bits in the return value 0x1AA means that
+	will be returned. The lower 12 bits in the return value 0x01AA means that
 	the card is SDC version 2 and it can work at voltage range of 2.7 to 3.6
 	volts. If not the case, the card should be rejected.
 	*/
@@ -70,19 +78,25 @@ void L2HAL_SDCard_Init
 	const uint8_t cmd8[] = { 0x40 | 0x08 /* CMD8 */, 0x00, 0x00, 0x01, 0xAA /* ARG */, (0x43 << 1) | 1 /* CRC7 + end bit */ };
 	L2HAL_SDCard_WriteDataNoCSControl(context, cmd8, sizeof(cmd8));
 
-	if(L2HAL_SDCard_ReadR1(context) != 0x01)
+	if (!L2HAL_SDCard_ReadR1(context, &r1Response))
 	{
 		L2HAL_SDCard_Select(context, false);
-		L2HAL_Error(Generic);
+		return Error;
+	}
+
+	if (r1Response != 0x01)
+	{
+		L2HAL_SDCard_Select(context, false);
+		return Error;
 	}
 
 	uint8_t r7Response[4];
 	L2HAL_SDCard_ReadData(context, r7Response, sizeof(r7Response));
 
-	if(((r7Response[2] & 0x01) != 1) || (r7Response[3] != 0xAA))
+	if(((r7Response[2] & 0x0b00001111) != 0x01) || (r7Response[3] != 0xAA))
 	{
 		L2HAL_SDCard_Select(context, false);
-		L2HAL_Error(Generic);
+		return UnsupportedCard;
 	}
 
 	/*
@@ -97,10 +111,16 @@ void L2HAL_SDCard_Init
 		const uint8_t cmd55[] = { 0x40 | 0x37 /* CMD55 */, 0x00, 0x00, 0x00, 0x00 /* ARG */, (0x7F << 1) | 1 /* CRC7 + end bit */ };
 		L2HAL_SDCard_WriteDataNoCSControl(context, cmd55, sizeof(cmd55));
 
-		if(L2HAL_SDCard_ReadR1(context) != 0x01)
+		if (!L2HAL_SDCard_ReadR1(context, &r1Response))
 		{
 			L2HAL_SDCard_Select(context, false);
-			L2HAL_Error(Generic);
+			return Error;
+		}
+
+		if (r1Response != 0x01)
+		{
+			L2HAL_SDCard_Select(context, false);
+			return Error;
 		}
 
 		L2HAL_SDCard_WaitForBusyCleared(context);
@@ -108,17 +128,22 @@ void L2HAL_SDCard_Init
 		const uint8_t acmd41[] = { 0x40 | 0x29 /* ACMD41 */, 0x40, 0x00, 0x00, 0x00 /* ARG */, (0x7F << 1) | 1 /* CRC7 + end bit */ };
 		L2HAL_SDCard_WriteDataNoCSControl(context, acmd41, sizeof(acmd41));
 
-		uint8_t r1 = L2HAL_SDCard_ReadR1(context);
-		if(r1 == 0x00)
+		if (!L2HAL_SDCard_ReadR1(context, &r1Response))
+		{
+			L2HAL_SDCard_Select(context, false);
+			return Error;
+		}
+
+		if(r1Response == 0x00)
 		{
 			// Ready
 			break;
 		}
 
-		if(r1 != 0x01)
+		if(r1Response != 0x01)
 		{
 			L2HAL_SDCard_Select(context, false);
-			L2HAL_Error(Generic);
+			return Error;
 		}
 	}
 
@@ -134,10 +159,16 @@ void L2HAL_SDCard_Init
 	const uint8_t cmd58[] = { 0x40 | 0x3A /* CMD58 */, 0x00, 0x00, 0x00, 0x00 /* ARG */, (0x7F << 1) | 1 /* CRC7 + end bit */ };
 	L2HAL_SDCard_WriteDataNoCSControl(context, cmd58, sizeof(cmd58));
 
-	if(L2HAL_SDCard_ReadR1(context) != 0x00)
+	if (!L2HAL_SDCard_ReadR1(context, &r1Response))
 	{
 		L2HAL_SDCard_Select(context, false);
-		L2HAL_Error(Generic);
+		return Error;
+	}
+
+	if (r1Response != 0x00)
+	{
+		L2HAL_SDCard_Select(context, false);
+		return Error;
 	}
 
 	uint8_t response[4];
@@ -146,11 +177,13 @@ void L2HAL_SDCard_Init
 	if((response[0] & 0xC0) != 0xC0)
 	{
 		L2HAL_SDCard_Select(context, false);
-		L2HAL_Error(Generic);
+		return UnsupportedCard;
 	}
 
 	/* Done */
 	L2HAL_SDCard_Select(context, false);
+
+	return Success;
 }
 
 void L2HAL_SDCard_Select(L2HAL_SDCard_ContextStruct *context, bool isSelected)
@@ -203,22 +236,100 @@ void L2HAL_SDCard_WaitForBusyCleared(L2HAL_SDCard_ContextStruct *context)
 	while(flags != 0xFF);
 }
 
-uint8_t L2HAL_SDCard_ReadR1(L2HAL_SDCard_ContextStruct *context)
+bool L2HAL_SDCard_ReadR1(L2HAL_SDCard_ContextStruct *context, uint8_t* response)
 {
-	uint8_t r1Response;
-
 	uint8_t toTransmit = 0xFF;
+	uint16_t timeout = 0xFFFF;
 	while(true)
 	{
-		if (HAL_SPI_TransmitReceive(context->SPIHandle, &toTransmit, &r1Response, 1, 1000) != HAL_OK)
+		if (HAL_SPI_TransmitReceive(context->SPIHandle, &toTransmit, response, 1, 1000) != HAL_OK)
 		{
 			L2HAL_Error(Generic);
 		}
 
-		if((r1Response & 0x80) == 0) // 8th bit alwyas zero, r1 recevied
+		if((*response & 0b10000000) == 0) // 8th bit alwyas zero, r1 recevied
 		{
 			break;
 		}
+
+		timeout --;
+		if (0 == timeout)
+		{
+			// We have timeout, mostly probably no SD-card inserted
+			return false;
+		}
 	}
-	return r1Response;
+
+	return true;
+}
+
+uint32_t L2HAL_SDCard_ReadBlocksCount(L2HAL_SDCard_ContextStruct* context)
+{
+	L2HAL_SDCard_Select(context, true);
+
+	L2HAL_SDCard_WaitForBusyCleared(context);
+
+	/* CMD9 (SEND_CSD) command */
+	const uint8_t cmd9[] = { 0x40 | 0x09 /* CMD9 */, 0x00, 0x00, 0x00, 0x00 /* ARG */, (0x7F << 1) | 1 /* CRC7 + end bit */ };
+	L2HAL_SDCard_WriteDataNoCSControl(context, cmd9, sizeof(cmd9));
+
+	uint8_t r1Response;
+	if (!L2HAL_SDCard_ReadR1(context, &r1Response))
+	{
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	if (r1Response != 0x00)
+	{
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	L2HAL_SDCard_WaitForToken(context, L2HAL_SDCARD_DATA_TOKEN_CMD9);
+
+	uint8_t csd[16];
+	L2HAL_SDCard_ReadData(context, csd, sizeof(csd));
+
+	uint8_t crc[2];
+	L2HAL_SDCard_ReadData(context, crc, sizeof(crc));
+
+	L2HAL_SDCard_Select(context, false);
+
+	// first byte is VVxxxxxxxx where VV is csd.version
+	if((csd[0] & 0xC0) != 0x40) // csd.version != 1
+	{
+		L2HAL_Error(Generic);
+	}
+
+	uint32_t result = csd[7] & 0x3F; // two bits are reserved
+	result = (result << 8) | csd[8];
+	result = (result << 8) | csd[9];
+
+	// Full volume: (C_SIZE+1)*512KByte == (C_SIZE+1)<<19
+	// Block size: 512Byte == 1<<9
+	// Blocks number: CARD_SIZE/BLOCK_SIZE = (C_SIZE+1)*(1<<19) / (1<<9) = (C_SIZE+1)*(1<<10)
+	result = (result + 1) << 10;
+
+	return result;
+}
+
+void L2HAL_SDCard_WaitForToken(L2HAL_SDCard_ContextStruct *context, uint8_t token)
+{
+	uint8_t byteBuffer;
+
+	while(true)
+	{
+		L2HAL_SDCard_ReadData(context, &byteBuffer, sizeof(byteBuffer));
+
+		if (byteBuffer == token)
+		{
+			return;
+		}
+
+		if (byteBuffer != 0xFF)
+		{
+			L2HAL_Error(Generic); /* We can have either 0xFF or token */
+		}
+	}
 }

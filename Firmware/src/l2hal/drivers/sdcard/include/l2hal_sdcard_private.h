@@ -12,6 +12,13 @@
 #include <l2hal_sdcard.h>
 #include <stdbool.h>
 
+/* Data tokens */
+#define L2HAL_SDCARD_DATA_TOKEN_CMD9  0xFE
+#define L2HAL_SDCARD_DATA_TOKEN_CMD17 0xFE
+#define L2HAL_SDCARD_DATA_TOKEN_CMD18 0xFE
+#define L2HAL_SDCARD_DATA_TOKEN_CMD24 0xFE
+#define L2HAL_SDCARD_DATA_TOKEN_CMD25 0xFC
+
 /**
  * Select / deselect sdcard
  */
@@ -43,10 +50,18 @@ void L2HAL_SDCard_WaitForBusyCleared(L2HAL_SDCard_ContextStruct *context);
 
 
 /**
- * Read SD-card R1 answer
+ * Read SD-card R1 response
  * @param context SD-card context
- * @return R1 data
+ * @param response R1 data
+ * @return Is successful
  */
-uint8_t L2HAL_SDCard_ReadR1(L2HAL_SDCard_ContextStruct *context);
+bool L2HAL_SDCard_ReadR1(L2HAL_SDCard_ContextStruct *context, uint8_t* response);
+
+/**
+ * Wait for given token
+ * @param context SD-card context
+ * @param token Token to wait for
+ */
+void L2HAL_SDCard_WaitForToken(L2HAL_SDCard_ContextStruct *context, uint8_t token);
 
 #endif /* L2HAL_DRIVERS_SDCARD_INCLUDE_L2HAL_SDCARD_PRIVATE_H_ */

@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	HAL_IntiHardware();
 
 	/* SD Card driver initialization */
-	L2HAL_SDCard_Init
+	enum L2HAL_SDCard_InitResult sdCardInitResult = L2HAL_SDCard_Init
 	(
 		&SDCardContext,
 		&SPI2Handle,
@@ -29,6 +29,15 @@ int main(int argc, char* argv[])
 		HAL_SDCARD_CS_PORT,
 		HAL_SDCARD_CS_PIN
 	);
+
+	if (NoCardInserted == sdCardInitResult)
+	{
+		L2HAL_Error(Generic); /* TODO: Show "Insert SD-card" message */
+	}
+	else if (Success != sdCardInitResult)
+	{
+		L2HAL_Error(Generic); /* Failed to initialize SD-card */
+	}
 
 	/* Display driver initialization */
 	L2HAL_GC9A01_Init
@@ -91,6 +100,13 @@ int main(int argc, char* argv[])
 
 	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
+	/* Preparing to read image from SD-card */
+	uint32_t sdCardSize = L2HAL_SDCard_ReadBlocksCount(&SDCardContext);
+	if (sdCardSize == 0)
+	{
+		L2HAL_Error(Generic);
+	}
+
 	/* Begin of PNG drawing */
 	pngle_t *pngle = pngle_new();
 	pngle_set_draw_callback(pngle, PngleOnDraw);
@@ -112,18 +128,6 @@ int main(int argc, char* argv[])
 
 	pngle_destroy(pngle);
 	/* End of PNG drawing */
-
-//	/* Circels drawing */
-//	FMGL_API_ColorStruct color;
-//	color.R = 0x00;
-//	color.G = 0xFF;
-//	color.B = 0x00;
-//
-//	FMGL_API_SetActiveColor(&fmglContext, color);
-//
-//	FMGL_API_DrawCircle(&fmglContext, 120, 120, 30);
-//
-//	/* End of circles drawing*/
 
 	while(true)
 	{

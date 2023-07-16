@@ -14,6 +14,17 @@
 #include <l2hal_mcu.h>
 
 /**
+ * SD-card initialization result
+ */
+enum L2HAL_SDCard_InitResult
+{
+	Success, /* Successfully initialized */
+	NoCardInserted, /* Card not inserted */
+	Error, /* Various generic initialization errors */
+	UnsupportedCard /* Unsupported card (version or voltage) */
+};
+
+/**
  * Display context, SPI connection and various stuff is stored here
  */
 typedef struct
@@ -34,7 +45,7 @@ L2HAL_SDCard_ContextStruct;
 /**
  * Initialize SD-card
  */
-void L2HAL_SDCard_Init
+enum L2HAL_SDCard_InitResult L2HAL_SDCard_Init
 (
 	L2HAL_SDCard_ContextStruct* context,
 	SPI_HandleTypeDef *spiHandle,
@@ -43,5 +54,11 @@ void L2HAL_SDCard_Init
 	uint16_t chipSelectPin
 );
 
+/**
+ * Read SD-card size in 512-bytes blocks
+ * @param context SD-card context
+ * @return Number of blocks
+ */
+uint32_t L2HAL_SDCard_ReadBlocksCount(L2HAL_SDCard_ContextStruct* context);
 
 #endif /* L2HAL_DRIVERS_SDCARD_INCLUDE_L2HAL_SDCARD_H_ */
