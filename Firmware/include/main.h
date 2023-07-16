@@ -12,6 +12,8 @@
 #include <GlobalVariables.h>
 #include <fmgl.h>
 #include <pngle.h>
+#include <ffconf.h>
+#include <ff.h>
 
 uint16_t fpsCounter;
 uint16_t fpsHandlerCounter;

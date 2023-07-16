@@ -99,8 +99,27 @@ int main(int argc, char* argv[])
 
 	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
+	/* Searching for image.png */
+	FATFS *filesystem = malloc(sizeof(FATFS));
+	FRESULT fResult = f_mount(filesystem, "0", 1);
+
+	if (fResult != FR_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	FIL file;
+	fResult = f_open(&file, "image.png", FA_READ);
+	if (fResult != FR_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	/* File opened */
+	uint32_t imageSize = f_size(&file);
+
 	/* Preparing to read image from SD-card */
-	uint8_t sdCardBlockBuffer[L2HAL_SDCARD_BLOCK_SIZE];
+	uint8_t fileBuffer[512];
 
 	/* Begin of PNG drawing */
 	pngle_t *pngle = pngle_new();
@@ -108,23 +127,38 @@ int main(int argc, char* argv[])
 
 	uint32_t blockNumber = 0;
 	uint32_t fed = 0;
-	while (fed < 118666)
+	while (fed < imageSize)
 	{
-		L2HAL_SDCard_ReadSingleBlock(&SDCardContext, blockNumber, sdCardBlockBuffer);
+		//L2HAL_SDCard_ReadSingleBlock(&SDCardContext, blockNumber, fileBuffer);
 
-		uint32_t toFeed = 118666 - fed;
-		if (toFeed > L2HAL_SDCARD_BLOCK_SIZE)
+		uint32_t bytesRead;
+		fResult = f_read(&file, fileBuffer, 512, &bytesRead);
+		if (fResult != FR_OK)
 		{
-			toFeed = L2HAL_SDCARD_BLOCK_SIZE;
+			L2HAL_Error(Generic);
 		}
 
-		fed += pngle_feed(pngle, sdCardBlockBuffer, toFeed);
+		fed += pngle_feed(pngle, fileBuffer, bytesRead);
 
 		blockNumber ++;
 	}
 
 	pngle_destroy(pngle);
 	/* End of PNG drawing */
+
+	fResult = f_close(&file);
+	if (fResult != FR_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	fResult = f_unmount("0");
+	if (fResult != FR_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	free(filesystem);
 
 	while(true)
 	{
