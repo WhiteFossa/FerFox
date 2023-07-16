@@ -12,6 +12,10 @@
 #include <l2hal_gc9a01.h>
 #include <l2hal_sdcard.h>
 #include <fmgl.h>
+#include <ffconf.h>
+#include <ff.h>
+#include <stddef.h>
+#include <pngle.h>
 
 /**
  * Number of drawing cycles before inverting font.
@@ -64,6 +68,16 @@ FMGL_API_DriverContext FmglContext;
  * SD-card context
  */
 L2HAL_SDCard_ContextStruct SDCardContext;
+
+/**
+ * SD card filesystem pointer
+ */
+FATFS* SDCardFsPtr = NULL;
+
+/**
+ * PNGLE library context
+ */
+pngle_t* PngleContext = NULL;
 
 
 #endif /* INCLUDE_GLOBALVARIABLES_H_ */
