@@ -347,7 +347,8 @@ void L2HAL_SDCard_ReadSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t 
 	L2HAL_SDCard_WaitForBusyCleared(context);
 
 	/* CMD17 (SEND_SINGLE_BLOCK) command */
-	uint8_t cmd17[] = {
+	uint8_t cmd17[] =
+	{
 		0x40 | 0x11 /* CMD17 */,
 		(blockNumber >> 24) & 0xFF, /* ARG */
 		(blockNumber >> 16) & 0xFF,
@@ -390,4 +391,65 @@ void L2HAL_SDCard_WaitForDataTransferCompletion(L2HAL_SDCard_ContextStruct *cont
 void L2HAL_SDCard_MarkDataTransferAsCompleted(L2HAL_SDCard_ContextStruct *context)
 {
 	context->IsDataTransferInProgress = false;
+}
+
+void L2HAL_SDCard_WriteSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t blockNumber, uint8_t* buffer)
+{
+	L2HAL_SDCard_Select(context, true);
+
+	L2HAL_SDCard_WaitForBusyCleared(context);
+
+	/* CMD24 (WRITE_BLOCK) command */
+	uint8_t cmd24[] =
+	{
+		0x40 | 0x18 /* CMD24 */,
+		(blockNumber >> 24) & 0xFF, /* ARG */
+		(blockNumber >> 16) & 0xFF,
+		(blockNumber >> 8) & 0xFF,
+		blockNumber & 0xFF,
+		(0x7F << 1) | 1 /* CRC7 + end bit */
+	};
+
+	L2HAL_SDCard_WriteDataNoCSControl(context, cmd24, sizeof(cmd24));
+
+	uint8_t r1Response;
+	if (!L2HAL_SDCard_ReadR1(context, &r1Response))
+	{
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	if (r1Response != 0x00)
+	{
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	uint8_t dataToken = L2HAL_SDCARD_DATA_TOKEN_CMD24;
+	L2HAL_SDCard_WriteDataNoCSControl(context, &dataToken, sizeof(dataToken));
+
+	L2HAL_SDCard_WriteDataNoCSControl(context, buffer, L2HAL_SDCARD_BLOCK_SIZE);
+
+	uint8_t crc[2] = { 0xFF, 0xFF };
+	L2HAL_SDCard_WriteDataNoCSControl(context, crc, sizeof(crc));
+
+	/*
+		dataResp:
+		xxx0abc1
+			010 - Data accepted
+			101 - Data rejected due to CRC error
+			110 - Data rejected due to write error
+	*/
+	uint8_t dataResponse;
+	L2HAL_SDCard_ReadData(context, &dataResponse, sizeof(dataResponse));
+	if((dataResponse & 0x1F) != 0x05)
+	{
+		/* Data rejected */
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	L2HAL_SDCard_WaitForBusyCleared(context);
+
+	L2HAL_SDCard_Select(context, true);
 }

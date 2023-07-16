@@ -108,11 +108,11 @@ int main(int argc, char* argv[])
 
 	uint32_t blockNumber = 0;
 	uint32_t fed = 0;
-	while (fed < 115493)
+	while (fed < 118666)
 	{
 		L2HAL_SDCard_ReadSingleBlock(&SDCardContext, blockNumber, sdCardBlockBuffer);
 
-		uint32_t toFeed = 115493 - fed;
+		uint32_t toFeed = 118666 - fed;
 		if (toFeed > L2HAL_SDCARD_BLOCK_SIZE)
 		{
 			toFeed = L2HAL_SDCARD_BLOCK_SIZE;

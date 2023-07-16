@@ -80,6 +80,14 @@ uint32_t L2HAL_SDCard_ReadBlocksCount(L2HAL_SDCard_ContextStruct* context);
 void L2HAL_SDCard_ReadSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t blockNumber, uint8_t* buffer);
 
 /**
+ * Write from buffer to given block. Buffer must be L2HAL_SDCARD_BLOCK_SIZE-bytes long array
+ * @param context SD-card context
+ * @param blockNumber Block number
+ * @param buffer Buffer with data to write
+ */
+void L2HAL_SDCard_WriteSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t blockNumber, uint8_t* buffer);
+
+/**
  * Call it from BOTH SPI DMA TX and SPI DMA RX completion interrupts
  * @param context SD-card context
  */
