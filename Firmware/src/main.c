@@ -8,7 +8,6 @@
 
 #include <main.h>
 #include <HAL.h>
-#include <lisessa.h>
 #include <terminusRegular12.h>
 
 int main(int argc, char* argv[])
@@ -101,29 +100,27 @@ int main(int argc, char* argv[])
 	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
 	/* Preparing to read image from SD-card */
-	uint32_t sdCardSize = L2HAL_SDCard_ReadBlocksCount(&SDCardContext);
-	if (sdCardSize == 0)
-	{
-		L2HAL_Error(Generic);
-	}
+	uint8_t sdCardBlockBuffer[L2HAL_SDCARD_BLOCK_SIZE];
 
 	/* Begin of PNG drawing */
 	pngle_t *pngle = pngle_new();
 	pngle_set_draw_callback(pngle, PngleOnDraw);
 
-	uint8_t feedBuffer[1024];
+	uint32_t blockNumber = 0;
 	uint32_t fed = 0;
-	while (fed < LISESSA_LENGTH)
+	while (fed < 115493)
 	{
-		uint32_t toFeed = LISESSA_LENGTH - fed;
-		if (toFeed > 1024)
+		L2HAL_SDCard_ReadSingleBlock(&SDCardContext, blockNumber, sdCardBlockBuffer);
+
+		uint32_t toFeed = 115493 - fed;
+		if (toFeed > L2HAL_SDCARD_BLOCK_SIZE)
 		{
-			toFeed = 1024;
+			toFeed = L2HAL_SDCARD_BLOCK_SIZE;
 		}
 
-		memcpy(feedBuffer, &lisessa[fed], toFeed);
+		fed += pngle_feed(pngle, sdCardBlockBuffer, toFeed);
 
-		fed += pngle_feed(pngle, feedBuffer, toFeed);
+		blockNumber ++;
 	}
 
 	pngle_destroy(pngle);

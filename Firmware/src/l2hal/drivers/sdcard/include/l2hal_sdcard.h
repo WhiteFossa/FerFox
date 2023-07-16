@@ -14,6 +14,11 @@
 #include <l2hal_mcu.h>
 
 /**
+ * SD-card block size in bytes
+ */
+#define L2HAL_SDCARD_BLOCK_SIZE 512
+
+/**
  * SD-card initialization result
  */
 enum L2HAL_SDCard_InitResult
@@ -60,5 +65,13 @@ enum L2HAL_SDCard_InitResult L2HAL_SDCard_Init
  * @return Number of blocks
  */
 uint32_t L2HAL_SDCard_ReadBlocksCount(L2HAL_SDCard_ContextStruct* context);
+
+/**
+ * Read given block to buffer. Buffer must be L2HAL_SDCARD_BLOCK_SIZE-bytes long array
+ * @param context SD-card context
+ * @param blockNumber Block number
+ * @param buffer Buffer to put data in
+ */
+void L2HAL_SDCard_ReadSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t blockNumber, uint8_t* buffer);
 
 #endif /* L2HAL_DRIVERS_SDCARD_INCLUDE_L2HAL_SDCARD_H_ */

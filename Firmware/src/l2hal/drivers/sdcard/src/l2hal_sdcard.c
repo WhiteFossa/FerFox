@@ -242,10 +242,7 @@ bool L2HAL_SDCard_ReadR1(L2HAL_SDCard_ContextStruct *context, uint8_t* response)
 	uint16_t timeout = 0xFFFF;
 	while(true)
 	{
-		if (HAL_SPI_TransmitReceive(context->SPIHandle, &toTransmit, response, 1, 1000) != HAL_OK)
-		{
-			L2HAL_Error(Generic);
-		}
+		L2HAL_SDCard_ReadData(context, response, 1);
 
 		if((*response & 0b10000000) == 0) // 8th bit alwyas zero, r1 recevied
 		{
@@ -332,4 +329,45 @@ void L2HAL_SDCard_WaitForToken(L2HAL_SDCard_ContextStruct *context, uint8_t toke
 			L2HAL_Error(Generic); /* We can have either 0xFF or token */
 		}
 	}
+}
+
+void L2HAL_SDCard_ReadSingleBlock(L2HAL_SDCard_ContextStruct* context, uint32_t blockNumber, uint8_t* buffer)
+{
+	L2HAL_SDCard_Select(context, true);
+
+	L2HAL_SDCard_WaitForBusyCleared(context);
+
+	/* CMD17 (SEND_SINGLE_BLOCK) command */
+	uint8_t cmd17[] = {
+		0x40 | 0x11 /* CMD17 */,
+		(blockNumber >> 24) & 0xFF, /* ARG */
+		(blockNumber >> 16) & 0xFF,
+		(blockNumber >> 8) & 0xFF,
+		blockNumber & 0xFF,
+		(0x7F << 1) | 1 /* CRC7 + end bit */
+	};
+
+	L2HAL_SDCard_WriteDataNoCSControl(context, cmd17, sizeof(cmd17));
+
+	uint8_t r1Response;
+	if (!L2HAL_SDCard_ReadR1(context, &r1Response))
+	{
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	if (r1Response != 0x00)
+	{
+		L2HAL_SDCard_Select(context, false);
+		L2HAL_Error(Generic);
+	}
+
+	L2HAL_SDCard_WaitForToken(context, L2HAL_SDCARD_DATA_TOKEN_CMD17);
+
+	L2HAL_SDCard_ReadData(context, buffer, L2HAL_SDCARD_BLOCK_SIZE);
+
+	uint8_t crc[2];
+	L2HAL_SDCard_ReadData(context, crc, sizeof(crc));
+
+	L2HAL_SDCard_Select(context, false);
 }
