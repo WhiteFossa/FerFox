@@ -111,7 +111,9 @@ int main(int argc, char* argv[])
 	}
 
 	/* Loading image.png */
-	LoadPngFromFile("image.png");
+	//LoadPngFromFile("image.png");
+
+	LoadJpegFromFile("image.jpeg");
 
 	while(true)
 	{
