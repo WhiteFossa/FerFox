@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum L2HAL_SDCard_InitResult  L2HAL_SDCard_Init
+enum L2HAL_SDCard_InitResult L2HAL_SDCard_Init
 (
 	L2HAL_SDCard_ContextStruct* context,
 	SPI_HandleTypeDef *spiHandle,

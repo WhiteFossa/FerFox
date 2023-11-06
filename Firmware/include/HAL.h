@@ -98,8 +98,9 @@
  *  SD CARD *
  *
  *  SPI 2:
- *  PB13 - SCK (SCL)
- *  PB15 - MOSI (SDA)
+ *  PB13 - SCK
+ *  PB14 - MISO
+ *  PB15 - MOSI
  *
  *  PB4 - CS (Active 0)
  *
@@ -107,6 +108,22 @@
 
 #define HAL_SDCARD_CS_PIN GPIO_PIN_4
 #define HAL_SDCARD_CS_PORT GPIOB
+
+
+/**********************
+ *  pSRAM - LY68L6400 *
+ *
+ *  SPI 1:
+ *  PA5 - SCK
+ *  PA6 - MISO
+ *  PB7 - MOSI
+ *
+ *  PB5 - CS (Active 0)
+ *
+ **********************/
+#define HAL_PSRAM_CS_PIN GPIO_PIN_5
+#define HAL_PSRAM_CS_PORT GPIOB
+
 
 /**
  * Init project-specific hardware here

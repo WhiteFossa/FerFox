@@ -96,6 +96,7 @@
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1306/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1327/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/gc9a01/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/ram/ly68l6400/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/buttons/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/fmgl/charsets/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/fmgl/fonts/include&quot;"/>
@@ -370,6 +371,7 @@
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1306/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/ssd1327/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/display/gc9a01/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/ram/ly68l6400/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/l2hal/drivers/input/buttons/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/fmgl/charsets/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../src/fmgl/fonts/include&quot;"/>

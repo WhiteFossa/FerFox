@@ -19,6 +19,16 @@ int main(int argc, char* argv[])
 	L2HAL_Init();
 	HAL_IntiHardware();
 
+	/* RAM initialization */
+	L2HAL_LY68L6400_Init
+	(
+		&RamContext,
+		&SPI1Handle,
+
+		HAL_PSRAM_CS_PORT,
+		HAL_PSRAM_CS_PIN
+	);
+
 	/* SD Card driver initialization */
 	enum L2HAL_SDCard_InitResult sdCardInitResult = L2HAL_SDCard_Init
 	(
@@ -37,6 +47,7 @@ int main(int argc, char* argv[])
 	{
 		L2HAL_Error(Generic); /* Failed to initialize SD-card */
 	}
+
 
 	/* Display driver initialization */
 	L2HAL_GC9A01_Init

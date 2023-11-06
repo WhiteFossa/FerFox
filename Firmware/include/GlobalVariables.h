@@ -11,6 +11,7 @@
 #include <l2hal_systick.h>
 #include <l2hal_gc9a01.h>
 #include <l2hal_sdcard.h>
+#include <l2hal_ly68l6400.h>
 #include <fmgl.h>
 #include <ffconf.h>
 #include <ff.h>
@@ -23,15 +24,28 @@
 #define FONT_BLINKING_INTERVAL 1U
 
 /**
- * Sprite movement speed.
- */
-#define SPRITE_SPEED_X 15
-#define SPRITE_SPEED_Y 20
-
-/**
  * SysTick driver context.
  */
 L2HAL_SysTick_ContextStruct L2HAL_SysTick_Context = { 0 };
+
+
+
+/**
+ * SPI1 bus handle.
+ */
+SPI_HandleTypeDef SPI1Handle = { 0 };
+
+/**
+ * SPI1 TX DMA handle.
+ */
+DMA_HandleTypeDef SPI1TxDmaHandle = { 0 };
+
+/**
+ * SPI1 RX DMA handle.
+ */
+DMA_HandleTypeDef SPI1RxDmaHandle = { 0 };
+
+
 
 /**
  * SPI2 bus handle.
@@ -47,6 +61,8 @@ DMA_HandleTypeDef SPI2TxDmaHandle = { 0 };
  * SPI2 RX DMA handle.
  */
 DMA_HandleTypeDef SPI2RxDmaHandle = { 0 };
+
+
 
 /**
  * Backlight timer handler
@@ -68,6 +84,13 @@ FMGL_API_DriverContext FmglContext;
  * SD-card context
  */
 L2HAL_SDCard_ContextStruct SDCardContext;
+
+
+/**
+ * pSRAM context
+ */
+L2HAL_LY68L6400_ContextStruct RamContext;
+
 
 /**
  * SD card filesystem pointer
