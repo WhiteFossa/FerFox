@@ -60,6 +60,12 @@ void L2HAL_LY68L6400_MarkDataTransferAsCompleted(L2HAL_LY68L6400_ContextStruct *
  * Read data from memory. Size can be up to chip capacity (i.e. 8MBytes), but internally transfers will be split to 32 bytes transactions to avoid
  * max #CE active time violation
  */
-//void L2HAL_LY68L6400_ReadData(L2HAL_LY68L6400_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer);
+void L2HAL_LY68L6400_MemoryRead(L2HAL_LY68L6400_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer);
+
+/**
+ * Write data to memory. Size can be up to chip capacity (i.e. 8MBytes), but internally transfers will be split to 32 bytes transactions to avoid
+ * max #CE active time violation
+ */
+void L2HAL_LY68L6400_MemoryWrite(L2HAL_LY68L6400_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer);
 
 #endif /* L2HAL_DRIVERS_RAM_LY68L6400_INCLUDE_L2HAL_LY68L6400_H_ */

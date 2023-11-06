@@ -29,6 +29,33 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_CS_PIN
 	);
 
+	/* Debug */
+	uint8_t dbgWriteBuffer[2048];
+	for (uint32_t i = 0; i < 2048; i++)
+	{
+		dbgWriteBuffer[i] = i % 256;
+	}
+
+	uint8_t dbgReadBuffer[2048];
+
+	for (uint32_t pkt = 0; pkt < 4096; pkt++)
+	{
+		uint32_t pktBaseAddress = pkt * 2048;
+
+		L2HAL_LY68L6400_MemoryWrite(&RamContext, pktBaseAddress, 2048, dbgWriteBuffer);
+
+		memset(dbgReadBuffer, 0x00, 2048);
+		L2HAL_LY68L6400_MemoryRead(&RamContext, pktBaseAddress, 2048, dbgReadBuffer);
+
+		for (uint32_t i = 0; i < 2048; i++)
+		{
+			if (dbgReadBuffer[i] != dbgWriteBuffer[i])
+			{
+				L2HAL_Error(Generic);
+			}
+		}
+	}
+
 	/* SD Card driver initialization */
 	enum L2HAL_SDCard_InitResult sdCardInitResult = L2HAL_SDCard_Init
 	(
