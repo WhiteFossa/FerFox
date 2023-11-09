@@ -48,6 +48,7 @@ void L2HAL_GC9A01_Init
 
 	/* Setting up cache */
 	context->PixelsCacheY = 0;
+	context->PixelsCacheX = 0;
 	memset(context->PixelsCache, 0x00, L2HAL_GC9A01_CACHE_SIZE);
 
 	context->IsDataTransferInProgress = true;
@@ -448,14 +449,6 @@ void L2HAL_GC9A01_ClearDisplay(L2HAL_GC9A01_ContextStruct *context)
 
 void L2HAL_GC9A01_DrawPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uint16_t y)
 {
-/*	 Naive, cacheless approach
-	uint8_t pixelBuffer[3];
-	pixelBuffer[0] = context->ActiveColor.R;
-	pixelBuffer[1] = context->ActiveColor.G;
-	pixelBuffer[2] = context->ActiveColor.B;
-
-	context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE + x * 3, 3, pixelBuffer);*/
-
 	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
 	{
 		/* Cache hit */
@@ -467,6 +460,7 @@ void L2HAL_GC9A01_DrawPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uin
 	L2HAL_GC9A01_WriteCacheToFramebuffer(context);
 
 	/* Moving cache to new position */
+	context->PixelsCacheX = x;
 	context->PixelsCacheY = y;
 	L2HAL_GC9A01_ReadCacheFromFramebuffer(context);
 
@@ -477,6 +471,10 @@ void L2HAL_GC9A01_DrawPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uin
 bool L2HAL_GC9A01_IsPixelsCacheHit(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y)
 {
 	return
+		x >= context->PixelsCacheX
+		&&
+		x < context->PixelsCacheX + L2HAL_GC9A01_CACHE_WIDTH
+		&&
 		y >= context->PixelsCacheY
 		&&
 		y < context->PixelsCacheY + L2HAL_GC9A01_CACHE_HEIGHT;
@@ -485,7 +483,7 @@ bool L2HAL_GC9A01_IsPixelsCacheHit(L2HAL_GC9A01_ContextStruct *context, uint16_t
 FMGL_API_ColorStruct L2HAL_GC9A01_ReadPixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y)
 {
 	uint16_t cacheLine = y - context->PixelsCacheY;
-	uint16_t cacheIndex = (cacheLine * L2HAL_GC9A01_CACHE_WIDTH + x) * 3;
+	uint16_t cacheIndex = (cacheLine * L2HAL_GC9A01_CACHE_WIDTH + x - context->PixelsCacheX) * 3;
 
 	FMGL_API_ColorStruct result;
 	result.R = context->PixelsCache[cacheIndex + 0]; // We have RGB sequence
@@ -498,7 +496,7 @@ FMGL_API_ColorStruct L2HAL_GC9A01_ReadPixelsCache(L2HAL_GC9A01_ContextStruct *co
 void L2HAL_GC9A01_WritePixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y, FMGL_API_ColorStruct color)
 {
 	uint16_t cacheLine = y - context->PixelsCacheY;
-	uint16_t cacheIndex = (cacheLine * L2HAL_GC9A01_CACHE_WIDTH + x) * 3;
+	uint16_t cacheIndex = (cacheLine * L2HAL_GC9A01_CACHE_WIDTH + x - context->PixelsCacheX) * 3;
 
 	context->PixelsCache[cacheIndex + 0] = color.R;
 	context->PixelsCache[cacheIndex + 1] = color.G;
@@ -512,17 +510,6 @@ void L2HAL_GC9A01_SetActiveColor(L2HAL_GC9A01_ContextStruct* context, FMGL_API_C
 
 FMGL_API_ColorStruct L2HAL_GC9A01_GetPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uint16_t y)
 {
-/*	 Naive cacheless approach
-	uint8_t pixelBuffer[3];
-	context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE + x * 3, 3, pixelBuffer);
-
-	FMGL_API_ColorStruct result;
-	result.R = pixelBuffer[0];
-	result.G = pixelBuffer[1];
-	result.B = pixelBuffer[2];
-
-	return result;*/
-
 	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
 	{
 		/* Cache hit */
@@ -571,7 +558,7 @@ void L2HAL_GC9A01_WriteCacheToFramebuffer(L2HAL_GC9A01_ContextStruct *context)
 	for(uint16_t cacheY = 0; cacheY < L2HAL_GC9A01_CACHE_HEIGHT; cacheY++)
 	{
 		uint8_t* cacheLineBaseAddress = &context->PixelsCache[cacheY * L2HAL_GC9A01_CACHE_LINE_SIZE];
-		uint32_t framebufferWriteBaseAddress = context->FramebufferBaseAddress + 3 * ((context->PixelsCacheY + cacheY) * L2HAL_GC9A01_DISPLAY_WIDTH);
+		uint32_t framebufferWriteBaseAddress = context->FramebufferBaseAddress + 3 * ((context->PixelsCacheY + cacheY) * L2HAL_GC9A01_DISPLAY_WIDTH + context->PixelsCacheX);
 
 		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, framebufferWriteBaseAddress, L2HAL_GC9A01_CACHE_LINE_SIZE, cacheLineBaseAddress);
 	}
@@ -582,7 +569,7 @@ void L2HAL_GC9A01_ReadCacheFromFramebuffer(L2HAL_GC9A01_ContextStruct *context)
 	for(uint16_t cacheY = 0; cacheY < L2HAL_GC9A01_CACHE_HEIGHT; cacheY++)
 	{
 		uint8_t* cacheLineBaseAddress = &context->PixelsCache[cacheY * L2HAL_GC9A01_CACHE_LINE_SIZE];
-		uint32_t framebufferWriteBaseAddress = context->FramebufferBaseAddress + 3 * ((context->PixelsCacheY + cacheY) * L2HAL_GC9A01_DISPLAY_WIDTH);
+		uint32_t framebufferWriteBaseAddress = context->FramebufferBaseAddress + 3 * ((context->PixelsCacheY + cacheY) * L2HAL_GC9A01_DISPLAY_WIDTH + context->PixelsCacheX);
 
 		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, framebufferWriteBaseAddress, L2HAL_GC9A01_CACHE_LINE_SIZE, cacheLineBaseAddress);
 	}

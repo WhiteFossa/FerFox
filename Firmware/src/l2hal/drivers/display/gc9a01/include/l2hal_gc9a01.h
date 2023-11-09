@@ -23,8 +23,8 @@
 /**
  * Sizes of local pixels cache
  */
-#define L2HAL_GC9A01_CACHE_WIDTH (L2HAL_GC9A01_DISPLAY_WIDTH)
-#define L2HAL_GC9A01_CACHE_HEIGHT 16
+#define L2HAL_GC9A01_CACHE_WIDTH 32
+#define L2HAL_GC9A01_CACHE_HEIGHT 32
 #define L2HAL_GC9A01_CACHE_LINE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * 3)
 #define L2HAL_GC9A01_CACHE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * L2HAL_GC9A01_CACHE_HEIGHT * 3)
 
@@ -76,8 +76,9 @@ typedef struct
 	uint8_t PixelsCache[L2HAL_GC9A01_CACHE_SIZE];
 
 	/**
-	 * Current location of pixels cache (Y)
+	 * Current location of pixels cache
 	 */
+	uint16_t PixelsCacheX;
 	uint16_t PixelsCacheY;
 
 	/**

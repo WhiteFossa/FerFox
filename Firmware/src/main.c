@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 	OnColor.B = 0xFF;
 
 	font.Font = &fontData;
-	font.Scale = 1;
+	font.Scale = 4;
 	font.CharactersSpacing = 0;
 	font.LinesSpacing = 0;
 	font.FontColor = &OnColor;
@@ -135,8 +135,8 @@ int main(int argc, char* argv[])
 		/* Drawing FPS */
 		uint16_t width, height;
 		char buffer[32];
-		sprintf(buffer, "FPS: %d", fps);
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 50, 50, &width, &height, false, buffer);
+		sprintf(buffer, "FPS:%.1f", fps / 10.0f);
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 100, &width, &height, false, buffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);
@@ -160,7 +160,7 @@ void FpsHandler(void)
 {
 	fpsHandlerCounter ++;
 
-	if (fpsHandlerCounter == 1000)
+	if (fpsHandlerCounter == 10000)
 	{
 		fps = fpsCounter;
 		fpsCounter = 0;
