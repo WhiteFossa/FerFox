@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
 		&RamContext,
 		&L2HAL_LY68L6400_MemoryWrite,
 		&L2HAL_LY68L6400_MemoryRead,
+
 		0
 	);
 
@@ -112,7 +113,7 @@ int main(int argc, char* argv[])
 	font.BackgroundColor = &OffColor;
 	font.Transparency = &transparencyMode;
 
-	L2HAL_SysTick_RegisterHandler(&FpsHandler);
+	//L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
 	/* Setting up PNGLE */
 	PngleContext = pngle_new();
@@ -125,23 +126,49 @@ int main(int argc, char* argv[])
 		L2HAL_Error(Generic);
 	}
 
-	/* Loading image.png */
-	//LoadPngFromFile("image.png");
+	/* Loading animations */
+	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
+	{
+		framebuffersAddresses[frame] = frame * 240 * 240 * 3;
 
-	LoadJpegFromFile("image.jpeg");
+		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
 
+		char filename[32];
+		sprintf(filename, "animation%d.jpeg", frame + 1);
+		LoadJpegFromFile(filename);
+	}
+
+/*	 Loading two images into two framebuffers
+	L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, FRAMEBUFFER_1_BASE_ADDRESS);
+	LoadPngFromFile("image.png");
+
+	L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, FRAMEBUFFER_2_BASE_ADDRESS);
+	LoadJpegFromFile("image.jpeg");*/
+
+	sprintf(fpsMessageBuffer, "Wait...");
+
+	uint8_t frame = 0;
 	while(true)
 	{
-		/* Drawing FPS */
+		/* Drawing FPS
 		uint16_t width, height;
-		char buffer[32];
-		sprintf(buffer, "FPS:%.1f", fps / 10.0f);
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 100, &width, &height, false, buffer);
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 100, &width, &height, false, fpsMessageBuffer);*/
+
+		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);
 
-		fpsCounter ++;
+		if (frame == FRAMES_COUNT - 1)
+		{
+			frame = 0;
+		}
+		else
+		{
+			frame ++;
+		}
+
+		//fpsCounter ++;
 	}
 }
 
@@ -156,7 +183,7 @@ void PngleOnDraw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h,
 	FMGL_API_DrawPixel(&FmglContext, (uint16_t)x, (uint16_t)y);
 }
 
-void FpsHandler(void)
+/*void FpsHandler(void)
 {
 	fpsHandlerCounter ++;
 
@@ -165,8 +192,10 @@ void FpsHandler(void)
 		fps = fpsCounter;
 		fpsCounter = 0;
 		fpsHandlerCounter = 0;
+
+		sprintf(fpsMessageBuffer, "FPS:%.1f", fps / 10.0f);
 	}
-}
+}*/
 
 #pragma GCC diagnostic pop
 

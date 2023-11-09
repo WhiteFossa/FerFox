@@ -436,14 +436,7 @@ uint16_t L2HAL_GC9A01_GetHeight(void)
 
 void L2HAL_GC9A01_ClearDisplay(L2HAL_GC9A01_ContextStruct *context)
 {
-	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
-	memset(lineBuffer, 0x00, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
-
-	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y++)
-	{
-		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
-	}
-
+	L2HAL_GC9A01_ClearFramebuffer(context);
 	L2HAL_GC9A01_PushFramebuffer(context);
 }
 
@@ -573,4 +566,26 @@ void L2HAL_GC9A01_ReadCacheFromFramebuffer(L2HAL_GC9A01_ContextStruct *context)
 
 		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, framebufferWriteBaseAddress, L2HAL_GC9A01_CACHE_LINE_SIZE, cacheLineBaseAddress);
 	}
+}
+
+void L2HAL_GC9A01_ClearFramebuffer(L2HAL_GC9A01_ContextStruct* context)
+{
+	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
+	memset(lineBuffer, 0x00, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
+
+	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y++)
+	{
+		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
+	}
+}
+
+void L2HAL_GC9A01_SetFramebufferBaseAddress(L2HAL_GC9A01_ContextStruct* context, uint32_t baseAddress)
+{
+	L2HAL_GC9A01_WriteCacheToFramebuffer(context);
+
+	context->FramebufferBaseAddress = baseAddress;
+
+	context->PixelsCacheX = 0;
+	context->PixelsCacheY = 0;
+	L2HAL_GC9A01_ReadCacheFromFramebuffer(context);
 }

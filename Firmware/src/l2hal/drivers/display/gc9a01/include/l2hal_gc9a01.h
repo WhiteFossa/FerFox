@@ -192,6 +192,16 @@ void L2HAL_GC9A01_SetActiveColor(L2HAL_GC9A01_ContextStruct* context, FMGL_API_C
 void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context);
 
 /**
+ * Fill framebuffer with black color
+ */
+void L2HAL_GC9A01_ClearFramebuffer(L2HAL_GC9A01_ContextStruct* context);
+
+/**
+ * Set framebuffer base address (in external RAM). Allows to have multiple framebuffers
+ */
+void L2HAL_GC9A01_SetFramebufferBaseAddress(L2HAL_GC9A01_ContextStruct* context, uint32_t baseAddress);
+
+/**
  * Call it from SPI DMA TX completion interrupt
  */
 void L2HAL_GC9A01_MarkDataTransferAsCompleted(L2HAL_GC9A01_ContextStruct *context);

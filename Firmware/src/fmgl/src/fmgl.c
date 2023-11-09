@@ -86,11 +86,6 @@ FMGL_API_ColorStruct FMGL_API_GetActiveColor(FMGL_API_DriverContext* context)
 
 void FMGL_API_DrawPixel (FMGL_API_DriverContext* context, uint16_t x, uint16_t y)
 {
-	if (x > context->MaxX || y > context->MaxY)
-	{
-		return;
-	}
-
 	context->DrawPixel(context->DeviceContext, x, y);
 }
 
@@ -100,11 +95,6 @@ FMGL_API_ColorStruct FMGL_API_GetPixel(FMGL_API_DriverContext* context, uint16_t
 	result.R = 0;
 	result.G = 0;
 	result.B = 0;
-
-	if (x > context->MaxX || y > context->MaxY)
-	{
-		return result;
-	}
 
 	return context->GetPixel(context->DeviceContext, x, y);
 }
