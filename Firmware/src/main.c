@@ -29,32 +29,30 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_CS_PIN
 	);
 
-	/* Debug */
-	uint8_t dbgWriteBuffer[2048];
-	for (uint32_t i = 0; i < 2048; i++)
-	{
-		dbgWriteBuffer[i] = i % 256;
-	}
+	/* Display driver initialization */
+	L2HAL_GC9A01_Init
+	(
+		&DisplayContext,
+		&SPI2Handle,
 
-	uint8_t dbgReadBuffer[2048];
+		HAL_DISPLAY_RESET_PORT,
+		HAL_DISPLAY_RESET_PIN,
 
-	for (uint32_t pkt = 0; pkt < 4096; pkt++)
-	{
-		uint32_t pktBaseAddress = pkt * 2048;
+		HAL_DISPLAY_DC_PORT,
+		HAL_DISPLAY_DC_PIN,
 
-		L2HAL_LY68L6400_MemoryWrite(&RamContext, pktBaseAddress, 2048, dbgWriteBuffer);
+		HAL_DISPLAY_CS_PORT,
+		HAL_DISPLAY_CS_PIN,
 
-		memset(dbgReadBuffer, 0x00, 2048);
-		L2HAL_LY68L6400_MemoryRead(&RamContext, pktBaseAddress, 2048, dbgReadBuffer);
+		ROTATION_180,
 
-		for (uint32_t i = 0; i < 2048; i++)
-		{
-			if (dbgReadBuffer[i] != dbgWriteBuffer[i])
-			{
-				L2HAL_Error(Generic);
-			}
-		}
-	}
+		&RamContext,
+		&L2HAL_LY68L6400_MemoryWrite,
+		&L2HAL_LY68L6400_MemoryRead,
+		0
+	);
+
+	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
 
 	/* SD Card driver initialization */
 	enum L2HAL_SDCard_InitResult sdCardInitResult = L2HAL_SDCard_Init
@@ -74,27 +72,6 @@ int main(int argc, char* argv[])
 	{
 		L2HAL_Error(Generic); /* Failed to initialize SD-card */
 	}
-
-
-	/* Display driver initialization */
-	L2HAL_GC9A01_Init
-	(
-		&DisplayContext,
-		&SPI2Handle,
-
-		HAL_DISPLAY_RESET_PORT,
-		HAL_DISPLAY_RESET_PIN,
-
-		HAL_DISPLAY_DC_PORT,
-		HAL_DISPLAY_DC_PIN,
-
-		HAL_DISPLAY_CS_PORT,
-		HAL_DISPLAY_CS_PIN,
-
-		ROTATION_180
-	);
-
-	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
 
 
 	FMGL_API_ColorStruct OffColor;
@@ -128,7 +105,7 @@ int main(int argc, char* argv[])
 	OnColor.B = 0xFF;
 
 	font.Font = &fontData;
-	font.Scale = 1;
+	font.Scale = 4;
 	font.CharactersSpacing = 0;
 	font.LinesSpacing = 0;
 	font.FontColor = &OnColor;
@@ -156,10 +133,10 @@ int main(int argc, char* argv[])
 	while(true)
 	{
 		/* Drawing FPS */
-		/*uint16_t width, height;
+		uint16_t width, height;
 		char buffer[32];
 		sprintf(buffer, "FPS: %d", fps);
-		FMGL_API_RenderTextWithLineBreaks(&fmglContext, &font, 50, 50, &width, &height, false, buffer);/*
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 50, 50, &width, &height, false, buffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);

@@ -13,6 +13,7 @@
 #include <fmgl.h>
 #include <pngle.h>
 #include <Filesystem.h>
+#include <stdio.h>
 
 uint16_t fpsCounter;
 uint16_t fpsHandlerCounter;

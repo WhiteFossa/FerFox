@@ -13,10 +13,19 @@
 #include <fmgl.h>
 
 /**
+ * Display sizes
+ */
+#define L2HAL_GC9A01_DISPLAY_WIDTH 240
+#define L2HAL_GC9A01_DISPLAY_HEIGHT 240
+
+#define L2HAL_GC9A01_DISPLAY_LINE_SIZE (L2HAL_GC9A01_DISPLAY_WIDTH * 3)
+
+/**
  * Sizes of local pixels cache
  */
-#define L2HAL_GC9A01_CACHE_WIDTH 8
+#define L2HAL_GC9A01_CACHE_WIDTH (L2HAL_GC9A01_DISPLAY_WIDTH)
 #define L2HAL_GC9A01_CACHE_HEIGHT 8
+#define L2HAL_GC9A01_CACHE_LINE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * 3)
 #define L2HAL_GC9A01_CACHE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * L2HAL_GC9A01_CACHE_HEIGHT * 3)
 
 enum L2HAL_GC9A01_Orientation
@@ -67,15 +76,42 @@ typedef struct
 	uint8_t PixelsCache[L2HAL_GC9A01_CACHE_SIZE];
 
 	/**
-	 * Current location of pixels cache
+	 * Current location of pixels cache (Y)
 	 */
-	uint16_t PixelsCacheX;
 	uint16_t PixelsCacheY;
 
 	/**
 	 * If true, then data transfer in progress and we must wait for next one
 	 */
 	volatile bool IsDataTransferInProgress;
+
+	/**
+	 * Framebuffer driver context pointer (usually it will be RAM-driver context)
+	 */
+	void* FramebufferDriverContext;
+
+	/**
+	 * Pointer to function, writing to framebuffer.
+	 * 1st param - pointer to framebuffer driver context (NOT to display driver context)
+	 * 2nd param - write start address
+	 * 3rd param - write length
+	 * 4rd param - pointer to buffer with data to write
+	 */
+	void (*FramebufferMemoryWriteFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*);
+
+	/**
+	 * Pointer to function, reading from framebuffer.
+	 * 1st param - pointer to framebuffer driver context (NOT to display driver context)
+	 * 2nd param - read start address
+	 * 3rd param - read length
+	 * 4rd param - pointer to buffer where data will be readed
+	 */
+	void (*FramebufferMemoryReadFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*);
+
+	/**
+	 * Framebuffer base address
+	 */
+	uint32_t FramebufferBaseAddress;
 }
 L2HAL_GC9A01_ContextStruct;
 
@@ -97,7 +133,15 @@ void L2HAL_GC9A01_Init
 	GPIO_TypeDef* chipSelectPort,
 	uint16_t chipSelectPin,
 
-	enum L2HAL_GC9A01_Orientation orientation
+	enum L2HAL_GC9A01_Orientation orientation,
+
+	void* FramebufferDriverContext,
+
+	void (*FramebufferMemoryWriteFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
+
+	void (*FramebufferMemoryReadFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
+
+	uint32_t FramebufferBaseAddress
 );
 
 

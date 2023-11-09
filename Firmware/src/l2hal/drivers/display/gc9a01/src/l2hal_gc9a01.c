@@ -24,7 +24,15 @@ void L2HAL_GC9A01_Init
 	GPIO_TypeDef* chipSelectPort,
 	uint16_t chipSelectPin,
 
-	enum L2HAL_GC9A01_Orientation orientation
+	enum L2HAL_GC9A01_Orientation orientation,
+
+	void* FramebufferDriverContext,
+
+	void (*FramebufferMemoryWriteFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
+
+	void (*FramebufferMemoryReadFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
+
+	uint32_t FramebufferBaseAddress
 )
 {
 	context->SPIHandle = spiHandle;
@@ -39,11 +47,15 @@ void L2HAL_GC9A01_Init
 	context->ChipSelectPin = chipSelectPin;
 
 	/* Setting up cache */
-	context->PixelsCacheX = 0;
 	context->PixelsCacheY = 0;
 	memset(context->PixelsCache, 0x00, L2HAL_GC9A01_CACHE_SIZE);
 
 	context->IsDataTransferInProgress = true;
+
+	context->FramebufferDriverContext = FramebufferDriverContext;
+	context->FramebufferMemoryWriteFunctionPtr = FramebufferMemoryWriteFunctionPtr;
+	context->FramebufferMemoryReadFunctionPtr = FramebufferMemoryReadFunctionPtr;
+	context->FramebufferBaseAddress = FramebufferBaseAddress;
 
 	L2HAL_GC9A01_ResetDisplay(context);
 
@@ -423,71 +435,49 @@ uint16_t L2HAL_GC9A01_GetHeight(void)
 
 void L2HAL_GC9A01_ClearDisplay(L2HAL_GC9A01_ContextStruct *context)
 {
-	/* Full width */
-	L2HAL_GC9A01_SetColumnsRange(context, 0, L2HAL_GC9A01_DISPLAY_WIDTH - 1);
+	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
+	memset(lineBuffer, 0x00, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
 
-	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_WIDTH * 3];
-	for (uint8_t x = 0; x < L2HAL_GC9A01_DISPLAY_WIDTH; x++)
+	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y++)
 	{
-		uint16_t base = x * 3;
-
-		lineBuffer[base + 0] = context->ActiveColor.R;
-		lineBuffer[base + 1] = context->ActiveColor.G;
-		lineBuffer[base + 2] = context->ActiveColor.B;
+		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
 	}
 
-	for (uint8_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y++)
-	{
-		L2HAL_GC9A01_SetRowsRange(context, y, y); /* Row by row */
-
-		L2HAL_GC9A01_WriteCommand(context, 0x2C); /* Start data write */
-		L2HAL_GC9A01_WriteData(context, lineBuffer, L2HAL_GC9A01_DISPLAY_WIDTH * 3);
-	}
+	L2HAL_GC9A01_PushFramebuffer(context);
 }
 
 void L2HAL_GC9A01_DrawPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uint16_t y)
 {
-	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
+	/* Naive, cacheless approach */
+	uint8_t pixelBuffer[3];
+	pixelBuffer[0] = context->ActiveColor.R;
+	pixelBuffer[1] = context->ActiveColor.G;
+	pixelBuffer[2] = context->ActiveColor.B;
+
+	context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE + x * 3, 3, pixelBuffer);
+
+
+/*	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
 	{
-		/* Cache hit */
+		 Cache hit
 		L2HAL_GC9A01_WritePixelsCache(context, x, y, context->ActiveColor);
 		return;
 	}
 
-	/*
-	 * TODO: Push cache to external memory, not to display
-	 * Cache miss, pushing cache to display
-	 * */
-	L2HAL_GC9A01_PushCacheToDisplay(context);
+	 Cache miss, pushing cache to external memory
+	L2HAL_GC9A01_WriteCacheToFramebuffer(context);
 
-	/* Moving cache to new position */
-	context->PixelsCacheX = x;
+	 Moving cache to new position
 	context->PixelsCacheY = y;
-	memset(context->PixelsCache, 0x00, L2HAL_GC9A01_CACHE_SIZE);
+	L2HAL_GC9A01_ReadCacheFromFramebuffer(context);
 
-	/* TODO: Download cache from external memory */
-
-	/* Writing new pixel to cache */
-	L2HAL_GC9A01_WritePixelsCache(context, x, y, context->ActiveColor);
-}
-
-void L2HAL_GC9A01_PushCacheToDisplay(L2HAL_GC9A01_ContextStruct *context)
-{
-	L2HAL_GC9A01_SetColumnsRange(context, context->PixelsCacheX, context->PixelsCacheX + L2HAL_GC9A01_CACHE_WIDTH - 1);
-	L2HAL_GC9A01_SetRowsRange(context, context->PixelsCacheY, context->PixelsCacheY + L2HAL_GC9A01_CACHE_HEIGHT - 1);
-
-	/* Writing cache to display */
-	L2HAL_GC9A01_WriteCommand(context, 0x2C);
-	L2HAL_GC9A01_WriteData(context, context->PixelsCache, L2HAL_GC9A01_CACHE_SIZE);
+	 Writing new pixel to cache
+	L2HAL_GC9A01_WritePixelsCache(context, x, y, context->ActiveColor);*/
 }
 
 bool L2HAL_GC9A01_IsPixelsCacheHit(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y)
 {
 	return
-		x >= context->PixelsCacheX
-		&&
-		x < context->PixelsCacheX + L2HAL_GC9A01_CACHE_WIDTH
-		&&
 		y >= context->PixelsCacheY
 		&&
 		y < context->PixelsCacheY + L2HAL_GC9A01_CACHE_HEIGHT;
@@ -496,7 +486,7 @@ bool L2HAL_GC9A01_IsPixelsCacheHit(L2HAL_GC9A01_ContextStruct *context, uint16_t
 FMGL_API_ColorStruct L2HAL_GC9A01_ReadPixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y)
 {
 	uint16_t cacheY = y - context->PixelsCacheY;
-	uint16_t cacheX = x - context->PixelsCacheX;
+	uint16_t cacheX = x;
 
 	uint16_t cacheIndex = (cacheY * L2HAL_GC9A01_CACHE_WIDTH + cacheX) * 3;
 
@@ -511,9 +501,9 @@ FMGL_API_ColorStruct L2HAL_GC9A01_ReadPixelsCache(L2HAL_GC9A01_ContextStruct *co
 void L2HAL_GC9A01_WritePixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y, FMGL_API_ColorStruct color)
 {
 	uint16_t cacheY = y - context->PixelsCacheY;
-	uint16_t cacheX = x - context->PixelsCacheX;
+	uint16_t cacheX = x;
 
-	uint16_t cacheIndex = (cacheY * L2HAL_GC9A01_CACHE_WIDTH + cacheX) * 3;
+	uint16_t cacheIndex = (cacheY * L2HAL_GC9A01_CACHE_WIDTH) * 3;
 
 	context->PixelsCache[cacheIndex + 0] = color.R;
 	context->PixelsCache[cacheIndex + 1] = color.G;
@@ -527,36 +517,45 @@ void L2HAL_GC9A01_SetActiveColor(L2HAL_GC9A01_ContextStruct* context, FMGL_API_C
 
 FMGL_API_ColorStruct L2HAL_GC9A01_GetPixel(L2HAL_GC9A01_ContextStruct* context, uint16_t x, uint16_t y)
 {
-	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
+	/* Naive cacheless approach */
+	uint8_t pixelBuffer[3];
+	context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE + x * 3, 3, pixelBuffer);
+
+	FMGL_API_ColorStruct result;
+	result.R = pixelBuffer[0];
+	result.G = pixelBuffer[1];
+	result.B = pixelBuffer[2];
+
+	return result;
+
+/*	if (L2HAL_GC9A01_IsPixelsCacheHit(context, x, y))
 	{
-		/* Cache hit */
+		 Cache hit
 		return L2HAL_GC9A01_ReadPixelsCache(context, x, y);
 	}
 	else
 	{
-		/* Cache miss, we need to download cache from external memory */
+		 Cache miss, we need to download cache from external memory
+		L2HAL_GC9A01_ReadCacheFromFramebuffer(context);
 
-		/*
-		 * TODO: CALL CACHE DOWNLOAD HERE
-		 * Dummy because we have no framebuffer
-		 * */
-		FMGL_API_ColorStruct color;
-		color.R = 0x00;
-		color.G = 0x00;
-		color.B = 0x00;
-
-		return color;
-	}
+		return L2HAL_GC9A01_ReadPixelsCache(context, x, y);
+	}*/
 }
 
 void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context)
 {
-	/*
-	 * TODO: UPLOAD PIXELS CACHE TO FRAMEBUFFER, THEN PUSH FRAMEBUFFER TO DISPLAY
-	 * Do nothing, we have no framebuffer
-	 * */
+	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
 
-	L2HAL_GC9A01_PushCacheToDisplay(context);
+	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y ++)
+	{
+		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
+
+		L2HAL_GC9A01_SetColumnsRange(context, 0, L2HAL_GC9A01_DISPLAY_WIDTH - 1);
+		L2HAL_GC9A01_SetRowsRange(context, y, y);
+
+		L2HAL_GC9A01_WriteCommand(context, 0x2C);
+		L2HAL_GC9A01_WriteData(context, lineBuffer, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
+	}
 }
 
 void L2HAL_GC9A01_WaitForDataTransferCompletion(L2HAL_GC9A01_ContextStruct *context)
@@ -570,3 +569,24 @@ void L2HAL_GC9A01_MarkDataTransferAsCompleted(L2HAL_GC9A01_ContextStruct *contex
 	context->IsDataTransferInProgress = false;
 }
 
+void L2HAL_GC9A01_WriteCacheToFramebuffer(L2HAL_GC9A01_ContextStruct *context)
+{
+	for(uint16_t cacheY = 0; cacheY < L2HAL_GC9A01_CACHE_HEIGHT; cacheY++)
+	{
+		uint8_t* cacheLineBaseAddress = &context->PixelsCache[cacheY * L2HAL_GC9A01_CACHE_LINE_SIZE];
+		uint32_t framebufferWriteBaseAddress = context->FramebufferBaseAddress + 3 * (context->PixelsCacheY * L2HAL_GC9A01_DISPLAY_WIDTH);
+
+		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, framebufferWriteBaseAddress, L2HAL_GC9A01_CACHE_LINE_SIZE, cacheLineBaseAddress);
+	}
+}
+
+void L2HAL_GC9A01_ReadCacheFromFramebuffer(L2HAL_GC9A01_ContextStruct *context)
+{
+	for(uint16_t cacheY = 0; cacheY < L2HAL_GC9A01_CACHE_HEIGHT; cacheY++)
+	{
+		uint8_t* cacheLineBaseAddress = &context->PixelsCache[cacheY * L2HAL_GC9A01_CACHE_LINE_SIZE];
+		uint32_t framebufferWriteBaseAddress = context->FramebufferBaseAddress + 3 * (context->PixelsCacheY * L2HAL_GC9A01_DISPLAY_WIDTH);
+
+		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, framebufferWriteBaseAddress, L2HAL_GC9A01_CACHE_LINE_SIZE, cacheLineBaseAddress);
+	}
+}

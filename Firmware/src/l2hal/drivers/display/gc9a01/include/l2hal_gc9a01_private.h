@@ -38,13 +38,6 @@
 #define L2HAL_GC9A01_DISPLAY_AFTER_ON_TIME 20
 
 /**
- * Display sizes
- */
-#define L2HAL_GC9A01_DISPLAY_WIDTH 240
-#define L2HAL_GC9A01_DISPLAY_HEIGHT 240
-
-
-/**
  * Select / deselect chip
  */
 void L2HAL_GC9A01_SelectChip(L2HAL_GC9A01_ContextStruct *context, bool isSelected);
@@ -87,9 +80,14 @@ FMGL_API_ColorStruct L2HAL_GC9A01_ReadPixelsCache(L2HAL_GC9A01_ContextStruct *co
 void L2HAL_GC9A01_WritePixelsCache(L2HAL_GC9A01_ContextStruct *context, uint16_t x, uint16_t y, FMGL_API_ColorStruct color);
 
 /**
- * Push cache to display
+ * Write cache to framebuffer
  */
-void L2HAL_GC9A01_PushCacheToDisplay(L2HAL_GC9A01_ContextStruct *context);
+void L2HAL_GC9A01_WriteCacheToFramebuffer(L2HAL_GC9A01_ContextStruct *context);
+
+/**
+ * Read cache from framebuffer
+ */
+void L2HAL_GC9A01_ReadCacheFromFramebuffer(L2HAL_GC9A01_ContextStruct *context);
 
 /**
  * Hang till the DMA transfer completed
