@@ -19,6 +19,7 @@
 #define L2HAL_GC9A01_DISPLAY_HEIGHT 240
 
 #define L2HAL_GC9A01_DISPLAY_LINE_SIZE (L2HAL_GC9A01_DISPLAY_WIDTH * 3)
+#define L2HAL_GC9A01_FRAMEBUFFER_SIZE (L2HAL_GC9A01_DISPLAY_LINE_SIZE * L2HAL_GC9A01_DISPLAY_HEIGHT)
 
 /**
  * Sizes of local pixels cache
@@ -113,6 +114,11 @@ typedef struct
 	 * Framebuffer base address
 	 */
 	uint32_t FramebufferBaseAddress;
+
+	/**
+	 * Previous frame buffer (to calculate dirty pixels map)
+	 */
+	uint32_t PreviousFrameBufferBaseAddress;
 }
 L2HAL_GC9A01_ContextStruct;
 
@@ -136,13 +142,15 @@ void L2HAL_GC9A01_Init
 
 	enum L2HAL_GC9A01_Orientation orientation,
 
-	void* FramebufferDriverContext,
+	void* framebufferDriverContext,
 
-	void (*FramebufferMemoryWriteFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
+	void (*framebufferMemoryWriteFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
 
-	void (*FramebufferMemoryReadFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
+	void (*framebufferMemoryReadFunctionPtr)(void*, uint32_t, uint32_t, uint8_t*),
 
-	uint32_t FramebufferBaseAddress
+	uint32_t framebufferBaseAddress,
+
+	uint32_t previousFrameBufferBaseAddress
 );
 
 

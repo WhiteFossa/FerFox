@@ -50,6 +50,8 @@ int main(int argc, char* argv[])
 		&L2HAL_LY68L6400_MemoryWrite,
 		&L2HAL_LY68L6400_MemoryRead,
 
+		L2HAL_GC9A01_FRAMEBUFFER_SIZE,
+
 		0
 	);
 
@@ -129,7 +131,7 @@ int main(int argc, char* argv[])
 	/* Loading animations */
 	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
 	{
-		framebuffersAddresses[frame] = frame * 240 * 240 * 3;
+		framebuffersAddresses[frame] = (frame + 1) * L2HAL_GC9A01_FRAMEBUFFER_SIZE;
 
 		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
 
