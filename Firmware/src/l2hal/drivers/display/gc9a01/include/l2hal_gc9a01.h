@@ -9,6 +9,7 @@
 #define L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_H_
 
 #include <l2hal_mcu.h>
+#include <l2hal_crc.h>
 #include <stdbool.h>
 #include <fmgl.h>
 
@@ -24,8 +25,8 @@
 /**
  * Sizes of local pixels cache
  */
-#define L2HAL_GC9A01_CACHE_WIDTH 32
-#define L2HAL_GC9A01_CACHE_HEIGHT 32
+#define L2HAL_GC9A01_CACHE_WIDTH 16
+#define L2HAL_GC9A01_CACHE_HEIGHT 16
 #define L2HAL_GC9A01_CACHE_LINE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * 3)
 #define L2HAL_GC9A01_CACHE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * L2HAL_GC9A01_CACHE_HEIGHT * 3)
 
@@ -119,6 +120,11 @@ typedef struct
 	 * Previous frame buffer (to calculate dirty pixels map)
 	 */
 	uint32_t PreviousFrameBufferBaseAddress;
+
+	/**
+	 * CRC calculation unit context
+	 */
+	L2HAL_CRCContextStruct* CrcContext;
 }
 L2HAL_GC9A01_ContextStruct;
 
@@ -150,7 +156,9 @@ void L2HAL_GC9A01_Init
 
 	uint32_t framebufferBaseAddress,
 
-	uint32_t previousFrameBufferBaseAddress
+	uint32_t previousFrameBufferBaseAddress,
+
+	L2HAL_CRCContextStruct* crcContext
 );
 
 

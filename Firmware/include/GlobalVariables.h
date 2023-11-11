@@ -12,6 +12,7 @@
 #include <l2hal_gc9a01.h>
 #include <l2hal_sdcard.h>
 #include <l2hal_ly68l6400.h>
+#include <l2hal_crc.h>
 #include <fmgl.h>
 #include <ffconf.h>
 #include <ff.h>
@@ -91,6 +92,10 @@ L2HAL_SDCard_ContextStruct SDCardContext;
  */
 L2HAL_LY68L6400_ContextStruct RamContext;
 
+/**
+ * CRC calculator context
+ */
+L2HAL_CRCContextStruct CRC_Context;
 
 /**
  * SD card filesystem pointer
