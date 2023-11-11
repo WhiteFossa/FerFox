@@ -38,19 +38,6 @@
 #define L2HAL_GC9A01_DISPLAY_AFTER_ON_TIME 20
 
 /**
- * How much pixels to transmit (in line) if we found dirty one
- * L2HAL_GC9A01_DISPLAY_WIDTH must be a multiple of this
- */
-#define L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH 40
-
-#define L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_BLOCKS_COUNT (L2HAL_GC9A01_DISPLAY_WIDTH / L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH)
-
-/**
- * Dirty pixels buffer line size
- */
-#define L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE ((L2HAL_GC9A01_DISPLAY_WIDTH / L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH) * 4)
-
-/**
  * Select / deselect chip
  */
 void L2HAL_GC9A01_SelectChip(L2HAL_GC9A01_ContextStruct *context, bool isSelected);

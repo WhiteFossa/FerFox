@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 		&L2HAL_LY68L6400_MemoryWrite,
 		&L2HAL_LY68L6400_MemoryRead,
 
-		L2HAL_GC9A01_FRAMEBUFFER_SIZE,
+		L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE,
 
 		0,
 
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 	/* Loading animations */
 	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
 	{
-		framebuffersAddresses[frame] = (frame + 1) * L2HAL_GC9A01_FRAMEBUFFER_SIZE;
+		framebuffersAddresses[frame] = frame * L2HAL_GC9A01_FRAMEBUFFER_SIZE + L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE;
 
 		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
 
@@ -155,9 +155,9 @@ int main(int argc, char* argv[])
 	{
 		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
 
-//		/* Drawing FPS */
-//		uint16_t width, height;
-//		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
+		/* Drawing FPS */
+		uint16_t width, height;
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);
