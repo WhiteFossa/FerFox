@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	L2HAL_GC9A01_Init
 	(
 		&DisplayContext,
-		&SPI1Handle,
+		&SPI2Handle,
 
 		HAL_DISPLAY_RESET_PORT,
 		HAL_DISPLAY_RESET_PIN,
