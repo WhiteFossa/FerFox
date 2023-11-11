@@ -73,10 +73,7 @@
 /**********************
  * DISPLAY - GC9A01 *
  *
- *  SPI 2:
- *  PB13 - SCK (SCL)
- *  PB15 - MOSI (SDA)
- *
+ *  SPI 1
  *  PB0 - RESET (Active 0)
  *  PB1 - D/C (1 - data, 0 - command)
  *  PB2 - CS (Active 0)
@@ -97,11 +94,7 @@
 /**********************
  *  SD CARD *
  *
- *  SPI 2:
- *  PB13 - SCK
- *  PB14 - MISO
- *  PB15 - MOSI
- *
+ *  SPI 1
  *  PB4 - CS (Active 0)
  *
  **********************/
@@ -113,11 +106,7 @@
 /**********************
  *  pSRAM - LY68L6400 *
  *
- *  SPI 1:
- *  PA5 - SCK
- *  PA6 - MISO
- *  PB7 - MOSI
- *
+ *  SPI 2
  *  PB5 - CS (Active 0)
  *
  **********************/

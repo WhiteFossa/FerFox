@@ -54,7 +54,7 @@ void L2HAL_SetupSPI(void)
 	SPI1Handle.Init.Mode = SPI_MODE_MASTER;
 	SPI1Handle.Init.Direction = SPI_DIRECTION_2LINES;
 	SPI1Handle.Init.DataSize =  SPI_DATASIZE_8BIT;
-	SPI1Handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+	SPI1Handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
 	SPI1Handle.Init.CLKPhase = SPI_PHASE_1EDGE;
 	SPI1Handle.Init.CLKPolarity = SPI_POLARITY_LOW;
 	SPI1Handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
@@ -73,7 +73,7 @@ void L2HAL_SetupSPI(void)
 	SPI2Handle.Instance = SPI2;
 	SPI2Handle.Init.Mode = SPI_MODE_MASTER;
 	SPI2Handle.Init.Direction = SPI_DIRECTION_2LINES;
-	SPI2Handle.Init.DataSize =  SPI_DATASIZE_8BIT;
+	SPI2Handle.Init.DataSize = SPI_DATASIZE_8BIT;
 	SPI2Handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
 	SPI2Handle.Init.CLKPhase = SPI_PHASE_1EDGE;
 	SPI2Handle.Init.CLKPolarity = SPI_POLARITY_LOW;
@@ -94,7 +94,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 	if (hspi->Instance == SPI1)
 	{
 		/**
-		 * Setting up port and SPI for pSRAM
 		 * SPI1 at PA5 (SCK), PA6 (MISO) and PA7 (MOSI)
 		 */
 		__HAL_RCC_GPIOA_CLK_ENABLE();
@@ -172,7 +171,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 	if (hspi->Instance == SPI2)
 	{
 		/**
-		 * Setting up port and SPI for display and SD-card
 		 * SPI2 at PB13 (SCK) and PB15 (MOSI)
 		 */
 		__HAL_RCC_GPIOB_CLK_ENABLE();

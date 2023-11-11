@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	L2HAL_LY68L6400_Init
 	(
 		&RamContext,
-		&SPI1Handle,
+		&SPI2Handle,
 
 		HAL_PSRAM_CS_PORT,
 		HAL_PSRAM_CS_PIN
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	L2HAL_GC9A01_Init
 	(
 		&DisplayContext,
-		&SPI2Handle,
+		&SPI1Handle,
 
 		HAL_DISPLAY_RESET_PORT,
 		HAL_DISPLAY_RESET_PIN,
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 	enum L2HAL_SDCard_InitResult sdCardInitResult = L2HAL_SDCard_Init
 	(
 		&SDCardContext,
-		&SPI2Handle,
+		&SPI1Handle,
 
 		HAL_SDCARD_CS_PORT,
 		HAL_SDCARD_CS_PIN
