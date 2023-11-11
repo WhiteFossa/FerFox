@@ -153,11 +153,11 @@ int main(int argc, char* argv[])
 	uint8_t frame = 0;
 	while(true)
 	{
-		/* Drawing FPS */
-		uint16_t width, height;
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
-
 		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
+
+//		/* Drawing FPS */
+//		uint16_t width, height;
+//		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);
