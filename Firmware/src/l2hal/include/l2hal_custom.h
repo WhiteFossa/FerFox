@@ -82,4 +82,10 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim);
 void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim);
 void L2HAL_SetupBacklighTimer(void);
 
+/**
+ * CRC calculator init and de-init
+ */
+volatile void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc);
+volatile void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc);
+
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */

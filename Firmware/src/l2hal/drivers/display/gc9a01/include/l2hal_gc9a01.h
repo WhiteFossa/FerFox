@@ -9,6 +9,7 @@
 #define L2HAL_DRIVERS_DISPLAY_GC9A01_INCLUDE_L2HAL_GC9A01_H_
 
 #include <l2hal_mcu.h>
+#include <l2hal_crc.h>
 #include <stdbool.h>
 #include <fmgl.h>
 
@@ -24,17 +25,38 @@
 /**
  * Sizes of local pixels cache
  */
-#define L2HAL_GC9A01_CACHE_WIDTH 32
-#define L2HAL_GC9A01_CACHE_HEIGHT 32
+#define L2HAL_GC9A01_CACHE_WIDTH 16
+#define L2HAL_GC9A01_CACHE_HEIGHT 16
 #define L2HAL_GC9A01_CACHE_LINE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * 3)
 #define L2HAL_GC9A01_CACHE_SIZE (L2HAL_GC9A01_CACHE_WIDTH * L2HAL_GC9A01_CACHE_HEIGHT * 3)
 
+/**
+ * How much pixels to transmit (in line) if we found dirty one
+ * L2HAL_GC9A01_DISPLAY_WIDTH must be a multiple of this
+ */
+#define L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH 40
+
+/**
+ * Dirty pixels buffer blocks count. Block have length of L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH pixels
+ */
+#define L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_BLOCKS_COUNT (L2HAL_GC9A01_DISPLAY_WIDTH / L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH)
+
+/**
+ * Dirty pixels buffer line size
+ */
+#define L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE ((L2HAL_GC9A01_DISPLAY_WIDTH / L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH) * 4)
+
+/**
+ * Dirty pixels buffer total size
+ */
+#define L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE (L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE * L2HAL_GC9A01_DISPLAY_HEIGHT)
+
 enum L2HAL_GC9A01_Orientation
 {
-	ROTATION_0,
-	ROTATION_90,
-	ROTATION_180,
-	ROTATION_270
+	ROTATION_0,  /**< ROTATION_0 */
+	ROTATION_90, /**< ROTATION_90 */
+	ROTATION_180,/**< ROTATION_180 */
+	ROTATION_270 /**< ROTATION_270 */
 };
 
 
@@ -119,6 +141,11 @@ typedef struct
 	 * Previous frame buffer (to calculate dirty pixels map)
 	 */
 	uint32_t PreviousFrameBufferBaseAddress;
+
+	/**
+	 * CRC calculation unit context
+	 */
+	L2HAL_CRCContextStruct* CrcContext;
 }
 L2HAL_GC9A01_ContextStruct;
 
@@ -150,7 +177,9 @@ void L2HAL_GC9A01_Init
 
 	uint32_t framebufferBaseAddress,
 
-	uint32_t previousFrameBufferBaseAddress
+	uint32_t previousFrameBufferBaseAddress,
+
+	L2HAL_CRCContextStruct* crcContext
 );
 
 

@@ -29,6 +29,9 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_CS_PIN
 	);
 
+	/* CRC calculation unit initialization */
+	CRC_Context = L2HAL_CRC_Init();
+
 	/* Display driver initialization */
 	L2HAL_GC9A01_Init
 	(
@@ -50,9 +53,11 @@ int main(int argc, char* argv[])
 		&L2HAL_LY68L6400_MemoryWrite,
 		&L2HAL_LY68L6400_MemoryRead,
 
-		L2HAL_GC9A01_FRAMEBUFFER_SIZE,
+		L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE,
 
-		0
+		0,
+
+		&CRC_Context
 	);
 
 	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
@@ -108,14 +113,14 @@ int main(int argc, char* argv[])
 	OnColor.B = 0xFF;
 
 	font.Font = &fontData;
-	font.Scale = 4;
+	font.Scale = 1;
 	font.CharactersSpacing = 0;
 	font.LinesSpacing = 0;
 	font.FontColor = &OnColor;
 	font.BackgroundColor = &OffColor;
 	font.Transparency = &transparencyMode;
 
-	//L2HAL_SysTick_RegisterHandler(&FpsHandler);
+	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
 	/* Setting up PNGLE */
 	PngleContext = pngle_new();
@@ -131,7 +136,7 @@ int main(int argc, char* argv[])
 	/* Loading animations */
 	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
 	{
-		framebuffersAddresses[frame] = (frame + 1) * L2HAL_GC9A01_FRAMEBUFFER_SIZE;
+		framebuffersAddresses[frame] = frame * L2HAL_GC9A01_FRAMEBUFFER_SIZE + L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE;
 
 		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
 
@@ -140,23 +145,19 @@ int main(int argc, char* argv[])
 		LoadJpegFromFile(filename);
 	}
 
-/*	 Loading two images into two framebuffers
-	L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, FRAMEBUFFER_1_BASE_ADDRESS);
-	LoadPngFromFile("image.png");
-
-	L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, FRAMEBUFFER_2_BASE_ADDRESS);
-	LoadJpegFromFile("image.jpeg");*/
+//	L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, 1000000);
+//	LoadJpegFromFile("image.jpeg");
 
 	sprintf(fpsMessageBuffer, "Wait...");
 
 	uint8_t frame = 0;
 	while(true)
 	{
-		/* Drawing FPS
-		uint16_t width, height;
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 100, &width, &height, false, fpsMessageBuffer);*/
-
 		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
+
+		/* Drawing FPS */
+		uint16_t width, height;
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);
@@ -170,7 +171,7 @@ int main(int argc, char* argv[])
 			frame ++;
 		}
 
-		//fpsCounter ++;
+		fpsCounter ++;
 	}
 }
 
@@ -185,7 +186,7 @@ void PngleOnDraw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h,
 	FMGL_API_DrawPixel(&FmglContext, (uint16_t)x, (uint16_t)y);
 }
 
-/*void FpsHandler(void)
+void FpsHandler(void)
 {
 	fpsHandlerCounter ++;
 
@@ -197,7 +198,7 @@ void PngleOnDraw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h,
 
 		sprintf(fpsMessageBuffer, "FPS:%.1f", fps / 10.0f);
 	}
-}*/
+}
 
 #pragma GCC diagnostic pop
 

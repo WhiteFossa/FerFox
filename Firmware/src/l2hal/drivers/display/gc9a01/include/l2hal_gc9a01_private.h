@@ -38,11 +38,6 @@
 #define L2HAL_GC9A01_DISPLAY_AFTER_ON_TIME 20
 
 /**
- * How much pixels to transmit (in line) if we found dirty one
- */
-#define L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH 8
-
-/**
  * Select / deselect chip
  */
 void L2HAL_GC9A01_SelectChip(L2HAL_GC9A01_ContextStruct *context, bool isSelected);

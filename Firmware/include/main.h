@@ -34,6 +34,6 @@ void PngleOnDraw(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h,
 /**
  * FPS SysTick handler, used to calculate FPS
  */
-//void FpsHandler(void);
+void FpsHandler(void);
 
 #endif /* INCLUDE_MAIN_H_ */

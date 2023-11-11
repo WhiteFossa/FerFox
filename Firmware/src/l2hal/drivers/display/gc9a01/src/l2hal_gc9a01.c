@@ -34,7 +34,9 @@ void L2HAL_GC9A01_Init
 
 	uint32_t framebufferBaseAddress,
 
-	uint32_t previousFrameBufferBaseAddress
+	uint32_t previousFrameBufferBaseAddress,
+
+	L2HAL_CRCContextStruct* crcContext
 )
 {
 	context->SPIHandle = spiHandle;
@@ -61,6 +63,8 @@ void L2HAL_GC9A01_Init
 	context->FramebufferBaseAddress = framebufferBaseAddress;
 
 	context->PreviousFrameBufferBaseAddress = previousFrameBufferBaseAddress;
+
+	context->CrcContext = crcContext;
 
 	L2HAL_GC9A01_ResetDisplay(context);
 
@@ -526,76 +530,127 @@ void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context)
 	L2HAL_GC9A01_WriteCacheToFramebuffer(context);
 
 	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
-	uint8_t previousFrameLineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
+	uint32_t previousFrameLineBuffer[L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_BLOCKS_COUNT];
 
 	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y ++)
 	{
 		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
-		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, previousFrameLineBuffer);
+		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE, L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE, (uint8_t*)previousFrameLineBuffer);
 
-		/* Searching for dirty (e.g. changed) pixels */
-		uint16_t x = 0;
-		while (x < L2HAL_GC9A01_DISPLAY_WIDTH)
+		for (uint16_t blockNumber = 0; blockNumber < L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_BLOCKS_COUNT; blockNumber ++)
 		{
-			uint16_t currentPixelBaseIndex = x * 3;
+			/* Calculating CRC for pixels block came from framebuffer */
+			uint32_t framebufferBlockCrc = L2HAL_CRC_Calculate(context->CrcContext, &lineBuffer[blockNumber * L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH * 3], L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH * 3);
 
-			if
-			(
-				previousFrameLineBuffer[currentPixelBaseIndex] != lineBuffer[currentPixelBaseIndex]
-				||
-				previousFrameLineBuffer[currentPixelBaseIndex + 1] != lineBuffer[currentPixelBaseIndex + 1]
-				||
-				previousFrameLineBuffer[currentPixelBaseIndex + 2] != lineBuffer[currentPixelBaseIndex + 2]
-			)
+			if (framebufferBlockCrc != previousFrameLineBuffer[blockNumber])
 			{
-				uint8_t pixelsCountToTransmit = L2HAL_GC9A01_DISPLAY_WIDTH - x;
+				uint16_t blockFirstPixel = blockNumber * L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH;
+				uint8_t pixelsCountToTransmit = L2HAL_GC9A01_DISPLAY_WIDTH - blockFirstPixel;
 				if (pixelsCountToTransmit > L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH)
 				{
 					pixelsCountToTransmit = L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH;
 				}
 
 				/* Transmitting */
-				L2HAL_GC9A01_SetColumnsRange(context, x, x + pixelsCountToTransmit - 1);
+				L2HAL_GC9A01_SetColumnsRange(context, blockFirstPixel, blockFirstPixel + pixelsCountToTransmit - 1);
 				L2HAL_GC9A01_SetRowsRange(context, y, y);
 
 				L2HAL_GC9A01_WriteCommand(context, 0x2C);
-				L2HAL_GC9A01_WriteData(context, &lineBuffer[x * 3], pixelsCountToTransmit * 3);
-
-
-				x += pixelsCountToTransmit;
+				L2HAL_GC9A01_WriteData(context, &lineBuffer[blockFirstPixel * 3], pixelsCountToTransmit * 3);
 			}
-			else
-			{
-				x += 1;
-			}
+
+			/* Refreshing previous frame buffer */
+			previousFrameLineBuffer[blockNumber] = framebufferBlockCrc;
 		}
 
-		/* Refreshing previous frame buffer */
-		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
+		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE, L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE, (uint8_t*)previousFrameLineBuffer);
+
+//		/* Searching for dirty (e.g. changed) pixels */
+//		uint16_t x = 0;
+//		while (x < L2HAL_GC9A01_DISPLAY_WIDTH)
+//		{
+//			uint16_t currentPixelBaseIndex = x * 3;
+//
+//			if
+//			(
+//				previousFrameLineBuffer[currentPixelBaseIndex] != lineBuffer[currentPixelBaseIndex]
+//				||
+//				previousFrameLineBuffer[currentPixelBaseIndex + 1] != lineBuffer[currentPixelBaseIndex + 1]
+//				||
+//				previousFrameLineBuffer[currentPixelBaseIndex + 2] != lineBuffer[currentPixelBaseIndex + 2]
+//			)
+//			{
+//				uint8_t pixelsCountToTransmit = L2HAL_GC9A01_DISPLAY_WIDTH - x;
+//				if (pixelsCountToTransmit > L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH)
+//				{
+//					pixelsCountToTransmit = L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH;
+//				}
+//
+//				/* Transmitting */
+//				L2HAL_GC9A01_SetColumnsRange(context, x, x + pixelsCountToTransmit - 1);
+//				L2HAL_GC9A01_SetRowsRange(context, y, y);
+//
+//				L2HAL_GC9A01_WriteCommand(context, 0x2C);
+//				L2HAL_GC9A01_WriteData(context, &lineBuffer[x * 3], pixelsCountToTransmit * 3);
+//
+//
+//				x += pixelsCountToTransmit;
+//			}
+//			else
+//			{
+//				x += 1;
+//			}
+//		}
+//
+//		/* Refreshing previous frame buffer */
+//		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
 	}
 }
+
+//void L2HAL_GC9A01_PushFramebuffer(L2HAL_GC9A01_ContextStruct* context)
+//{
+//	L2HAL_GC9A01_WriteCacheToFramebuffer(context);
+//
+//	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
+//
+//	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y ++)
+//	{
+//		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
+//
+//		/* Transmitting */
+//		L2HAL_GC9A01_SetColumnsRange(context, 0, L2HAL_GC9A01_DISPLAY_WIDTH - 1);
+//		L2HAL_GC9A01_SetRowsRange(context, y, y);
+//
+//		L2HAL_GC9A01_WriteCommand(context, 0x2C);
+//		L2HAL_GC9A01_WriteData(context, lineBuffer, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
+//	}
+//}
 
 void L2HAL_GC9A01_ForcePushFramebuffer(L2HAL_GC9A01_ContextStruct* context)
 {
 	L2HAL_GC9A01_WriteCacheToFramebuffer(context);
 
-		uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
-		uint8_t previousFrameLineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
+	uint8_t lineBuffer[L2HAL_GC9A01_DISPLAY_LINE_SIZE];
+	uint32_t previousFrameLineBuffer[L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_BLOCKS_COUNT];
 
-		for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y ++)
+	for (uint16_t y = 0; y < L2HAL_GC9A01_DISPLAY_HEIGHT; y ++)
+	{
+		context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
+
+		/* Transmitting */
+		L2HAL_GC9A01_SetColumnsRange(context, 0, L2HAL_GC9A01_DISPLAY_WIDTH - 1);
+		L2HAL_GC9A01_SetRowsRange(context, y, y);
+
+		L2HAL_GC9A01_WriteCommand(context, 0x2C);
+		L2HAL_GC9A01_WriteData(context, lineBuffer, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
+
+		/* Refreshing previous frame buffer */
+		for (uint16_t blockNumber = 0; blockNumber < L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_BLOCKS_COUNT; blockNumber ++)
 		{
-			context->FramebufferMemoryReadFunctionPtr(context->FramebufferDriverContext, context->FramebufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
-
-			/* Transmitting */
-			L2HAL_GC9A01_SetColumnsRange(context, 0, L2HAL_GC9A01_DISPLAY_WIDTH - 1);
-			L2HAL_GC9A01_SetRowsRange(context, y, y);
-
-			L2HAL_GC9A01_WriteCommand(context, 0x2C);
-			L2HAL_GC9A01_WriteData(context, lineBuffer, L2HAL_GC9A01_DISPLAY_LINE_SIZE);
-
-			/* Refreshing previous frame buffer */
-			context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DISPLAY_LINE_SIZE, L2HAL_GC9A01_DISPLAY_LINE_SIZE, lineBuffer);
+			previousFrameLineBuffer[blockNumber] = L2HAL_CRC_Calculate(context->CrcContext, &lineBuffer[blockNumber * L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH * 3], L2HAL_GC9A01_DIRTY_PIXELS_TRANSMISSION_LENGTH * 3);
 		}
+		context->FramebufferMemoryWriteFunctionPtr(context->FramebufferDriverContext, context->PreviousFrameBufferBaseAddress + y * L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE, L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_LINE_SIZE, (uint8_t*)previousFrameLineBuffer);
+	}
 }
 
 void L2HAL_GC9A01_WaitForDataTransferCompletion(L2HAL_GC9A01_ContextStruct *context)
