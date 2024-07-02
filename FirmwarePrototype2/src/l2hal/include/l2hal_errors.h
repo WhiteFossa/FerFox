@@ -48,22 +48,22 @@
 /**
  * Clock this port on error.
  */
-#define L2HAL_ERROR_CLOCK_SIGNAL_PORT() __HAL_RCC_GPIOC_CLK_ENABLE()
+#define L2HAL_ERROR_CLOCK_SIGNAL_PORT() __HAL_RCC_GPIOB_CLK_ENABLE()
 
 /**
  * In case of error pin at this port will be changed.
  */
-#define L2HAL_ERROR_SIGNAL_PORT GPIOC
+#define L2HAL_ERROR_SIGNAL_PORT GPIOB
 
 /**
  * Change this pin on error.
  */
-#define L2HAL_ERROR_SIGNAL_PIN GPIO_PIN_13
+#define L2HAL_ERROR_SIGNAL_PIN GPIO_PIN_7
 
 /**
  * Do this with L2HAL_ERROR_SIGNAL_PIN of L2HAL_ERROR_SIGNAL_PORT on error.
  */
-#define L2HAL_ERROR_SIGNAL_PIN_STATE GPIO_PIN_RESET
+#define L2HAL_ERROR_SIGNAL_PIN_STATE GPIO_PIN_SET
 
 
 /**

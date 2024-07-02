@@ -45,7 +45,27 @@ int main(int argc, char* argv[])
 	L2HAL_Init();
 	HAL_IntiHardware();
 
-	trace_printf("Clock: %d", HAL_RCC_GetSysClockFreq());
+	/* QSPI */
+	QSPIHandle.Instance = QUADSPI;
+
+	/* pSRAM init */
+	L2HAL_LY68L6400_QSPI_Init
+	(
+		&RamContext,
+		&QSPIHandle,
+
+		HAL_PSRAM_CS_PORT,
+		HAL_PSRAM_CS_PIN,
+
+		HAL_PSRAM_CLK_PORT,
+		HAL_PSRAM_CLK_PIN,
+
+		HAL_PSRAM_SIO0_PORT,
+		HAL_PSRAM_SIO0_PIN,
+
+		HAL_PSRAM_SIO1_PORT,
+		HAL_PSRAM_SIO1_PIN
+	);
 
 	/* Main loop */
 	while (true)

@@ -51,6 +51,12 @@
 void L2HAL_InitCustomHardware(void);
 
 /**
+ * QSPI init and de-init
+ */
+volatile void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi);
+volatile void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef *hqspi);
+
+/**
  * CRC calculator init and de-init
  */
 volatile void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc);

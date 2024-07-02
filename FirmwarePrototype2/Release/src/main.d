@@ -1,16 +1,17 @@
-src/main.o: ../src/main.c ../system/include/diag/trace.h \
- ../include/timer.h ../system/include/cmsis/cmsis_device.h \
+src/main.o: ../src/main.c ../include/main.h \
+ ../system/include/diag/trace.h ../include/hal.h \
+ ../src/l2hal/mcu_dependent/l2hal_mcu.h \
+ ../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.h \
+ ../system/include/stm32f7-hal/stm32f7xx_hal.h \
+ ../include/stm32f7xx_hal_conf.h \
+ ../system/include/stm32f7-hal/stm32f7xx_hal_rcc.h \
+ ../system/include/stm32f7-hal/stm32f7xx_hal_def.h \
  ../system/include/cmsis/stm32f7xx.h \
  ../system/include/cmsis/stm32f767xx.h ../system/include/cmsis/core_cm7.h \
  ../system/include/cmsis/cmsis_version.h \
  ../system/include/cmsis/cmsis_compiler.h \
  ../system/include/cmsis/cmsis_gcc.h ../system/include/cmsis/mpu_armv7.h \
  ../system/include/cmsis/system_stm32f7xx.h \
- ../system/include/stm32f7-hal/stm32f7xx_hal.h \
- ../include/stm32f7xx_hal_conf.h \
- ../system/include/stm32f7-hal/stm32f7xx_hal_rcc.h \
- ../system/include/stm32f7-hal/stm32f7xx_hal_def.h \
- ../system/include/cmsis/stm32f7xx.h \
  ../system/include/stm32f7-hal/Legacy/stm32_hal_legacy.h \
  ../system/include/stm32f7-hal/stm32f7xx_hal_rcc_ex.h \
  ../system/include/stm32f7-hal/stm32f7xx_hal_gpio.h \
@@ -78,10 +79,24 @@ src/main.o: ../src/main.c ../system/include/diag/trace.h \
  ../system/include/stm32f7-hal/stm32f7xx_hal_jpeg.h \
  ../system/include/stm32f7-hal/stm32f7xx_hal_mdios.h \
  ../system/include/stm32f7-hal/stm32f7xx_hal_smbus.h \
- ../system/include/stm32f7-hal/stm32f7xx_hal_mmc.h ../include/led.h
+ ../system/include/stm32f7-hal/stm32f7xx_hal_mmc.h \
+ ../src/l2hal/include/l2hal_errors.h \
+ ../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/drivers/input/buttons/include/l2hal_stm32f767zit6u_buttons.h \
+ ../src/l2hal/drivers/input/buttons/include/l2hal_buttons_defaults.h \
+ ../src/l2hal/include/l2hal.h ../src/l2hal/include/l2hal_custom.h \
+ ../src/l2hal/include/l2hal_systick.h \
+ ../src/l2hal/include/l2hal_systick_private.h \
+ ../include/global_variables.h \
+ ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h
+../include/main.h:
 ../system/include/diag/trace.h:
-../include/timer.h:
-../system/include/cmsis/cmsis_device.h:
+../include/hal.h:
+../src/l2hal/mcu_dependent/l2hal_mcu.h:
+../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.h:
+../system/include/stm32f7-hal/stm32f7xx_hal.h:
+../include/stm32f7xx_hal_conf.h:
+../system/include/stm32f7-hal/stm32f7xx_hal_rcc.h:
+../system/include/stm32f7-hal/stm32f7xx_hal_def.h:
 ../system/include/cmsis/stm32f7xx.h:
 ../system/include/cmsis/stm32f767xx.h:
 ../system/include/cmsis/core_cm7.h:
@@ -90,11 +105,6 @@ src/main.o: ../src/main.c ../system/include/diag/trace.h \
 ../system/include/cmsis/cmsis_gcc.h:
 ../system/include/cmsis/mpu_armv7.h:
 ../system/include/cmsis/system_stm32f7xx.h:
-../system/include/stm32f7-hal/stm32f7xx_hal.h:
-../include/stm32f7xx_hal_conf.h:
-../system/include/stm32f7-hal/stm32f7xx_hal_rcc.h:
-../system/include/stm32f7-hal/stm32f7xx_hal_def.h:
-../system/include/cmsis/stm32f7xx.h:
 ../system/include/stm32f7-hal/Legacy/stm32_hal_legacy.h:
 ../system/include/stm32f7-hal/stm32f7xx_hal_rcc_ex.h:
 ../system/include/stm32f7-hal/stm32f7xx_hal_gpio.h:
@@ -163,4 +173,12 @@ src/main.o: ../src/main.c ../system/include/diag/trace.h \
 ../system/include/stm32f7-hal/stm32f7xx_hal_mdios.h:
 ../system/include/stm32f7-hal/stm32f7xx_hal_smbus.h:
 ../system/include/stm32f7-hal/stm32f7xx_hal_mmc.h:
-../include/led.h:
+../src/l2hal/include/l2hal_errors.h:
+../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/drivers/input/buttons/include/l2hal_stm32f767zit6u_buttons.h:
+../src/l2hal/drivers/input/buttons/include/l2hal_buttons_defaults.h:
+../src/l2hal/include/l2hal.h:
+../src/l2hal/include/l2hal_custom.h:
+../src/l2hal/include/l2hal_systick.h:
+../src/l2hal/include/l2hal_systick_private.h:
+../include/global_variables.h:
+../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h:
