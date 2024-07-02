@@ -19,7 +19,12 @@ L2HAL_SysTick_ContextStruct L2HAL_SysTick_Context = { 0 };
 /**
  * QSPI bus handle.
  */
-QSPI_HandleTypeDef QSPIHandle = { 0 };
+QSPI_HandleTypeDef QspiHandle = { 0 };
+
+/**
+ * QSPI DMA handle
+ */
+DMA_HandleTypeDef QspiDmaHandle = { 0 };
 
 /**
  * pSRAM context

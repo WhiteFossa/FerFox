@@ -46,13 +46,13 @@ int main(int argc, char* argv[])
 	HAL_IntiHardware();
 
 	/* QSPI */
-	QSPIHandle.Instance = QUADSPI;
+	QspiHandle.Instance = QUADSPI;
 
 	/* pSRAM init */
 	L2HAL_LY68L6400_QSPI_Init
 	(
 		&RamContext,
-		&QSPIHandle,
+		&QspiHandle,
 
 		HAL_PSRAM_CS_PORT,
 		HAL_PSRAM_CS_PIN,
@@ -67,12 +67,26 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_SIO1_PIN
 	);
 
+	/* Test port */
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Pin = GPIO_PIN_14;
+
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	/* Test data */
 	uint8_t testByte = 0xA5;
 	uint32_t testNumber = 0x00;
 
-	/* Test data */
-	#define TEST_BLOCK_SIZE 131072
-	//#define TEST_BLOCK_SIZE 256
+	#define TEST_BLOCK_SIZE 1024U
+
+	//#define TEST_RAM_SIZE 8388608U
+	#define TEST_RAM_SIZE (1024U * 1024U)
+
 	uint8_t writeBuffer[TEST_BLOCK_SIZE];
 	uint8_t readBuffer[TEST_BLOCK_SIZE];
 
@@ -83,9 +97,9 @@ int main(int argc, char* argv[])
 			writeBuffer[i] = (uint8_t)(testByte + i % 255);
 		}
 
-		for (uint32_t baseAddr = 0; baseAddr < 8388608U; baseAddr += TEST_BLOCK_SIZE)
+		for (uint32_t baseAddr = 0; baseAddr < TEST_RAM_SIZE; baseAddr += TEST_BLOCK_SIZE)
 		{
-			uint32_t remainingSize = 8388608U - baseAddr;
+			uint32_t remainingSize = TEST_RAM_SIZE - baseAddr;
 			if (remainingSize > TEST_BLOCK_SIZE)
 			{
 				remainingSize = TEST_BLOCK_SIZE;
@@ -97,12 +111,13 @@ int main(int argc, char* argv[])
 
 			if (memcmp(writeBuffer, readBuffer, remainingSize) != 0)
 			{
-				trace_printf("PSRAM Failure, base addr: %d\n", baseAddr);
+			//	trace_printf("PSRAM Failure, base addr: %d\n", baseAddr);
 				L2HAL_Error(Generic);
 			}
 		}
 
-		trace_printf("Check %d complete!\n", testNumber);
+		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
+		//trace_printf("Check %d complete!\n", testNumber);
 
 		testByte ++;
 		testNumber ++;

@@ -243,12 +243,12 @@ void L2HAL_LY68L6400_QSPI_MemoryReadInternal(L2HAL_LY68L6400_QSPI_ContextStruct 
 
 	sCommand.SIOOMode = QSPI_SIOO_INST_EVERY_CMD;
 
-	if (HAL_QSPI_Command(context->QSPIHandle, &sCommand, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	if (HAL_QSPI_Command_IT(context->QSPIHandle, &sCommand) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
 
-	if (HAL_QSPI_Receive(context->QSPIHandle, buffer, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	if (HAL_QSPI_Receive_DMA(context->QSPIHandle, buffer) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
@@ -289,12 +289,12 @@ void L2HAL_LY68L6400_QSPI_MemoryWriteInternal(L2HAL_LY68L6400_QSPI_ContextStruct
 
 	sCommand.SIOOMode = QSPI_SIOO_INST_EVERY_CMD;
 
-	if (HAL_QSPI_Command(context->QSPIHandle, &sCommand, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	if (HAL_QSPI_Command_IT(context->QSPIHandle, &sCommand) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
 
-	if (HAL_QSPI_Transmit(context->QSPIHandle, buffer, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	if (HAL_QSPI_Transmit_DMA(context->QSPIHandle, buffer) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}
@@ -404,7 +404,7 @@ void L2HAL_LY68L6400_QSPI_ExitQspiMode(L2HAL_LY68L6400_QSPI_ContextStruct *conte
 
 	sCommand.SIOOMode = QSPI_SIOO_INST_EVERY_CMD;
 
-	if (HAL_QSPI_Command(context->QSPIHandle, &sCommand, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	if (HAL_QSPI_Command_IT(context->QSPIHandle, &sCommand) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
 	}

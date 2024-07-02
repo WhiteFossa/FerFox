@@ -11,10 +11,10 @@
 #include <l2hal_ly68l6400_qspi.h>
 
 /**
- * Read/write no more than this amount of bytes per attempt
+ * Read/write no more than this amount of bytes per transaction
  */
-#define L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE 32U
-#define L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE 32U
+#define L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE 30U
+#define L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE 30U
 
 /**
  * Chip capacity in bytes

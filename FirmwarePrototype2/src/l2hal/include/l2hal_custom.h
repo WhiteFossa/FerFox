@@ -45,6 +45,8 @@
 #include <l2hal_mcu.h>
 #include <l2hal_errors.h>
 
+extern DMA_HandleTypeDef QspiDmaHandle;
+
 /**
  * Put custom hardware initialization stuff here,
  */
