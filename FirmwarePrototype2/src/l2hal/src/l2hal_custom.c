@@ -62,7 +62,7 @@ void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi)
 	GPIO_InitStruct.Pin = HAL_PSRAM_CS_PIN;
 	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	GPIO_InitStruct.Alternate = GPIO_AF10_QUADSPI;
 	HAL_GPIO_Init(HAL_PSRAM_CS_PORT, &GPIO_InitStruct);
 

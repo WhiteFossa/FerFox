@@ -11,14 +11,20 @@
 #include <l2hal_ly68l6400_qspi.h>
 
 /**
- * Read no more than this amount of bytes per attempt
+ * Read/write no more than this amount of bytes per attempt
  */
-#define L2HAL_LY68L6400_QSPI_MAX_READ_BYTES 128U
+#define L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE 32U
+#define L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE 32U
 
 /**
  * Chip capacity in bytes
  */
 #define L2HAL_LY68L6400_QSPI_CAPACITY 8388608U
+
+/**
+ * QSPI prescaler
+ */
+#define L2HAL_LY68L6400_QSPI_PRESCALER 1U
 
 /**
  * Init soft-SPI (classic) mode for chip initialization

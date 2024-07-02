@@ -67,11 +67,52 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_SIO1_PIN
 	);
 
-	/* Main loop */
+	uint8_t testByte = 0xA5;
+	uint32_t testNumber = 0x00;
+
+	/* Test data */
+	#define TEST_BLOCK_SIZE 131072
+	//#define TEST_BLOCK_SIZE 256
+	uint8_t writeBuffer[TEST_BLOCK_SIZE];
+	uint8_t readBuffer[TEST_BLOCK_SIZE];
+
+	while(1)
+	{
+		for (uint32_t i = 0; i < TEST_BLOCK_SIZE; i++)
+		{
+			writeBuffer[i] = (uint8_t)(testByte + i % 255);
+		}
+
+		for (uint32_t baseAddr = 0; baseAddr < 8388608U; baseAddr += TEST_BLOCK_SIZE)
+		{
+			uint32_t remainingSize = 8388608U - baseAddr;
+			if (remainingSize > TEST_BLOCK_SIZE)
+			{
+				remainingSize = TEST_BLOCK_SIZE;
+			}
+
+			L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, baseAddr, remainingSize, writeBuffer);
+
+			L2HAL_LY68L6400_QSPI_MemoryRead(&RamContext, baseAddr, remainingSize, readBuffer);
+
+			if (memcmp(writeBuffer, readBuffer, remainingSize) != 0)
+			{
+				trace_printf("PSRAM Failure, base addr: %d\n", baseAddr);
+				L2HAL_Error(Generic);
+			}
+		}
+
+		trace_printf("Check %d complete!\n", testNumber);
+
+		testByte ++;
+		testNumber ++;
+	}
+
+	/* Main loop
 	while (true)
 	{
 		trace_puts("Yiff");
-	}
+	}*/
 }
 
 #pragma GCC diagnostic pop

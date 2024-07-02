@@ -205,21 +205,21 @@ void L2HAL_LY68L6400_MemoryWrite(L2HAL_LY68L6400_ContextStruct *context, uint32_
 
 	while (remaining > 0)
 	{
-		uint8_t toRead;
+		uint8_t toWrite;
 		if (remaining > L2HAL_LY68L6400_MAX_READ_BYTES)
 		{
-			toRead = L2HAL_LY68L6400_MAX_READ_BYTES;
+			toWrite = L2HAL_LY68L6400_MAX_READ_BYTES;
 		}
 		else
 		{
-			toRead = (uint8_t)remaining;
+			toWrite = (uint8_t)remaining;
 		}
 
-		L2HAL_LY68L6400_MemoryWriteInternal(context, packetStartAddress, toRead, &buffer[bufferStartAddress]);
+		L2HAL_LY68L6400_MemoryWriteInternal(context, packetStartAddress, toWrite, &buffer[bufferStartAddress]);
 
-		bufferStartAddress += toRead;
-		packetStartAddress += toRead;
-		remaining -= toRead;
+		bufferStartAddress += toWrite;
+		packetStartAddress += toWrite;
+		remaining -= toWrite;
 	}
 }
 

@@ -46,7 +46,7 @@ void L2HAL_LY68L6400_QSPI_Init
 	/* After previous reset chip might be in QSPI mode, we have to pull it out from it */
 	HAL_QSPI_DeInit(context->QSPIHandle);
 
-	qspiHandle->Init.ClockPrescaler = 8; // Temporarily as slow as possible
+	qspiHandle->Init.ClockPrescaler = L2HAL_LY68L6400_QSPI_PRESCALER;
 	qspiHandle->Init.FifoThreshold = 1;
 	qspiHandle->Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
 	qspiHandle->Init.FlashSize = 22; // 23 bits addressing
@@ -132,7 +132,7 @@ void L2HAL_LY68L6400_QSPI_Init
 
 	HAL_Delay(100);
 
-	qspiHandle->Init.ClockPrescaler = 8; // Temporarily as slow as possible
+	qspiHandle->Init.ClockPrescaler = L2HAL_LY68L6400_QSPI_PRESCALER;
 	qspiHandle->Init.FifoThreshold = 1;
 	qspiHandle->Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
 	qspiHandle->Init.FlashSize = 22; // 23 bits addressing
@@ -144,45 +144,6 @@ void L2HAL_LY68L6400_QSPI_Init
 	if (HAL_QSPI_Init(context->QSPIHandle) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
-	}
-
-	uint8_t testByte = 0xA5;
-	uint32_t testNumber = 0x00;
-
-	while(1)
-	{
-		/* Test data */
-		#define TEST_BLOCK_SIZE 8
-		uint8_t writeBuffer[TEST_BLOCK_SIZE];
-		for (uint8_t i = 0; i < TEST_BLOCK_SIZE; i++)
-		{
-			writeBuffer[i] = testByte + i;
-		}
-
-		uint8_t readBuffer[TEST_BLOCK_SIZE];
-
-		for (uint32_t baseAddr = 0; baseAddr < L2HAL_LY68L6400_QSPI_CAPACITY; baseAddr += TEST_BLOCK_SIZE)
-		{
-			L2HAL_LY68L6400_QSPI_MemoryWriteInternal(context, baseAddr, TEST_BLOCK_SIZE, writeBuffer);
-
-			L2HAL_LY68L6400_QSPI_MemoryReadInternal(context, baseAddr, TEST_BLOCK_SIZE, readBuffer);
-
-			if (memcmp(writeBuffer, readBuffer, TEST_BLOCK_SIZE) != 0)
-			{
-				trace_printf("PSRAM Failure, base addr: %d\n", baseAddr);
-				L2HAL_Error(Generic);
-			}
-
-			if (baseAddr % 262144 == 0)
-			{
-				trace_printf("Base addr %d OK\n", baseAddr);
-			}
-		}
-
-		trace_printf("Check %d complete!\n", testNumber);
-
-		testByte ++;
-		testNumber ++;
 	}
 }
 
@@ -302,7 +263,7 @@ uint8_t L2HAL_LY68L6400_QSPI_SoftSpi_SwapBytes(L2HAL_LY68L6400_QSPI_ContextStruc
 
 void L2HAL_LY68L6400_QSPI_MemoryReadInternal(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint32_t startAddress, uint8_t size, uint8_t* buffer)
 {
-	if (size > L2HAL_LY68L6400_QSPI_MAX_READ_BYTES)
+	if (size > L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE)
 	{
 		L2HAL_Error(Generic);
 	}
@@ -348,7 +309,7 @@ void L2HAL_LY68L6400_QSPI_MemoryReadInternal(L2HAL_LY68L6400_QSPI_ContextStruct 
 
 void L2HAL_LY68L6400_QSPI_MemoryWriteInternal(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint32_t startAddress, uint8_t size, uint8_t* buffer)
 {
-	if (size > L2HAL_LY68L6400_QSPI_MAX_READ_BYTES)
+	if (size > L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE)
 	{
 		L2HAL_Error(Generic);
 	}
@@ -389,5 +350,67 @@ void L2HAL_LY68L6400_QSPI_MemoryWriteInternal(L2HAL_LY68L6400_QSPI_ContextStruct
 	if (HAL_QSPI_Transmit(context->QSPIHandle, buffer, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
 	{
 		L2HAL_Error(Generic);
+	}
+}
+
+void L2HAL_LY68L6400_QSPI_MemoryRead(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer)
+{
+	if (startAddress + (uint32_t)size > L2HAL_LY68L6400_QSPI_CAPACITY)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	uint32_t bufferStartAddress = 0;
+	uint32_t packetStartAddress = startAddress;
+	uint32_t remaining = size;
+
+	while (remaining > 0)
+	{
+		uint8_t toRead;
+		if (remaining > L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE)
+		{
+			toRead = L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE;
+		}
+		else
+		{
+			toRead = (uint8_t)remaining;
+		}
+
+		L2HAL_LY68L6400_QSPI_MemoryReadInternal(context, packetStartAddress, toRead, &buffer[bufferStartAddress]);
+
+		bufferStartAddress += toRead;
+		packetStartAddress += toRead;
+		remaining -= toRead;
+	}
+}
+
+void L2HAL_LY68L6400_QSPI_MemoryWrite(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer)
+{
+	if (startAddress + (uint32_t)size > L2HAL_LY68L6400_QSPI_CAPACITY)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	uint32_t bufferStartAddress = 0;
+	uint32_t packetStartAddress = startAddress;
+	uint32_t remaining = size;
+
+	while (remaining > 0)
+	{
+		uint8_t toWrite;
+		if (remaining > L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE)
+		{
+			toWrite = L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE;
+		}
+		else
+		{
+			toWrite = (uint8_t)remaining;
+		}
+
+		L2HAL_LY68L6400_QSPI_MemoryWriteInternal(context, packetStartAddress, toWrite, &buffer[bufferStartAddress]);
+
+		bufferStartAddress += toWrite;
+		packetStartAddress += toWrite;
+		remaining -= toWrite;
 	}
 }

@@ -73,6 +73,16 @@ void L2HAL_LY68L6400_QSPI_Init
 	uint16_t misoPin
 );
 
+/**
+ * Read data from memory. Size can be up to chip capacity (i.e. 8MBytes), but internally transfers will be split to L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE bytes transactions to avoid
+ * max #CE active time violation
+ */
+void L2HAL_LY68L6400_QSPI_MemoryRead(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer);
 
+/**
+ * Write data to memory. Size can be up to chip capacity (i.e. 8MBytes), but internally transfers will be split L2HAL_L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE 32 bytes transactions to avoid
+ * max #CE active time violation
+ */
+void L2HAL_LY68L6400_QSPI_MemoryWrite(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint32_t startAddress, uint32_t size, uint8_t* buffer);
 
 #endif /* L2HAL_DRIVERS_RAM_LY68L6400_QSPI_INCLUDE_L2HAL_LY68L6400_QSPI_H_ */
