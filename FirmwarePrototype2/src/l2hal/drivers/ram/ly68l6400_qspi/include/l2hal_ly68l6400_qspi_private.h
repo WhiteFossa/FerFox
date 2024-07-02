@@ -22,6 +22,11 @@
 #define L2HAL_LY68L6400_QSPI_CAPACITY 8388608U
 
 /**
+ * Chip capacity in terms of address size - 1
+ */
+#define L2HAL_LY68L6400_QSPI_ADDRESS_SIZE 22 // 23 bits addressing
+
+/**
  * QSPI prescaler
  */
 #define L2HAL_LY68L6400_QSPI_PRESCALER 1U
@@ -55,6 +60,16 @@ GPIO_PinState L2HAL_LY68L6400_QSPI_SoftSpi_ReadMisoState(L2HAL_LY68L6400_QSPI_Co
  * Sends toSend to device and receives a byte from device. ! DOES NOT MANAGE CS !
  */
 uint8_t L2HAL_LY68L6400_QSPI_SoftSpi_SwapBytes(L2HAL_LY68L6400_QSPI_ContextStruct *context, uint8_t toSend);
+
+/**
+ * Init QSPI peripherial
+ */
+void L2HAL_LY68L6400_QSPI_InitQspi(L2HAL_LY68L6400_QSPI_ContextStruct *context);
+
+/**
+ * Bring chip back to SPI mode
+ */
+void L2HAL_LY68L6400_QSPI_ExitQspiMode(L2HAL_LY68L6400_QSPI_ContextStruct *context);
 
 /**
  * Read up to L2HAL_LY68L6400_QSPI_MAX_READ_BYTES into buffer

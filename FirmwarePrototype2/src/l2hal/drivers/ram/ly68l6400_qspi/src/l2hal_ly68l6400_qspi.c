@@ -45,55 +45,14 @@ void L2HAL_LY68L6400_QSPI_Init
 
 	/* After previous reset chip might be in QSPI mode, we have to pull it out from it */
 	HAL_QSPI_DeInit(context->QSPIHandle);
-
-	qspiHandle->Init.ClockPrescaler = L2HAL_LY68L6400_QSPI_PRESCALER;
-	qspiHandle->Init.FifoThreshold = 1;
-	qspiHandle->Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
-	qspiHandle->Init.FlashSize = 22; // 23 bits addressing
-	qspiHandle->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_2_CYCLE;
-	qspiHandle->Init.ClockMode = QSPI_CLOCK_MODE_0;
-	qspiHandle->Init.FlashID = QSPI_FLASH_ID_1;
-	qspiHandle->Init.DualFlash = QSPI_DUALFLASH_DISABLE;
-
-	if (HAL_QSPI_Init(context->QSPIHandle) != HAL_OK)
-	{
-		L2HAL_Error(Generic);
-	}
-
-	QSPI_CommandTypeDef sCommand = { 0 };
-
-	sCommand.InstructionMode = QSPI_INSTRUCTION_4_LINES;
-	sCommand.Instruction = 0xF5;
-
-	sCommand.AddressMode = QSPI_ADDRESS_NONE;
-	sCommand.AddressSize = QSPI_ADDRESS_24_BITS;
-	sCommand.Address = 0x00;
-
-	sCommand.AlternateByteMode = QSPI_ALTERNATE_BYTES_NONE;
-	sCommand.AlternateBytesSize = 0;
-	sCommand.AlternateBytes = 0;
-
-	sCommand.DataMode = QSPI_DATA_NONE;
-	sCommand.NbData = 0;
-
-	sCommand.DummyCycles = 0;
-
-	sCommand.DdrMode = QSPI_DDR_MODE_DISABLE;
-	sCommand.DdrHoldHalfCycle = QSPI_DDR_HHC_ANALOG_DELAY;
-
-	sCommand.SIOOMode = QSPI_SIOO_INST_EVERY_CMD;
-
-	if (HAL_QSPI_Command(context->QSPIHandle, &sCommand, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
-	{
-		L2HAL_Error(Generic);
-	}
+	L2HAL_LY68L6400_QSPI_InitQspi(context);
+	L2HAL_LY68L6400_QSPI_ExitQspiMode(context);
 
 	/* Now chip must be in SPI mode, deinitializing QSPI */
 	HAL_QSPI_DeInit(context->QSPIHandle);
 
 	/* Starting in soft SPI mode to check chip state and switch it to QSPI mode */
 	L2HAL_LY68L6400_QSPI_SoftSpi_Init(context);
-
 
 	/* Reset enable */
 	L2HAL_LY68L6400_QSPI_SoftSpi_SelectChip(context, true);
@@ -132,19 +91,7 @@ void L2HAL_LY68L6400_QSPI_Init
 
 	HAL_Delay(100);
 
-	qspiHandle->Init.ClockPrescaler = L2HAL_LY68L6400_QSPI_PRESCALER;
-	qspiHandle->Init.FifoThreshold = 1;
-	qspiHandle->Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
-	qspiHandle->Init.FlashSize = 22; // 23 bits addressing
-	qspiHandle->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_2_CYCLE;
-	qspiHandle->Init.ClockMode = QSPI_CLOCK_MODE_0;
-	qspiHandle->Init.FlashID = QSPI_FLASH_ID_1;
-	qspiHandle->Init.DualFlash = QSPI_DUALFLASH_DISABLE;
-
-	if (HAL_QSPI_Init(context->QSPIHandle) != HAL_OK)
-	{
-		L2HAL_Error(Generic);
-	}
+	L2HAL_LY68L6400_QSPI_InitQspi(context);
 }
 
 void L2HAL_LY68L6400_QSPI_SoftSpi_Init(L2HAL_LY68L6400_QSPI_ContextStruct *context)
@@ -412,5 +359,53 @@ void L2HAL_LY68L6400_QSPI_MemoryWrite(L2HAL_LY68L6400_QSPI_ContextStruct *contex
 		bufferStartAddress += toWrite;
 		packetStartAddress += toWrite;
 		remaining -= toWrite;
+	}
+}
+
+void L2HAL_LY68L6400_QSPI_InitQspi(L2HAL_LY68L6400_QSPI_ContextStruct *context)
+{
+	context->QSPIHandle->Init.ClockPrescaler = L2HAL_LY68L6400_QSPI_PRESCALER;
+	context->QSPIHandle->Init.FifoThreshold = 1;
+	context->QSPIHandle->Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
+	context->QSPIHandle->Init.FlashSize = L2HAL_LY68L6400_QSPI_ADDRESS_SIZE;
+	context->QSPIHandle->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_2_CYCLE;
+	context->QSPIHandle->Init.ClockMode = QSPI_CLOCK_MODE_0;
+	context->QSPIHandle->Init.FlashID = QSPI_FLASH_ID_1;
+	context->QSPIHandle->Init.DualFlash = QSPI_DUALFLASH_DISABLE;
+
+	if (HAL_QSPI_Init(context->QSPIHandle) != HAL_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+}
+
+void L2HAL_LY68L6400_QSPI_ExitQspiMode(L2HAL_LY68L6400_QSPI_ContextStruct *context)
+{
+	QSPI_CommandTypeDef sCommand = { 0 };
+
+	sCommand.InstructionMode = QSPI_INSTRUCTION_4_LINES;
+	sCommand.Instruction = 0xF5;
+
+	sCommand.AddressMode = QSPI_ADDRESS_NONE;
+	sCommand.AddressSize = QSPI_ADDRESS_24_BITS;
+	sCommand.Address = 0x00;
+
+	sCommand.AlternateByteMode = QSPI_ALTERNATE_BYTES_NONE;
+	sCommand.AlternateBytesSize = 0;
+	sCommand.AlternateBytes = 0;
+
+	sCommand.DataMode = QSPI_DATA_NONE;
+	sCommand.NbData = 0;
+
+	sCommand.DummyCycles = 0;
+
+	sCommand.DdrMode = QSPI_DDR_MODE_DISABLE;
+	sCommand.DdrHoldHalfCycle = QSPI_DDR_HHC_ANALOG_DELAY;
+
+	sCommand.SIOOMode = QSPI_SIOO_INST_EVERY_CMD;
+
+	if (HAL_QSPI_Command(context->QSPIHandle, &sCommand, HAL_QPSI_TIMEOUT_DEFAULT_VALUE) != HAL_OK)
+	{
+		L2HAL_Error(Generic);
 	}
 }
