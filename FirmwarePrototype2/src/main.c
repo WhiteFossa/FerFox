@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 	#define TEST_BLOCK_SIZE 1024U
 
 	//#define TEST_RAM_SIZE 8388608U
-	#define TEST_RAM_SIZE (1024U * 1024U)
+	#define TEST_RAM_SIZE (8192U * 1024U)
 
 	uint8_t writeBuffer[TEST_BLOCK_SIZE];
 	uint8_t readBuffer[TEST_BLOCK_SIZE];

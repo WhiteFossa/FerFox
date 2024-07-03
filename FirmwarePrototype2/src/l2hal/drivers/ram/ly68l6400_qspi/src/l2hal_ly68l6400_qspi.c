@@ -368,7 +368,7 @@ void L2HAL_LY68L6400_QSPI_InitQspi(L2HAL_LY68L6400_QSPI_ContextStruct *context)
 	context->QSPIHandle->Init.FifoThreshold = 1;
 	context->QSPIHandle->Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
 	context->QSPIHandle->Init.FlashSize = L2HAL_LY68L6400_QSPI_ADDRESS_SIZE;
-	context->QSPIHandle->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_2_CYCLE;
+	context->QSPIHandle->Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_8_CYCLE;
 	context->QSPIHandle->Init.ClockMode = QSPI_CLOCK_MODE_0;
 	context->QSPIHandle->Init.FlashID = QSPI_FLASH_ID_1;
 	context->QSPIHandle->Init.DualFlash = QSPI_DUALFLASH_DISABLE;
