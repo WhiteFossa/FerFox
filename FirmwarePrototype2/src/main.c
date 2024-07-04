@@ -67,67 +67,138 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_SIO1_PIN
 	);
 
-	/* Test port */
-	__HAL_RCC_GPIOB_CLK_ENABLE();
+	/* CRC calculation unit initialization */
+	CRC_Context = L2HAL_CRC_Init();
 
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.Pin = GPIO_PIN_14;
+	/* Display */
+	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
 
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	/* Display driver initialization */
+	L2HAL_GC9A01_Init
+	(
+		&DisplayContext,
+		&Spi1Handle,
 
-	/* Test data */
-	uint8_t testByte = 0xA5;
-	uint32_t testNumber = 0x00;
+		HAL_DISPLAY_RESET_PORT,
+		HAL_DISPLAY_RESET_PIN,
 
-	#define TEST_BLOCK_SIZE 1024U
+		HAL_DISPLAY_DC_PORT,
+		HAL_DISPLAY_DC_PIN,
 
-	//#define TEST_RAM_SIZE 8388608U
-	#define TEST_RAM_SIZE (8192U * 1024U)
+		HAL_DISPLAY_CS_PORT,
+		HAL_DISPLAY_CS_PIN,
 
-	uint8_t writeBuffer[TEST_BLOCK_SIZE];
-	uint8_t readBuffer[TEST_BLOCK_SIZE];
+		ROTATION_180,
 
-	while(1)
-	{
-		for (uint32_t i = 0; i < TEST_BLOCK_SIZE; i++)
-		{
-			writeBuffer[i] = (uint8_t)(testByte + i % 255);
-		}
+		&RamContext,
+		&L2HAL_LY68L6400_QSPI_MemoryWrite,
+		&L2HAL_LY68L6400_QSPI_MemoryRead,
 
-		for (uint32_t baseAddr = 0; baseAddr < TEST_RAM_SIZE; baseAddr += TEST_BLOCK_SIZE)
-		{
-			uint32_t remainingSize = TEST_RAM_SIZE - baseAddr;
-			if (remainingSize > TEST_BLOCK_SIZE)
-			{
-				remainingSize = TEST_BLOCK_SIZE;
-			}
+		L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE,
 
-			L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, baseAddr, remainingSize, writeBuffer);
+		0,
 
-			L2HAL_LY68L6400_QSPI_MemoryRead(&RamContext, baseAddr, remainingSize, readBuffer);
+		&CRC_Context
+	);
 
-			if (memcmp(writeBuffer, readBuffer, remainingSize) != 0)
-			{
-			//	trace_printf("PSRAM Failure, base addr: %d\n", baseAddr);
-				L2HAL_Error(Generic);
-			}
-		}
+	/* FMGL initialization */
+	FMGL_API_ColorStruct OffColor;
+	OffColor.R = 0;
+	OffColor.G = 0;
+	OffColor.B = 0;
 
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-		//trace_printf("Check %d complete!\n", testNumber);
+	/* Attaching FMGL to display */
+	FmglContext = FMGL_API_AttachToDriver
+	(
+		&DisplayContext,
+		&L2HAL_GC9A01_GetWidth,
+		&L2HAL_GC9A01_GetHeight,
+		&L2HAL_GC9A01_SetActiveColor,
+		&L2HAL_GC9A01_DrawPixel,
+		&L2HAL_GC9A01_GetPixel,
+		&L2HAL_GC9A01_PushFramebuffer,
+		OffColor
+	);
 
-		testByte ++;
-		testNumber ++;
-	}
+	FMGL_API_Font fontData= FMGL_FontTerminusRegular12Init();
+	FMGL_API_XBMTransparencyMode transparencyMode = FMGL_XBMTransparencyModeNormal;
+
+	/* Font settings */
+	FMGL_API_ColorStruct OnColor;
+	OnColor.R = 0xFF;
+	OnColor.G = 0xFF;
+	OnColor.B = 0xFF;
+
+	font.Font = &fontData;
+	font.Scale = 1;
+	font.CharactersSpacing = 0;
+	font.LinesSpacing = 0;
+	font.FontColor = &OnColor;
+	font.BackgroundColor = &OffColor;
+	font.Transparency = &transparencyMode;
+
+	/* FPS */
+	fpsCounter = 0;
+	fpsHandlerCounter = 0;
+
+	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
 	/* Main loop
+	FMGL_API_ColorStruct RectColor;
+	RectColor.R = 0x00;
+	RectColor.G = 0xFF;
+	RectColor.B = 0x00;
+
+	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
+	{
+		//framebuffersAddresses[frame] = frame * L2HAL_GC9A01_FRAMEBUFFER_SIZE + L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE;
+		framebuffersAddresses[frame] = frame * 200000;
+
+		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
+
+		FMGL_API_DrawRectangleFilled(&FmglContext, 0, 0, 239, 239, RectColor, RectColor);
+		RectColor.R = RectColor.G + 25;
+		RectColor.G = RectColor.B + 47;
+		RectColor.B = RectColor.G + 18;
+	}*/
+
+	//uint8_t frame = 0;
 	while (true)
 	{
-		trace_puts("Yiff");
-	}*/
+		//L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
+
+		/* Drawing FPS */
+		uint16_t width, height;
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
+
+		/* Pushing framebuffer */
+		FMGL_API_PushFramebuffer(&FmglContext);
+
+		/*if (frame >= FRAMES_COUNT - 1)
+		{
+			frame = 0;
+		}
+		else
+		{
+			frame ++;
+		}*/
+
+		fpsCounter ++;
+	}
+}
+
+void FpsHandler(void)
+{
+	fpsHandlerCounter ++;
+
+	if (fpsHandlerCounter == 1000)
+	{
+		fps = fpsCounter;
+		fpsCounter = 0;
+		fpsHandlerCounter = 0;
+
+		sprintf(fpsMessageBuffer, "FPS: %d", fps);
+	}
 }
 
 #pragma GCC diagnostic pop

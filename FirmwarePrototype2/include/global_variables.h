@@ -10,6 +10,7 @@
 
 #include <l2hal_systick.h>
 #include <l2hal_ly68l6400_qspi.h>
+#include <l2hal_crc.h>
 
 /**
  * SysTick driver context.
@@ -30,5 +31,40 @@ DMA_HandleTypeDef QspiDmaHandle = { 0 };
  * pSRAM context
  */
 L2HAL_LY68L6400_QSPI_ContextStruct RamContext = { 0 };
+
+/**
+ * Backlight timer handler
+ */
+TIM_HandleTypeDef BacklightTimerHandle = { 0 };
+
+/**
+ * CRC calculator context
+ */
+L2HAL_CRCContextStruct CRC_Context;
+
+/**
+ * SPI1 bus handle.
+ */
+SPI_HandleTypeDef Spi1Handle = { 0 };
+
+/**
+ * SPI1 TX DMA handle.
+ */
+DMA_HandleTypeDef Spi1TxDmaHandle = { 0 };
+
+/**
+ * SPI1 RX DMA handle.
+ */
+DMA_HandleTypeDef Spi1RxDmaHandle = { 0 };
+
+/**
+ * Display context
+ */
+L2HAL_GC9A01_ContextStruct DisplayContext;
+
+/**
+ * FMGL context.
+ */
+FMGL_API_DriverContext FmglContext;
 
 #endif /* GLOBAL_VARIABLES_H_ */

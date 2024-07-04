@@ -84,10 +84,14 @@ src/main.o: ../src/main.c ../include/main.h \
  ../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/drivers/input/buttons/include/l2hal_stm32f767zit6u_buttons.h \
  ../src/l2hal/drivers/input/buttons/include/l2hal_buttons_defaults.h \
  ../src/l2hal/include/l2hal.h ../src/l2hal/include/l2hal_custom.h \
+ ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h \
+ ../src/l2hal/drivers/internal/crc/include/l2hal_crc.h \
+ ../src/fmgl/include/fmgl.h ../src/l2hal/include/l2hal_aux.h \
  ../src/l2hal/include/l2hal_systick.h \
  ../src/l2hal/include/l2hal_systick_private.h \
  ../include/global_variables.h \
- ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h
+ ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h \
+ ../src/fmgl/fonts/include/terminusRegular12.h
 ../include/main.h:
 ../system/include/diag/trace.h:
 ../include/hal.h:
@@ -178,7 +182,12 @@ src/main.o: ../src/main.c ../include/main.h \
 ../src/l2hal/drivers/input/buttons/include/l2hal_buttons_defaults.h:
 ../src/l2hal/include/l2hal.h:
 ../src/l2hal/include/l2hal_custom.h:
+../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h:
+../src/l2hal/drivers/internal/crc/include/l2hal_crc.h:
+../src/fmgl/include/fmgl.h:
+../src/l2hal/include/l2hal_aux.h:
 ../src/l2hal/include/l2hal_systick.h:
 ../src/l2hal/include/l2hal_systick_private.h:
 ../include/global_variables.h:
 ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h:
+../src/fmgl/fonts/include/terminusRegular12.h:

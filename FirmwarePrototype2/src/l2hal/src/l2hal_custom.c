@@ -39,6 +39,9 @@
 
 void L2HAL_InitCustomHardware(void)
 {
+	L2HAL_SetupSPI();
+
+	L2HAL_SetupBacklighTimer();
 }
 
 void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi)
@@ -156,9 +159,180 @@ void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc)
 	__HAL_RCC_CRC_CLK_DISABLE();
 }
 
-/*void HAL_QSPI_TxCpltCallback(QSPI_HandleTypeDef *hqspi)
+/* Begin PWM timers related stuff */
+
+void L2HAL_SetupBacklighTimer(void)
 {
+	/* Setting up timer itself */
+	BacklightTimerHandle.Instance = HAL_DISPLAY_BACKLIGHT_TIMER;
+	BacklightTimerHandle.Init.Prescaler = (uint32_t)(SystemCoreClock / HAL_DISPLAY_BACKLIGHT_TIMER_FREQ) - 1;
+	BacklightTimerHandle.Init.Period = HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD;
+	BacklightTimerHandle.Init.ClockDivision = 0;
+	BacklightTimerHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	BacklightTimerHandle.Init.RepetitionCounter = 0;
+	BacklightTimerHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
-}*/
+	if (HAL_OK != HAL_TIM_PWM_Init(&BacklightTimerHandle))
+	{
+		L2HAL_Error(Generic);
+	}
 
-/* CRC-calculator related stuff end */
+	/* Setting up PWM */
+	HAL_SetBacklightLevel(0);
+}
+
+
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim)
+{
+	if (HAL_DISPLAY_BACKLIGHT_TIMER == htim->Instance)
+	{
+		HAL_DISPLAY_BACKLIGHT_TIMER_CLOCK_IN();
+
+		L2HAL_MCU_ClockPortIn(HAL_DISPLAY_BACKLIGHT_TIMER_PORT);
+
+		GPIO_InitTypeDef GPIO_InitStruct;
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+		GPIO_InitStruct.Alternate = HAL_DISPLAY_BACKLIGHT_TIMER_PIN_AF;
+		GPIO_InitStruct.Pin = HAL_DISPLAY_BACKLIGHT_TIMER_PIN;
+		HAL_GPIO_Init(HAL_DISPLAY_BACKLIGHT_TIMER_PORT, &GPIO_InitStruct);
+	}
+}
+
+void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim)
+{
+	if (HAL_DISPLAY_BACKLIGHT_TIMER == htim->Instance)
+	{
+		/* Returning PB3 to normal mode, input direction (to be safe) */
+		L2HAL_MCU_ClockPortIn(HAL_DISPLAY_BACKLIGHT_TIMER_PORT);
+
+		GPIO_InitTypeDef GPIO_InitStruct;
+		GPIO_InitStruct.Pin = HAL_DISPLAY_BACKLIGHT_TIMER_PIN;
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+		HAL_GPIO_Init(HAL_DISPLAY_BACKLIGHT_TIMER_PORT, &GPIO_InitStruct);
+	}
+}
+
+/* End of PWM timers related stuff */
+
+/* Begin SPI-related stuff */
+
+void L2HAL_SetupSPI(void)
+{
+	/* SPI1 */
+	Spi1Handle.Instance = SPI1;
+	Spi1Handle.Init.Mode = SPI_MODE_MASTER;
+	Spi1Handle.Init.Direction = SPI_DIRECTION_2LINES;
+	Spi1Handle.Init.DataSize =  SPI_DATASIZE_8BIT;
+	Spi1Handle.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+	Spi1Handle.Init.CLKPhase = SPI_PHASE_1EDGE;
+	Spi1Handle.Init.CLKPolarity = SPI_POLARITY_LOW;
+	Spi1Handle.Init.FirstBit = SPI_FIRSTBIT_MSB;
+	Spi1Handle.Init.TIMode = SPI_TIMODE_DISABLE;
+	Spi1Handle.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+	Spi1Handle.Init.NSS = SPI_NSS_SOFT;
+
+	if(HAL_SPI_Init(&Spi1Handle) != HAL_OK)
+	{
+		/* Initialization Error */
+		L2HAL_Error(Generic);
+	}
+}
+
+void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
+{
+	if (hspi->Instance == SPI1)
+	{
+		/**
+		 * SPI1 at PA5 (SCK), PA6 (MISO) and PA7 (MOSI)
+		 */
+		__HAL_RCC_GPIOA_CLK_ENABLE();
+		__HAL_RCC_SPI1_CLK_ENABLE();
+		__HAL_RCC_DMA2_CLK_ENABLE();
+
+		GPIO_InitTypeDef GPIO_InitStruct = { 0 };
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+
+		GPIO_InitStruct.Pin = GPIO_PIN_5;
+		GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_7;
+		GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+		/* TX DMA */
+		Spi1TxDmaHandle.Instance = DMA2_Stream3;
+		Spi1TxDmaHandle.Init.Channel = DMA_CHANNEL_3;
+		Spi1TxDmaHandle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+		Spi1TxDmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
+		Spi1TxDmaHandle.Init.MemInc = DMA_MINC_ENABLE;
+		Spi1TxDmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+		Spi1TxDmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+		Spi1TxDmaHandle.Init.Mode = DMA_NORMAL;
+		Spi1TxDmaHandle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+		Spi1TxDmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+		Spi1TxDmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+		Spi1TxDmaHandle.Init.MemBurst = DMA_MBURST_SINGLE;
+		Spi1TxDmaHandle.Init.PeriphBurst = DMA_PBURST_SINGLE;
+
+		if (HAL_DMA_Init(&Spi1TxDmaHandle) != HAL_OK)
+		{
+			L2HAL_Error(Generic);
+		}
+
+		__HAL_LINKDMA(hspi, hdmatx, Spi1TxDmaHandle);
+
+		HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 1);
+		HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+
+		/* RX DMA */
+		Spi1RxDmaHandle.Instance = DMA2_Stream2;
+		Spi1RxDmaHandle.Init.Channel = DMA_CHANNEL_3;
+		Spi1RxDmaHandle.Init.Direction = DMA_PERIPH_TO_MEMORY;
+		Spi1RxDmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
+		Spi1RxDmaHandle.Init.MemInc = DMA_MINC_ENABLE;
+		Spi1RxDmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+		Spi1RxDmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+		Spi1RxDmaHandle.Init.Mode = DMA_NORMAL;
+		Spi1RxDmaHandle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+		Spi1RxDmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+		Spi1RxDmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+		Spi1RxDmaHandle.Init.MemBurst = DMA_MBURST_SINGLE;
+		Spi1RxDmaHandle.Init.PeriphBurst = DMA_PBURST_SINGLE;
+
+		if (HAL_DMA_Init(&Spi1RxDmaHandle) != HAL_OK)
+		{
+			L2HAL_Error(Generic);
+		}
+
+		__HAL_LINKDMA(hspi, hdmarx, Spi1RxDmaHandle);
+
+		HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 0, 1);
+		HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
+	}
+}
+
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
+{
+	if (hspi->Instance == SPI1)
+	{
+		HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
+
+		HAL_DMA_DeInit(&Spi1TxDmaHandle);
+		HAL_NVIC_DisableIRQ(DMA2_Stream3_IRQn);
+
+		HAL_DMA_DeInit(&Spi1RxDmaHandle);
+		HAL_NVIC_DisableIRQ(DMA2_Stream2_IRQn);
+	}
+}
+
+void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma)
+{
+	L2HAL_GC9A01_MarkDataTransferAsCompleted(&DisplayContext);
+}

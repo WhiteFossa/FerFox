@@ -44,8 +44,13 @@
 
 #include <l2hal_mcu.h>
 #include <l2hal_errors.h>
+#include <l2hal_gc9a01.h>
 
 extern DMA_HandleTypeDef QspiDmaHandle;
+extern SPI_HandleTypeDef Spi1Handle;
+extern DMA_HandleTypeDef Spi1TxDmaHandle;
+extern DMA_HandleTypeDef Spi1RxDmaHandle;
+extern L2HAL_GC9A01_ContextStruct DisplayContext;
 
 /**
  * Put custom hardware initialization stuff here,
@@ -59,9 +64,29 @@ volatile void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi);
 volatile void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef *hqspi);
 
 /**
+ * PWM timer-related stuff
+ */
+void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef *htim);
+void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *htim);
+void L2HAL_SetupBacklighTimer(void);
+
+/**
  * CRC calculator init and de-init
  */
 volatile void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc);
 volatile void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc);
+
+/**
+ * SPI init and de-init
+ */
+void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi);
+void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi);
+void L2HAL_SetupSPI(void);
+
+/**
+ * Display
+ * @param hdma
+ */
+void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma); /* Called when transmission via Display SPI is completed */
 
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */
