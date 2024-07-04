@@ -11,6 +11,7 @@
 #include <l2hal_systick.h>
 #include <l2hal_ly68l6400_qspi.h>
 #include <l2hal_crc.h>
+#include <l2hal_gc9a01_lfb.h>
 
 /**
  * SysTick driver context.
@@ -60,7 +61,7 @@ DMA_HandleTypeDef Spi1RxDmaHandle = { 0 };
 /**
  * Display context
  */
-L2HAL_GC9A01_ContextStruct DisplayContext;
+L2HAL_GC9A01_LFB_ContextStruct DisplayContext;
 
 /**
  * FMGL context.

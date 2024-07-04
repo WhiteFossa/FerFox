@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
 
 	/* Display driver initialization */
-	L2HAL_GC9A01_Init
+	L2HAL_GC9A01_LFB_Init
 	(
 		&DisplayContext,
 		&Spi1Handle,
@@ -88,15 +88,7 @@ int main(int argc, char* argv[])
 		HAL_DISPLAY_CS_PORT,
 		HAL_DISPLAY_CS_PIN,
 
-		ROTATION_180,
-
-		&RamContext,
-		&L2HAL_LY68L6400_QSPI_MemoryWrite,
-		&L2HAL_LY68L6400_QSPI_MemoryRead,
-
-		L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE,
-
-		0,
+		L2HAL_GC9A01_LFB_ROTATION_180,
 
 		&CRC_Context
 	);
@@ -111,12 +103,12 @@ int main(int argc, char* argv[])
 	FmglContext = FMGL_API_AttachToDriver
 	(
 		&DisplayContext,
-		&L2HAL_GC9A01_GetWidth,
-		&L2HAL_GC9A01_GetHeight,
-		&L2HAL_GC9A01_SetActiveColor,
-		&L2HAL_GC9A01_DrawPixel,
-		&L2HAL_GC9A01_GetPixel,
-		&L2HAL_GC9A01_PushFramebuffer,
+		&L2HAL_GC9A01_LFB_GetWidth,
+		&L2HAL_GC9A01_LFB_GetHeight,
+		&L2HAL_GC9A01_LFB_SetActiveColor,
+		&L2HAL_GC9A01_LFB_DrawPixel,
+		&L2HAL_GC9A01_LFB_GetPixel,
+		&L2HAL_GC9A01_LFB_PushFramebuffer,
 		OffColor
 	);
 
@@ -130,7 +122,7 @@ int main(int argc, char* argv[])
 	OnColor.B = 0xFF;
 
 	font.Font = &fontData;
-	font.Scale = 1;
+	font.Scale = 4;
 	font.CharactersSpacing = 0;
 	font.LinesSpacing = 0;
 	font.FontColor = &OnColor;
@@ -169,7 +161,7 @@ int main(int argc, char* argv[])
 
 		/* Drawing FPS */
 		uint16_t width, height;
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessageBuffer);
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, fpsMessageBuffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);

@@ -44,13 +44,13 @@
 
 #include <l2hal_mcu.h>
 #include <l2hal_errors.h>
-#include <l2hal_gc9a01.h>
+#include <l2hal_gc9a01_lfb.h>
 
 extern DMA_HandleTypeDef QspiDmaHandle;
 extern SPI_HandleTypeDef Spi1Handle;
 extern DMA_HandleTypeDef Spi1TxDmaHandle;
 extern DMA_HandleTypeDef Spi1RxDmaHandle;
-extern L2HAL_GC9A01_ContextStruct DisplayContext;
+extern L2HAL_GC9A01_LFB_ContextStruct DisplayContext;
 
 /**
  * Put custom hardware initialization stuff here,

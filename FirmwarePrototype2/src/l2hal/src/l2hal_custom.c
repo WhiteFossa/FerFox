@@ -334,5 +334,5 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
 
 void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma)
 {
-	L2HAL_GC9A01_MarkDataTransferAsCompleted(&DisplayContext);
+	L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted(&DisplayContext);
 }

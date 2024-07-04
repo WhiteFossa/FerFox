@@ -83,7 +83,7 @@ src/l2hal/src/l2hal.o: ../src/l2hal/src/l2hal.c \
  ../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/drivers/input/buttons/include/l2hal_stm32f767zit6u_buttons.h \
  ../src/l2hal/drivers/input/buttons/include/l2hal_buttons_defaults.h \
  ../src/l2hal/include/l2hal_custom.h \
- ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h \
+ ../src/l2hal/drivers/display/gc9a01_local_framebuffer/include/l2hal_gc9a01_lfb.h \
  ../src/l2hal/drivers/internal/crc/include/l2hal_crc.h \
  ../src/fmgl/include/fmgl.h ../src/l2hal/include/l2hal_aux.h \
  ../src/l2hal/include/l2hal_systick.h \
@@ -175,7 +175,7 @@ src/l2hal/src/l2hal.o: ../src/l2hal/src/l2hal.c \
 ../src/l2hal/mcu_dependent/mcus/stm32f767zit6u/drivers/input/buttons/include/l2hal_stm32f767zit6u_buttons.h:
 ../src/l2hal/drivers/input/buttons/include/l2hal_buttons_defaults.h:
 ../src/l2hal/include/l2hal_custom.h:
-../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h:
+../src/l2hal/drivers/display/gc9a01_local_framebuffer/include/l2hal_gc9a01_lfb.h:
 ../src/l2hal/drivers/internal/crc/include/l2hal_crc.h:
 ../src/fmgl/include/fmgl.h:
 ../src/l2hal/include/l2hal_aux.h:

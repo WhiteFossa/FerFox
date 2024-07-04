@@ -42,6 +42,7 @@ src/l2hal/drivers/bluetooth/hc06/src \
 src/l2hal/drivers/dac/ad5245/src \
 src/l2hal/drivers/dds/ad9835/src \
 src/l2hal/drivers/display/gc9a01/src \
+src/l2hal/drivers/display/gc9a01_local_framebuffer/src \
 src/l2hal/drivers/display/ssd1306/src \
 src/l2hal/drivers/display/ssd1327/src \
 src/l2hal/drivers/eeprom/24x/src \
