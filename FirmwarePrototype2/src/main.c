@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
 	OnColor.B = 0xFF;
 
 	font.Font = &fontData;
-	font.Scale = 4;
+	font.Scale = 1;
 	font.CharactersSpacing = 0;
 	font.LinesSpacing = 0;
 	font.FontColor = &OnColor;
@@ -135,45 +135,65 @@ int main(int argc, char* argv[])
 
 	L2HAL_SysTick_RegisterHandler(&FpsHandler);
 
-	/* Main loop
-	FMGL_API_ColorStruct RectColor;
-	RectColor.R = 0x00;
-	RectColor.G = 0xFF;
-	RectColor.B = 0x00;
+	FMGL_API_ColorStruct TempColor;
+	TempColor.R = 0x00;
+	TempColor.G = 0x0;
+	TempColor.B = 0x00;
 
 	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
 	{
-		//framebuffersAddresses[frame] = frame * L2HAL_GC9A01_FRAMEBUFFER_SIZE + L2HAL_GC9A01_DIRTY_PIXELS_BUFFER_SIZE;
-		framebuffersAddresses[frame] = frame * 200000;
+		framebuffersAddresses[frame] = frame * L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE;
 
-		L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
+		/* Drawing into display framebuffer, but DO NOT push it */
+		for (uint8_t y = 0; y < 240; y++)
+		{
+			FMGL_API_SetActiveColor(&FmglContext, TempColor);
+			FMGL_API_DrawLineHorizontal(&FmglContext, 0, 239, y);
 
-		FMGL_API_DrawRectangleFilled(&FmglContext, 0, 0, 239, 239, RectColor, RectColor);
-		RectColor.R = RectColor.G + 25;
-		RectColor.G = RectColor.B + 47;
-		RectColor.B = RectColor.G + 18;
-	}*/
+			TempColor.R = TempColor.R + 3;
+			TempColor.G = TempColor.G + 2;
+			TempColor.B = TempColor.B + 1;
+		}
 
-	//uint8_t frame = 0;
+
+		uint16_t width, height;
+		char textbuff[32];
+		sprintf(textbuff, "%d", frame);
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 96, &width, &height, false, textbuff);
+
+		/* Copying framebuffer to PSRAM */
+		L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
+	}
+
+	uint8_t frame = 0;
 	while (true)
 	{
-		//L2HAL_GC9A01_SetFramebufferBaseAddress(&DisplayContext, framebuffersAddresses[frame]);
+		/* Loading framebuffer */
+		L2HAL_LY68L6400_QSPI_MemoryRead(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
+		memset(DisplayContext.DirtyLinesBuffer, 0xFF, L2HAL_GC9A01_LFB_DIRTY_LINES_BUFFER_SIZE);
+
+//		/* Screen fill */
+//		FMGL_API_DrawRectangleFilled(&FmglContext, 0, 0, 239, 239, TempColor, TempColor);
+//		TempColor.R = TempColor.R + 3;
+//		TempColor.G = TempColor.G + 2;
+//		TempColor.B = TempColor.B + 1;
 
 		/* Drawing FPS */
 		uint16_t width, height;
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, "        ");
 		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, fpsMessageBuffer);
 
 		/* Pushing framebuffer */
 		FMGL_API_PushFramebuffer(&FmglContext);
 
-		/*if (frame >= FRAMES_COUNT - 1)
+		if (frame >= FRAMES_COUNT - 1)
 		{
 			frame = 0;
 		}
 		else
 		{
 			frame ++;
-		}*/
+		}
 
 		fpsCounter ++;
 	}

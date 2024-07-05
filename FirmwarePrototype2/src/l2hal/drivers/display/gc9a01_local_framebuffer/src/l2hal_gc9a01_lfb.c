@@ -432,6 +432,13 @@ void L2HAL_GC9A01_LFB_DrawPixel(L2HAL_GC9A01_LFB_ContextStruct* context, uint16_
 	context->Framebuffer[fbba + 0] = context->ActiveColor.R;
 	context->Framebuffer[fbba + 1] = context->ActiveColor.G;
 	context->Framebuffer[fbba + 2] = context->ActiveColor.B;
+
+	/* Marking pixel as dirty */
+	uint8_t dirtyLineAddress = y / 8;
+	uint8_t dirtyBitNumber = y % 8;
+	uint8_t mask = (1 << dirtyBitNumber);
+
+	context->DirtyLinesBuffer[dirtyLineAddress] |= mask;
 }
 
 FMGL_API_ColorStruct L2HAL_GC9A01_LFB_GetPixel(L2HAL_GC9A01_LFB_ContextStruct* context, uint16_t x, uint16_t y)
@@ -453,19 +460,29 @@ void L2HAL_GC9A01_LFB_SetActiveColor(L2HAL_GC9A01_LFB_ContextStruct* context, FM
 
 void L2HAL_GC9A01_LFB_PushFramebuffer(L2HAL_GC9A01_LFB_ContextStruct* context)
 {
-	for (uint16_t y = 0; y < L2HAL_GC9A01_LFB_DISPLAY_HEIGHT; y ++)
+	for (uint8_t y = 0; y < L2HAL_GC9A01_LFB_DISPLAY_HEIGHT; y ++)
 	{
-		L2HAL_GC9A01_LFB_SetColumnsRange(context, 0, L2HAL_GC9A01_LFB_DISPLAY_WIDTH - 1);
-		L2HAL_GC9A01_LFB_SetRowsRange(context, y, y);
+		uint8_t dirtyLineAddress = y / 8;
+		uint8_t dirtyBitNumber = y % 8;
+		uint8_t mask = (1 << dirtyBitNumber);
 
-		L2HAL_GC9A01_LFB_WriteCommand(context, 0x2C);
-		L2HAL_GC9A01_LFB_WriteData(context, &context->Framebuffer[y * L2HAL_GC9A01_LFB_DISPLAY_LINE_SIZE], L2HAL_GC9A01_LFB_DISPLAY_LINE_SIZE);
+		if (context->DirtyLinesBuffer[dirtyLineAddress] & mask != 0x00)
+		{
+			L2HAL_GC9A01_LFB_SetColumnsRange(context, 0, L2HAL_GC9A01_LFB_DISPLAY_WIDTH - 1);
+			L2HAL_GC9A01_LFB_SetRowsRange(context, y, y);
+
+			L2HAL_GC9A01_LFB_WriteCommand(context, 0x2C);
+			L2HAL_GC9A01_LFB_WriteData(context, &context->Framebuffer[y * L2HAL_GC9A01_LFB_DISPLAY_LINE_SIZE], L2HAL_GC9A01_LFB_DISPLAY_LINE_SIZE);
+		}
 	}
+
+	memset(context->DirtyLinesBuffer, 0x00, L2HAL_GC9A01_LFB_DIRTY_LINES_BUFFER_SIZE);
 }
 
 void L2HAL_GC9A01_LFB_ClearFramebuffer(L2HAL_GC9A01_LFB_ContextStruct* context)
 {
 	memset(context->Framebuffer, 0x00, L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE);
+	memset(context->DirtyLinesBuffer, 0xFF, L2HAL_GC9A01_LFB_DIRTY_LINES_BUFFER_SIZE);
 }
 
 void L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted(L2HAL_GC9A01_LFB_ContextStruct *context)

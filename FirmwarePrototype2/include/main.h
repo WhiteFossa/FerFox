@@ -30,7 +30,7 @@ uint16_t fpsHandlerCounter;
 uint16_t fps;
 char fpsMessageBuffer[32];
 
-#define FRAMES_COUNT 4
+#define FRAMES_COUNT 32
 uint32_t framebuffersAddresses[FRAMES_COUNT];
 
 /**
