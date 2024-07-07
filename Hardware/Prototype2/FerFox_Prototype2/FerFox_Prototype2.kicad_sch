@@ -5552,6 +5552,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 191.77) (xy 226.06 191.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cea7352-3a54-4a08-a061-69e672c94933")
+	)
+	(wire
+		(pts
 			(xy 153.67 166.37) (xy 154.94 166.37)
 		)
 		(stroke
@@ -5762,6 +5772,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 186.69) (xy 226.06 186.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4ede88c7-72c0-4080-9b16-c20387a5478e")
+	)
+	(wire
+		(pts
 			(xy 40.64 165.1) (xy 41.91 165.1)
 		)
 		(stroke
@@ -5812,6 +5832,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 214.63) (xy 226.06 214.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "587abdf7-778d-4fd1-b587-65b91af039f5")
+	)
+	(wire
+		(pts
 			(xy 224.79 82.55) (xy 226.06 82.55)
 		)
 		(stroke
@@ -5829,6 +5859,16 @@
 			(type default)
 		)
 		(uuid "5c2ecd72-9aea-4990-bf17-5a198cfb7a03")
+	)
+	(wire
+		(pts
+			(xy 224.79 189.23) (xy 226.06 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5edb5ab9-17bf-4497-8d47-e5142be87b4a")
 	)
 	(wire
 		(pts
@@ -6079,6 +6119,16 @@
 			(type default)
 		)
 		(uuid "ac174a4d-9905-4a15-b08e-e4733cf6b6d2")
+	)
+	(wire
+		(pts
+			(xy 224.79 194.31) (xy 226.06 194.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae954ab2-ffd8-4c0e-a58d-49f01e73c559")
 	)
 	(wire
 		(pts
@@ -6382,6 +6432,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 196.85) (xy 226.06 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fdfabf1f-c37d-4590-8e33-22b8f908d5d9")
+	)
+	(wire
+		(pts
 			(xy 306.07 99.06) (xy 304.8 99.06)
 		)
 		(stroke
@@ -6614,7 +6674,7 @@
 	)
 	(global_label "SD_CLK"
 		(shape output)
-		(at 217.17 196.85 0)
+		(at 226.06 196.85 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6624,7 +6684,7 @@
 		)
 		(uuid "257c5429-7656-49dc-bd56-802b78297391")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 227.1704 196.85 0)
+			(at 236.0604 196.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6834,7 +6894,7 @@
 	)
 	(global_label "SD_D2"
 		(shape bidirectional)
-		(at 217.17 191.77 0)
+		(at 226.06 191.77 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6844,7 +6904,7 @@
 		)
 		(uuid "4fd8cfb3-91d9-4b20-898e-52977f72f306")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 227.1931 191.77 0)
+			(at 236.0831 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6944,7 +7004,7 @@
 	)
 	(global_label "SD_D0"
 		(shape bidirectional)
-		(at 217.17 186.69 0)
+		(at 226.06 186.69 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6954,7 +7014,7 @@
 		)
 		(uuid "75fd7a33-d5e4-4c88-ace3-9ab88684902f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 227.1931 186.69 0)
+			(at 236.0831 186.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7120,7 +7180,7 @@
 	)
 	(global_label "SD_CMD"
 		(shape output)
-		(at 217.17 214.63 0)
+		(at 226.06 214.63 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7130,7 +7190,7 @@
 		)
 		(uuid "9e51cb97-10d7-4873-8089-c89a51f8c95c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 227.5937 214.63 0)
+			(at 236.4837 214.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7186,7 +7246,7 @@
 	)
 	(global_label "SD_D1"
 		(shape bidirectional)
-		(at 217.17 189.23 0)
+		(at 226.06 189.23 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7196,7 +7256,7 @@
 		)
 		(uuid "bc22a87e-782d-4de1-96b9-45bccbbfe800")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 227.1931 189.23 0)
+			(at 236.0831 189.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7208,7 +7268,7 @@
 	)
 	(global_label "SD_D3"
 		(shape bidirectional)
-		(at 217.17 194.31 0)
+		(at 226.06 194.31 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7218,7 +7278,7 @@
 		)
 		(uuid "be412e9d-eb65-4209-8865-a4eafd5dfc62")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 227.1931 194.31 0)
+			(at 236.0831 194.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7650,6 +7710,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 340.36 194.31 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "134b0e06-bae7-4f11-bdfe-1bbbe69fc28c")
+		(property "Reference" "C4"
+			(at 338.582 193.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7uF 6.3V"
+			(at 352.298 193.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 344.17 193.3448 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 340.36 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 340.36 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fb8eb356-a820-49a8-ace9-57f0109799be")
+		)
+		(pin "2"
+			(uuid "66cf0e0c-f9fa-48aa-a947-16844d399592")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 345.44 200.66 0)
 		(unit 1)
@@ -7871,6 +8000,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 220.98 214.63 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1f999abf-bcc2-4ea2-a6f8-50daaff4045e")
+		(property "Reference" "R18"
+			(at 217.17 215.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 220.98 214.63 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 216.408 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 220.98 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 220.98 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ba02f999-a2d2-4a56-acba-3ff3052f0bef")
+		)
+		(pin "2"
+			(uuid "b03f6399-d057-4bfd-b453-ca0829eb0440")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "R18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_name "GND_2")
 		(lib_id "power:GND")
 		(at 38.1 34.29 0)
@@ -7932,6 +8128,73 @@
 			(project "FerFox_Prototype2"
 				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 220.98 196.85 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "28879f87-d882-450f-beeb-b98e7481b632")
+		(property "Reference" "R17"
+			(at 217.17 198.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 220.98 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 198.628 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 220.98 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 220.98 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b281a2e5-7d56-4516-8031-108d076dae81")
+		)
+		(pin "2"
+			(uuid "6865fc14-d0d3-4def-8245-ede479c19870")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -8140,6 +8403,73 @@
 	)
 	(symbol
 		(lib_id "Device:R")
+		(at 220.98 186.69 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4143861e-ae28-4efd-809c-d628abee1be1")
+		(property "Reference" "R13"
+			(at 217.17 187.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 220.98 186.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 188.468 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 220.98 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 220.98 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f43114c4-a031-48b2-8536-8c93309ea2c5")
+		)
+		(pin "2"
+			(uuid "5525b158-a7ff-4f4d-91db-f5ab148b5766")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
 		(at 149.86 173.99 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8200,6 +8530,73 @@
 			(project "FerFox_Prototype2"
 				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
 					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 220.98 194.31 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4346817d-c37c-4a00-92b1-63202c02ac7a")
+		(property "Reference" "R16"
+			(at 217.17 195.58 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 220.98 194.31 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 196.088 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 220.98 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 220.98 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2e3d0e92-1d15-432c-8bad-28cd4a106a23")
+		)
+		(pin "2"
+			(uuid "cca62cf5-524f-42b3-b11b-ba1be14e2110")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -9172,74 +9569,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 340.36 194.31 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7d8c8d41-73d3-48ee-9201-fec6a52bc0b4")
-		(property "Reference" "C15"
-			(at 340.36 186.69 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "4.7uF"
-			(at 340.36 189.23 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 344.17 193.3448 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 340.36 194.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 340.36 194.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "603901c9-abbf-4556-b30f-260ce1967cc9")
-		)
-		(pin "2"
-			(uuid "10b0bc0f-bce4-4b01-a5d3-1aa29e063405")
-		)
-		(instances
-			(project "FerFox_Prototype2"
-				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
-					(reference "C15")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "fossa library:LY68L6400")
 		(at 52.07 152.4 0)
 		(unit 1)
@@ -9670,7 +9999,7 @@
 		(dnp no)
 		(uuid "ccfa0835-d833-40c3-adb3-e83babf605d4")
 		(property "Reference" "C18"
-			(at 336.55 196.85 90)
+			(at 337.312 200.914 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9678,7 +10007,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 336.55 200.66 90)
+			(at 338.582 203.2 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9999,6 +10328,73 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 220.98 189.23 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "db27dde2-6d5c-4081-8c16-6aa246025ffa")
+		(property "Reference" "R14"
+			(at 217.17 190.5 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 220.98 189.23 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 191.008 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 220.98 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 220.98 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1bccf520-4f6b-4786-8f22-132984f82cce")
+		)
+		(pin "2"
+			(uuid "19cb1c96-a063-4af0-ab98-a69dd8ae060e")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:SD_Card")
 		(at 292.1 199.39 0)
 		(mirror y)
@@ -10094,6 +10490,73 @@
 			(project "FerFox_Prototype2"
 				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
 					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 220.98 191.77 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "eec6c000-49b7-4288-a390-0a60d18a9cfe")
+		(property "Reference" "R15"
+			(at 217.17 193.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100"
+			(at 220.98 191.77 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 193.548 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 220.98 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 220.98 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "55bb8d27-208d-47b1-a2c6-e7573de3d66b")
+		)
+		(pin "2"
+			(uuid "ca327766-7619-47d5-8ed9-f09c525d4f53")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "R15")
 					(unit 1)
 				)
 			)

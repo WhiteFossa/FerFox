@@ -42,6 +42,8 @@ void L2HAL_InitCustomHardware(void)
 	L2HAL_SetupSPI();
 
 	L2HAL_SetupBacklighTimer();
+
+	L2HAL_SetupSdcard();
 }
 
 void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi)
@@ -335,4 +337,91 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
 void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma)
 {
 	L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted(&DisplayContext);
+}
+
+
+void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
+{
+	if (hsd->Instance == SDMMC1)
+	{
+		__HAL_RCC_SDMMC1_CLK_ENABLE();
+
+		__HAL_RCC_GPIOC_CLK_ENABLE();
+		__HAL_RCC_GPIOD_CLK_ENABLE();
+
+		GPIO_InitTypeDef GPIO_InitStruct;
+
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Pull = GPIO_PULLUP;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+
+		/* PC8 - SD D0 */
+		GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
+		GPIO_InitStruct.Pin = GPIO_PIN_8;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		/* PC9 - SD D1 */
+		GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
+		GPIO_InitStruct.Pin = GPIO_PIN_9;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		/* PC10 - SD D2 */
+		GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
+		GPIO_InitStruct.Pin = GPIO_PIN_10;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		/* PC11 - SD D3 */
+		GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
+		GPIO_InitStruct.Pin = GPIO_PIN_11;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		/* PC12 - SD CLOCK */
+		GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
+		GPIO_InitStruct.Pin = GPIO_PIN_12;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		/* PD2 - SD CMD */
+		GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
+		GPIO_InitStruct.Pin = GPIO_PIN_2;
+		HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+	}
+}
+
+void HAL_SD_MspDeInit(SD_HandleTypeDef *hsd)
+{
+	if (hsd->Instance == SDMMC1)
+	{
+		HAL_GPIO_DeInit(GPIOC, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12);
+		HAL_GPIO_DeInit(GPIOD, GPIO_PIN_2);
+
+		__HAL_RCC_SDMMC1_CLK_DISABLE();
+	}
+}
+
+void L2HAL_SetupSdcard(void)
+{
+	/* Low speed, narrow mode, for init */
+	SdcardHandle.Instance = SDMMC1;
+	SdcardHandle.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
+	SdcardHandle.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
+	SdcardHandle.Init.BusWide = SDMMC_BUS_WIDE_1B;
+	SdcardHandle.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_ENABLE;
+	SdcardHandle.Init.ClockDiv = 268; // 108 MHz / (268 + 2) = 400 kHz
+
+	if (HAL_SD_Init(&SdcardHandle) != HAL_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	if (HAL_SD_InitCard(&SdcardHandle) != HAL_OK)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	/* Full speed, wide mode */
+	SdcardHandle.Init.ClockDiv = 3; // 108 MHz / (3 + 2) = 21.6 MHz
+	if (HAL_SD_ConfigWideBusOperation(&SdcardHandle, SDMMC_BUS_WIDE_4B) != HAL_OK)
+	{
+		L2HAL_Error(Generic);
+	}
 }

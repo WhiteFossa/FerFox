@@ -68,4 +68,9 @@ L2HAL_GC9A01_LFB_ContextStruct DisplayContext;
  */
 FMGL_API_DriverContext FmglContext;
 
+/**
+ * SDCARD context
+ */
+SD_HandleTypeDef SdcardHandle = { 0 };
+
 #endif /* GLOBAL_VARIABLES_H_ */

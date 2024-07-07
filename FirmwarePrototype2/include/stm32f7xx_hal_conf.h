@@ -27,6 +27,8 @@
  extern "C" {
 #endif
 
+#define USE_SD_TRANSCEIVER 0U
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 

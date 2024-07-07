@@ -51,6 +51,7 @@ extern SPI_HandleTypeDef Spi1Handle;
 extern DMA_HandleTypeDef Spi1TxDmaHandle;
 extern DMA_HandleTypeDef Spi1RxDmaHandle;
 extern L2HAL_GC9A01_LFB_ContextStruct DisplayContext;
+extern SD_HandleTypeDef SdcardHandle;
 
 /**
  * Put custom hardware initialization stuff here,
@@ -85,8 +86,14 @@ void L2HAL_SetupSPI(void);
 
 /**
  * Display
- * @param hdma
  */
 void L2HAL_DisplayDmaCompleted(DMA_HandleTypeDef *hdma); /* Called when transmission via Display SPI is completed */
+
+/**
+ * SDMMC init and de-init
+ */
+void HAL_SD_MspInit(SD_HandleTypeDef *hsd);
+void HAL_SD_MspDeInit(SD_HandleTypeDef *hsd);
+void L2HAL_SetupSdcard(void);
 
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */

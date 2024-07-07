@@ -482,7 +482,7 @@ void L2HAL_GC9A01_LFB_PushFramebuffer(L2HAL_GC9A01_LFB_ContextStruct* context)
 void L2HAL_GC9A01_LFB_ClearFramebuffer(L2HAL_GC9A01_LFB_ContextStruct* context)
 {
 	memset(context->Framebuffer, 0x00, L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE);
-	memset(context->DirtyLinesBuffer, 0xFF, L2HAL_GC9A01_LFB_DIRTY_LINES_BUFFER_SIZE);
+	L2HAL_GC9A01_LFB_MarkFramebufferAsDirty(context);
 }
 
 void L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted(L2HAL_GC9A01_LFB_ContextStruct *context)
@@ -494,4 +494,9 @@ void L2HAL_GC9A01_LFB_WaitForDataTransferCompletion(L2HAL_GC9A01_LFB_ContextStru
 {
 	while (context->IsDataTransferInProgress) {} /* First wait for DMA completion */
 	while (HAL_SPI_GetState(context->SPIHandle) != HAL_SPI_STATE_READY) { } /* Then wait for SPI ready*/
+}
+
+void L2HAL_GC9A01_LFB_MarkFramebufferAsDirty(L2HAL_GC9A01_LFB_ContextStruct* context)
+{
+	memset(context->DirtyLinesBuffer, 0xFF, L2HAL_GC9A01_LFB_DIRTY_LINES_BUFFER_SIZE);
 }

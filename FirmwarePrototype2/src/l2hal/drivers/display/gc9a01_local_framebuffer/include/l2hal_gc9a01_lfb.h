@@ -171,5 +171,10 @@ void L2HAL_GC9A01_LFB_ClearFramebuffer(L2HAL_GC9A01_LFB_ContextStruct* context);
  */
 void L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted(L2HAL_GC9A01_LFB_ContextStruct *context);
 
+/**
+ * Mark framebuffer as dirty
+ * Call this after framebuffer external modification
+ */
+void L2HAL_GC9A01_LFB_MarkFramebufferAsDirty(L2HAL_GC9A01_LFB_ContextStruct* context);
 
 #endif /* L2HAL_DRIVERS_DISPLAY_GC9A01_LOCAL_FRAMEBUFFER_INCLUDE_L2HAL_GC9A01_LFB_LFB_H_ */

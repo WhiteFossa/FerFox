@@ -25,17 +25,11 @@
 
 FMGL_API_FontSettings font;
 
-uint16_t fpsCounter;
-uint16_t fpsHandlerCounter;
-uint16_t fps;
-char fpsMessageBuffer[32];
+uint32_t mainTickHandlerCounter;
 
-#define FRAMES_COUNT 32
-uint32_t framebuffersAddresses[FRAMES_COUNT];
+uint32_t sdcardBlockAddress;
+uint32_t sdcardBytesRead;
 
-/**
- * FPS SysTick handler, used to calculate FPS
- */
-void FpsHandler(void);
+void MainTickHandler(void);
 
 #endif /* INCLUDE_MAIN_H_ */

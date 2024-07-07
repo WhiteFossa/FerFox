@@ -129,87 +129,58 @@ int main(int argc, char* argv[])
 	font.BackgroundColor = &OffColor;
 	font.Transparency = &transparencyMode;
 
-	/* FPS */
-	fpsCounter = 0;
-	fpsHandlerCounter = 0;
+	mainTickHandlerCounter = 0;
+	L2HAL_SysTick_RegisterHandler(&MainTickHandler);
 
-	L2HAL_SysTick_RegisterHandler(&FpsHandler);
+	/* SD Card init */
+	uint8_t sdcardBlockBuffer[5120];
+	sdcardBlockAddress = 0;
+	sdcardBytesRead = 0;
 
-	FMGL_API_ColorStruct TempColor;
-	TempColor.R = 0x00;
-	TempColor.G = 0x0;
-	TempColor.B = 0x00;
-
-	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
-	{
-		framebuffersAddresses[frame] = frame * L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE;
-
-		/* Drawing into display framebuffer, but DO NOT push it */
-		for (uint8_t y = 0; y < 240; y++)
-		{
-			FMGL_API_SetActiveColor(&FmglContext, TempColor);
-			FMGL_API_DrawLineHorizontal(&FmglContext, 0, 239, y);
-
-			TempColor.R = TempColor.R + 3;
-			TempColor.G = TempColor.G + 2;
-			TempColor.B = TempColor.B + 1;
-		}
-
-
-		uint16_t width, height;
-		char textbuff[32];
-		sprintf(textbuff, "%d", frame);
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 96, &width, &height, false, textbuff);
-
-		/* Copying framebuffer to PSRAM */
-		L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
-	}
-
-	uint8_t frame = 0;
 	while (true)
 	{
-		/* Loading framebuffer */
-		L2HAL_LY68L6400_QSPI_MemoryRead(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
-		memset(DisplayContext.DirtyLinesBuffer, 0xFF, L2HAL_GC9A01_LFB_DIRTY_LINES_BUFFER_SIZE);
-
-//		/* Screen fill */
-//		FMGL_API_DrawRectangleFilled(&FmglContext, 0, 0, 239, 239, TempColor, TempColor);
-//		TempColor.R = TempColor.R + 3;
-//		TempColor.G = TempColor.G + 2;
-//		TempColor.B = TempColor.B + 1;
-
-		/* Drawing FPS */
-		uint16_t width, height;
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, "        ");
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, fpsMessageBuffer);
-
-		/* Pushing framebuffer */
-		FMGL_API_PushFramebuffer(&FmglContext);
-
-		if (frame >= FRAMES_COUNT - 1)
+/*		memset(blockBuffer, 0x00, 512);
+		sprintf(blockBuffer, "Yiff! Yuff! Yerf!");
+		if (HAL_SD_WriteBlocks(&SdcardHandle, blockBuffer, sdcardBlockAddress, 1, 1000) != HAL_OK)
 		{
-			frame = 0;
-		}
-		else
-		{
-			frame ++;
+			L2HAL_Error(Generic);
 		}
 
-		fpsCounter ++;
+		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}*/
+
+		if (HAL_SD_ReadBlocks(&SdcardHandle, sdcardBlockBuffer, sdcardBlockAddress, 10, 1000) != HAL_OK)
+		{
+			L2HAL_Error(Generic);
+		}
+
+		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}
+
+		sdcardBlockAddress += 10;
+		sdcardBytesRead += 5120;
+
 	}
 }
 
-void FpsHandler(void)
+void MainTickHandler(void)
 {
-	fpsHandlerCounter ++;
-
-	if (fpsHandlerCounter == 1000)
+	if (mainTickHandlerCounter == 1000)
 	{
-		fps = fpsCounter;
-		fpsCounter = 0;
-		fpsHandlerCounter = 0;
+		mainTickHandlerCounter = 0;
 
-		sprintf(fpsMessageBuffer, "FPS: %d", fps);
+		uint8_t charbuff[32];
+		uint16_t width, height;
+
+		sprintf(charbuff, "Block %d, speed %d kBps", sdcardBlockAddress, sdcardBytesRead / 1024);
+
+		sdcardBytesRead = 0;
+
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, "                  ");
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, charbuff);
+		FMGL_API_PushFramebuffer(&FmglContext);
+	}
+	else
+	{
+		mainTickHandlerCounter ++;
 	}
 }
 
