@@ -133,30 +133,39 @@ int main(int argc, char* argv[])
 	L2HAL_SysTick_RegisterHandler(&MainTickHandler);
 
 	/* SD Card init */
-	uint8_t sdcardBlockBuffer[5120];
+	#define SD_EXCHANGE_BLOCKS_COUNT 128
+	#define SD_EXCHANGE_BUFFER_SIZE (SD_EXCHANGE_BLOCKS_COUNT * 512)
+	uint8_t sdcardBlockBufferRead[SD_EXCHANGE_BUFFER_SIZE];
+	uint8_t sdcardBlockBufferWrite[SD_EXCHANGE_BUFFER_SIZE];
 	sdcardBlockAddress = 0;
 	sdcardBytesRead = 0;
 
+	memset(sdcardBlockBufferWrite, 0xA5, SD_EXCHANGE_BUFFER_SIZE);
+	sprintf(sdcardBlockBufferWrite, "Yiff! Yuff! Yerf! Ururu!");
+
 	while (true)
 	{
-/*		memset(blockBuffer, 0x00, 512);
-		sprintf(blockBuffer, "Yiff! Yuff! Yerf!");
-		if (HAL_SD_WriteBlocks(&SdcardHandle, blockBuffer, sdcardBlockAddress, 1, 1000) != HAL_OK)
+		if (HAL_SD_WriteBlocks(&SdcardHandle, sdcardBlockBufferWrite, sdcardBlockAddress, SD_EXCHANGE_BLOCKS_COUNT, 1000) != HAL_OK)
 		{
 			L2HAL_Error(Generic);
 		}
-
-		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}*/
-
-		if (HAL_SD_ReadBlocks(&SdcardHandle, sdcardBlockBuffer, sdcardBlockAddress, 10, 1000) != HAL_OK)
-		{
-			L2HAL_Error(Generic);
-		}
-
 		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}
 
-		sdcardBlockAddress += 10;
-		sdcardBytesRead += 5120;
+		memset(sdcardBlockBufferRead, 0x00, SD_EXCHANGE_BUFFER_SIZE);
+
+		if (HAL_SD_ReadBlocks(&SdcardHandle, sdcardBlockBufferRead, sdcardBlockAddress, SD_EXCHANGE_BLOCKS_COUNT, 1000) != HAL_OK)
+		{
+			L2HAL_Error(Generic);
+		}
+		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}
+
+		if (memcmp(sdcardBlockBufferRead, sdcardBlockBufferWrite, SD_EXCHANGE_BUFFER_SIZE) != 0)
+		{
+			L2HAL_Error(Generic);
+		}
+
+		sdcardBlockAddress += SD_EXCHANGE_BLOCKS_COUNT;
+		sdcardBytesRead += SD_EXCHANGE_BUFFER_SIZE;
 
 	}
 }

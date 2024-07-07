@@ -73,4 +73,9 @@ FMGL_API_DriverContext FmglContext;
  */
 SD_HandleTypeDef SdcardHandle = { 0 };
 
+/**
+ * SD DMA handle
+ */
+DMA_HandleTypeDef SdDmaHandle = { 0 };
+
 #endif /* GLOBAL_VARIABLES_H_ */

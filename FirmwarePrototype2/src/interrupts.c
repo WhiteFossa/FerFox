@@ -36,3 +36,4 @@ void DMA2_Stream2_IRQHandler(void)
 {
 	HAL_DMA_IRQHandler(Spi1Handle.hdmarx);
 }
+

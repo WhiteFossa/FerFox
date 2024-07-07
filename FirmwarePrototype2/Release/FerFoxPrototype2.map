@@ -22,6 +22,8 @@ Archive member included to satisfy reference by file (symbol)
                               ./src/l2hal/drivers/bluetooth/hc06/src/l2hal_hc06.o (snprintf)
 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
                               ./src/main.o (sprintf)
+/home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
+                              ./src/main.o (memcmp)
 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
                               ./src/l2hal/drivers/sdcard/src/l2hal_sdcard.o (memset)
 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strncpy.o)
@@ -493,12 +495,10 @@ Discarded input sections
                 0x00000000        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_DeInit
                 0x00000000       0x26 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+ .text.HAL_SD_ReadBlocks
+                0x00000000      0x210 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_WriteBlocks
                 0x00000000      0x1a4 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.HAL_SD_ReadBlocks_IT
-                0x00000000       0xd8 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.HAL_SD_WriteBlocks_IT
-                0x00000000       0xd8 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_ReadBlocks_DMA
                 0x00000000      0x128 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_WriteBlocks_DMA
@@ -513,12 +513,8 @@ Discarded input sections
                 0x00000000        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_RxCpltCallback
                 0x00000000        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.HAL_SD_ErrorCallback
-                0x00000000        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.SD_DMAReceiveCplt
                 0x00000000       0x40 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.HAL_SD_AbortCallback
-                0x00000000        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_GetCardCID
                 0x00000000       0x48 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_GetCardStatus
@@ -527,12 +523,6 @@ Discarded input sections
                 0x00000000       0x24 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.SD_DMAError
                 0x00000000       0x60 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.SD_DMATxAbort
-                0x00000000       0x40 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.HAL_SD_IRQHandler
-                0x00000000      0x200 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .text.SD_DMARxAbort
-                0x00000000        0x4 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_Abort
                 0x00000000       0x70 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.HAL_SD_Abort_IT
@@ -838,8 +828,6 @@ Discarded input sections
  .text          0x00000000        0x0 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .data          0x00000000        0x0 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .bss           0x00000000        0x0 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
- .text.SDMMC_WriteFIFO
-                0x00000000        0xa ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_PowerState_OFF
                 0x00000000        0x8 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_GetCommandResponse
@@ -850,10 +838,6 @@ Discarded input sections
                 0x00000000        0x6 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_SetSDMMCReadWaitMode
                 0x00000000        0xe ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
- .text.SDMMC_CmdWriteSingleBlock
-                0x00000000       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
- .text.SDMMC_CmdWriteMultiBlock
-                0x00000000       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_CmdSDEraseStartAdd
                 0x00000000       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_CmdSDEraseEndAdd
@@ -1557,6 +1541,8 @@ Discarded input sections
  .text          0x00000000        0x0 ./src/main.o
  .data          0x00000000        0x0 ./src/main.o
  .bss           0x00000000        0x0 ./src/main.o
+ .bss.SdDmaHandle
+                0x00000000       0x60 ./src/main.o
  .text          0x00000000        0x0 ./src/stm32f7xx_hal_msp.o
  .data          0x00000000        0x0 ./src/stm32f7xx_hal_msp.o
  .bss           0x00000000        0x0 ./src/stm32f7xx_hal_msp.o
@@ -1627,6 +1613,9 @@ Discarded input sections
  .bss           0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
  .text._sprintf_r
                 0x00000000       0x38 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
+ .text          0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
+ .data          0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
+ .bss           0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
  .text          0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
  .data          0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
  .bss           0x00000000        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
@@ -1806,7 +1795,7 @@ END GROUP
                 0x2007fc00                        __Main_Stack_Limit = (__stack - __Main_Stack_Size)
                 [!provide]                        PROVIDE (_Main_Stack_Limit = __Main_Stack_Limit)
                 0x00000100                        _Minimum_Stack_Size = 0x100
-                0x2002a72c                        PROVIDE (_Heap_Begin = _end_noinit)
+                0x2002a730                        PROVIDE (_Heap_Begin = _end_noinit)
                 0x2007fc00                        PROVIDE (_Heap_Limit = (__stack - __Main_Stack_Size))
 
 .isr_vector     0x08000000      0x32e
@@ -1894,7 +1883,6 @@ END GROUP
                 0x0800032c                DMA1_Stream7_IRQHandler
                 0x0800032c                SPI5_IRQHandler
                 0x0800032c                TIM7_IRQHandler
-                0x0800032c                SDMMC1_IRQHandler
                 0x0800032c                CAN2_TX_IRQHandler
                 0x0800032c                TIM5_IRQHandler
                 0x0800032c                I2C3_EV_IRQHandler
@@ -1945,16 +1933,16 @@ END GROUP
 
 .inits          0x08000330       0x28
                 0x08000330                        __data_regions_array_start = .
-                0x08000330        0x4 LONG 0x8006174 LOADADDR (.data)
+                0x08000330        0x4 LONG 0x80064ac LOADADDR (.data)
                 0x08000334        0x4 LONG 0x20000000 ADDR (.data)
                 0x08000338        0x4 LONG 0x20000064 (ADDR (.data) + SIZEOF (.data))
-                0x0800033c        0x4 LONG 0x8006174 LOADADDR (.data_CCMRAM)
+                0x0800033c        0x4 LONG 0x80064ac LOADADDR (.data_CCMRAM)
                 0x08000340        0x4 LONG 0x10000000 ADDR (.data_CCMRAM)
                 0x08000344        0x4 LONG 0x10000000 (ADDR (.data_CCMRAM) + SIZEOF (.data_CCMRAM))
                 0x08000348                        __data_regions_array_end = .
                 0x08000348                        __bss_regions_array_start = .
                 0x08000348        0x4 LONG 0x20000064 ADDR (.bss)
-                0x0800034c        0x4 LONG 0x2002a72c (ADDR (.bss) + SIZEOF (.bss))
+                0x0800034c        0x4 LONG 0x2002a730 (ADDR (.bss) + SIZEOF (.bss))
                 0x08000350        0x4 LONG 0x10000000 ADDR (.bss_CCMRAM)
                 0x08000354        0x4 LONG 0x10000000 (ADDR (.bss_CCMRAM) + SIZEOF (.bss_CCMRAM))
                 0x08000358                        __bss_regions_array_end = .
@@ -1980,7 +1968,7 @@ END GROUP
 .flashtext
  *(.flashtext .flashtext.*)
 
-.text           0x08000360     0x5e0c
+.text           0x08000360     0x6144
  *(.text .text.*)
  .text.HAL_InitTick
                 0x08000360       0x48 ./system/src/stm32f7-hal/stm32f7xx_hal.o
@@ -2115,533 +2103,570 @@ END GROUP
  .text.SD_FindSCR.constprop.0
                 0x0800174c       0xca ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  *fill*         0x08001816        0x2 
- .text.HAL_SD_ReadBlocks
-                0x08001818      0x210 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
-                0x08001818                HAL_SD_ReadBlocks
+ .text.HAL_SD_ReadBlocks_IT
+                0x08001818       0xd8 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x08001818                HAL_SD_ReadBlocks_IT
+ .text.HAL_SD_WriteBlocks_IT
+                0x080018f0       0xd8 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x080018f0                HAL_SD_WriteBlocks_IT
+ .text.HAL_SD_ErrorCallback
+                0x080019c8        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x080019c8                HAL_SD_ErrorCallback
+ .text.HAL_SD_AbortCallback
+                0x080019ca        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x080019ca                HAL_SD_AbortCallback
  .text.HAL_SD_GetCardCSD
-                0x08001a28      0x16c ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
-                0x08001a28                HAL_SD_GetCardCSD
+                0x080019cc      0x16c ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x080019cc                HAL_SD_GetCardCSD
  .text.HAL_SD_InitCard
-                0x08001b94      0x1dc ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
-                0x08001b94                HAL_SD_InitCard
+                0x08001b38      0x1dc ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x08001b38                HAL_SD_InitCard
  .text.HAL_SD_Init
-                0x08001d70       0x36 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
-                0x08001d70                HAL_SD_Init
- *fill*         0x08001da6        0x2 
+                0x08001d14       0x36 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x08001d14                HAL_SD_Init
+ *fill*         0x08001d4a        0x2 
  .text.HAL_SD_ConfigWideBusOperation
-                0x08001da8       0xf4 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
-                0x08001da8                HAL_SD_ConfigWideBusOperation
+                0x08001d4c       0xf4 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x08001d4c                HAL_SD_ConfigWideBusOperation
  .text.HAL_SD_GetCardState
-                0x08001e9c       0x28 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
-                0x08001e9c                HAL_SD_GetCardState
+                0x08001e40       0x28 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x08001e40                HAL_SD_GetCardState
+ .text.SD_DMATxAbort
+                0x08001e68       0x40 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+ .text.HAL_SD_IRQHandler
+                0x08001ea8      0x200 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+                0x08001ea8                HAL_SD_IRQHandler
+ .text.SD_DMARxAbort
+                0x080020a8        0x4 ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
  .text.SPI_WaitFlagStateUntilTimeout.part.0
-                0x08001ec4       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080020ac       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.SPI_WaitFlagStateUntilTimeout
-                0x08001f14       0x42 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080020fc       0x42 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.SPI_WaitFifoStateUntilTimeout
-                0x08001f56       0x44 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x0800213e       0x44 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.SPI_EndRxTxTransaction
-                0x08001f9a       0x4e ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x08002182       0x4e ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.HAL_SPI_Init
-                0x08001fe8       0xc6 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
-                0x08001fe8                HAL_SPI_Init
- *fill*         0x080020ae        0x2 
+                0x080021d0       0xc6 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080021d0                HAL_SPI_Init
+ *fill*         0x08002296        0x2 
  .text.HAL_SPI_Transmit_DMA
-                0x080020b0      0x11c ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
-                0x080020b0                HAL_SPI_Transmit_DMA
+                0x08002298      0x11c ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x08002298                HAL_SPI_Transmit_DMA
  .text.HAL_SPI_TxCpltCallback
-                0x080021cc        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
-                0x080021cc                HAL_SPI_TxCpltCallback
+                0x080023b4        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080023b4                HAL_SPI_TxCpltCallback
  .text.HAL_SPI_TxHalfCpltCallback
-                0x080021ce        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
-                0x080021ce                HAL_SPI_TxHalfCpltCallback
+                0x080023b6        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080023b6                HAL_SPI_TxHalfCpltCallback
  .text.SPI_DMAHalfTransmitCplt
-                0x080021d0        0xa ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080023b8        0xa ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.HAL_SPI_ErrorCallback
-                0x080021da        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
-                0x080021da                HAL_SPI_ErrorCallback
+                0x080023c2        0x2 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080023c2                HAL_SPI_ErrorCallback
  .text.SPI_DMAError
-                0x080021dc       0x22 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080023c4       0x22 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.SPI_DMATransmitCplt
-                0x080021fe       0x6a ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x080023e6       0x6a ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
  .text.HAL_SPI_GetState
-                0x08002268        0x6 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
-                0x08002268                HAL_SPI_GetState
- *fill*         0x0800226e        0x2 
+                0x08002450        0x6 ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+                0x08002450                HAL_SPI_GetState
+ *fill*         0x08002456        0x2 
  .text.TIM_OC1_SetConfig
-                0x08002270       0x5c ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x08002458       0x5c ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
  .text.TIM_OC3_SetConfig
-                0x080022cc       0x60 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x080024b4       0x60 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
  .text.TIM_OC4_SetConfig
-                0x0800232c       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x08002514       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
  .text.TIM_OC5_SetConfig
-                0x0800237c       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x08002564       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
  .text.TIM_OC6_SetConfig
-                0x080023cc       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x080025b4       0x50 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
  .text.TIM_Base_SetConfig
-                0x0800241c       0xa0 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x0800241c                TIM_Base_SetConfig
+                0x08002604       0xa0 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x08002604                TIM_Base_SetConfig
  .text.HAL_TIM_PWM_Init
-                0x080024bc       0x34 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x080024bc                HAL_TIM_PWM_Init
+                0x080026a4       0x34 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x080026a4                HAL_TIM_PWM_Init
  .text.TIM_OC2_SetConfig
-                0x080024f0       0x64 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x080024f0                TIM_OC2_SetConfig
+                0x080026d8       0x64 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x080026d8                TIM_OC2_SetConfig
  .text.HAL_TIM_PWM_ConfigChannel
-                0x08002554       0xfe ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x08002554                HAL_TIM_PWM_ConfigChannel
+                0x0800273c       0xfe ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x0800273c                HAL_TIM_PWM_ConfigChannel
  .text.TIM_CCxChannelCmd
-                0x08002652       0x1c ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x08002652                TIM_CCxChannelCmd
- *fill*         0x0800266e        0x2 
+                0x0800283a       0x1c ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x0800283a                TIM_CCxChannelCmd
+ *fill*         0x08002856        0x2 
  .text.HAL_TIM_OC_Start
-                0x08002670       0x44 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x08002670                HAL_TIM_OC_Start
+                0x08002858       0x44 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x08002858                HAL_TIM_OC_Start
  .text.HAL_TIM_PWM_Start
-                0x080026b4        0x4 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
-                0x080026b4                HAL_TIM_PWM_Start
+                0x0800289c        0x4 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+                0x0800289c                HAL_TIM_PWM_Start
  .text.SDMMC_GetCmdResp2
-                0x080026b8       0x4c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x080028a0       0x4c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_GetCmdResp3
-                0x08002704       0x44 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x080028ec       0x44 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_GetCmdResp1
-                0x08002748      0x11c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002930      0x11c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
  .text.SDMMC_Init
-                0x08002864       0x38 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002864                SDMMC_Init
+                0x08002a4c       0x38 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002a4c                SDMMC_Init
  .text.SDMMC_ReadFIFO
-                0x0800289c        0x6 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x0800289c                SDMMC_ReadFIFO
+                0x08002a84        0x6 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002a84                SDMMC_ReadFIFO
+ .text.SDMMC_WriteFIFO
+                0x08002a8a        0xa ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002a8a                SDMMC_WriteFIFO
  .text.SDMMC_PowerState_ON
-                0x080028a2       0x10 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080028a2                SDMMC_PowerState_ON
+                0x08002a94       0x10 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002a94                SDMMC_PowerState_ON
  .text.SDMMC_GetPowerState
-                0x080028b2        0x8 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080028b2                SDMMC_GetPowerState
+                0x08002aa4        0x8 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002aa4                SDMMC_GetPowerState
  .text.SDMMC_SendCommand
-                0x080028ba       0x22 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080028ba                SDMMC_SendCommand
+                0x08002aac       0x22 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002aac                SDMMC_SendCommand
  .text.SDMMC_GetResponse
-                0x080028dc        0x6 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080028dc                SDMMC_GetResponse
+                0x08002ace        0x6 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002ace                SDMMC_GetResponse
  .text.SDMMC_ConfigData
-                0x080028e2       0x26 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080028e2                SDMMC_ConfigData
+                0x08002ad4       0x26 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002ad4                SDMMC_ConfigData
  .text.SDMMC_CmdBlockLength
-                0x08002908       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002908                SDMMC_CmdBlockLength
+                0x08002afa       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002afa                SDMMC_CmdBlockLength
  .text.SDMMC_CmdReadSingleBlock
-                0x0800293a       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x0800293a                SDMMC_CmdReadSingleBlock
+                0x08002b2c       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002b2c                SDMMC_CmdReadSingleBlock
  .text.SDMMC_CmdReadMultiBlock
-                0x0800296c       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x0800296c                SDMMC_CmdReadMultiBlock
- *fill*         0x0800299e        0x2 
+                0x08002b5e       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002b5e                SDMMC_CmdReadMultiBlock
+ .text.SDMMC_CmdWriteSingleBlock
+                0x08002b90       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002b90                SDMMC_CmdWriteSingleBlock
+ .text.SDMMC_CmdWriteMultiBlock
+                0x08002bc2       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002bc2                SDMMC_CmdWriteMultiBlock
  .text.SDMMC_CmdStopTransfer
-                0x080029a0       0x34 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080029a0                SDMMC_CmdStopTransfer
+                0x08002bf4       0x34 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002bf4                SDMMC_CmdStopTransfer
  .text.SDMMC_CmdSelDesel
-                0x080029d4       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x080029d4                SDMMC_CmdSelDesel
- *fill*         0x08002a06        0x2 
+                0x08002c28       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002c28                SDMMC_CmdSelDesel
+ *fill*         0x08002c5a        0x2 
  .text.SDMMC_CmdGoIdleState
-                0x08002a08       0x4c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002a08                SDMMC_CmdGoIdleState
+                0x08002c5c       0x4c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002c5c                SDMMC_CmdGoIdleState
  .text.SDMMC_CmdOperCond
-                0x08002a54       0x7c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002a54                SDMMC_CmdOperCond
+                0x08002ca8       0x7c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002ca8                SDMMC_CmdOperCond
  .text.SDMMC_CmdAppCommand
-                0x08002ad0       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002ad0                SDMMC_CmdAppCommand
+                0x08002d24       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002d24                SDMMC_CmdAppCommand
  .text.SDMMC_CmdAppOperCommand
-                0x08002b02       0x34 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002b02                SDMMC_CmdAppOperCommand
+                0x08002d56       0x34 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002d56                SDMMC_CmdAppOperCommand
  .text.SDMMC_CmdBusWidth
-                0x08002b36       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002b36                SDMMC_CmdBusWidth
+                0x08002d8a       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002d8a                SDMMC_CmdBusWidth
  .text.SDMMC_CmdSendSCR
-                0x08002b68       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002b68                SDMMC_CmdSendSCR
+                0x08002dbc       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002dbc                SDMMC_CmdSendSCR
  .text.SDMMC_CmdSendCID
-                0x08002b9a       0x2c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002b9a                SDMMC_CmdSendCID
+                0x08002dee       0x2c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002dee                SDMMC_CmdSendCID
  .text.SDMMC_CmdSendCSD
-                0x08002bc6       0x2c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002bc6                SDMMC_CmdSendCSD
- *fill*         0x08002bf2        0x2 
+                0x08002e1a       0x2c ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002e1a                SDMMC_CmdSendCSD
+ *fill*         0x08002e46        0x2 
  .text.SDMMC_CmdSetRelAdd
-                0x08002bf4       0xa0 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002bf4                SDMMC_CmdSetRelAdd
+                0x08002e48       0xa0 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002e48                SDMMC_CmdSetRelAdd
  .text.SDMMC_CmdSendStatus
-                0x08002c94       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
-                0x08002c94                SDMMC_CmdSendStatus
- .text._exit    0x08002cc6        0x6 ./system/src/newlib/exit.o
-                0x08002cc6                _exit
- .text._sbrk    0x08002ccc       0x3c ./system/src/newlib/sbrk.o
-                0x08002ccc                _sbrk
+                0x08002ee8       0x32 ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+                0x08002ee8                SDMMC_CmdSendStatus
+ .text._exit    0x08002f1a        0x6 ./system/src/newlib/exit.o
+                0x08002f1a                _exit
+ .text._sbrk    0x08002f20       0x3c ./system/src/newlib/sbrk.o
+                0x08002f20                _sbrk
  .text.__initialize_args
-                0x08002d08       0x10 ./system/src/newlib/syscalls.o
-                0x08002d08                __initialize_args
+                0x08002f5c       0x10 ./system/src/newlib/syscalls.o
+                0x08002f5c                __initialize_args
  .text.__initialize_hardware_early
-                0x08002d18       0x24 ./system/src/cortexm/initialize-hardware.o
-                0x08002d18                __initialize_hardware_early
+                0x08002f6c       0x24 ./system/src/cortexm/initialize-hardware.o
+                0x08002f6c                __initialize_hardware_early
  .text.__initialize_hardware
-                0x08002d3c        0x4 ./system/src/cortexm/initialize-hardware.o
-                0x08002d3c                __initialize_hardware
+                0x08002f90        0x4 ./system/src/cortexm/initialize-hardware.o
+                0x08002f90                __initialize_hardware
  .text.__reset_hardware
-                0x08002d40       0x24 ./system/src/cortexm/reset-hardware.o
-                0x08002d40                __reset_hardware
+                0x08002f94       0x24 ./system/src/cortexm/reset-hardware.o
+                0x08002f94                __reset_hardware
  .text.SystemInit
-                0x08002d64       0x1c ./system/src/cmsis/system_stm32f7xx.o
-                0x08002d64                SystemInit
+                0x08002fb8       0x1c ./system/src/cmsis/system_stm32f7xx.o
+                0x08002fb8                SystemInit
  .text.SystemCoreClockUpdate
-                0x08002d80       0x70 ./system/src/cmsis/system_stm32f7xx.o
-                0x08002d80                SystemCoreClockUpdate
+                0x08002fd4       0x70 ./system/src/cmsis/system_stm32f7xx.o
+                0x08002fd4                SystemCoreClockUpdate
  .text.L2HAL_SetupClocks
-                0x08002df0       0xac ./src/l2hal/src/l2hal.o
-                0x08002df0                L2HAL_SetupClocks
+                0x08003044       0xac ./src/l2hal/src/l2hal.o
+                0x08003044                L2HAL_SetupClocks
  .text.L2HAL_Init
-                0x08002e9c       0x12 ./src/l2hal/src/l2hal.o
-                0x08002e9c                L2HAL_Init
- *fill*         0x08002eae        0x2 
+                0x080030f0       0x12 ./src/l2hal/src/l2hal.o
+                0x080030f0                L2HAL_Init
+ *fill*         0x08003102        0x2 
  .text.HAL_QSPI_MspInit
-                0x08002eb0      0x12c ./src/l2hal/src/l2hal_custom.o
-                0x08002eb0                HAL_QSPI_MspInit
+                0x08003104      0x12c ./src/l2hal/src/l2hal_custom.o
+                0x08003104                HAL_QSPI_MspInit
  .text.HAL_QSPI_MspDeInit
-                0x08002fdc       0x80 ./src/l2hal/src/l2hal_custom.o
-                0x08002fdc                HAL_QSPI_MspDeInit
+                0x08003230       0x80 ./src/l2hal/src/l2hal_custom.o
+                0x08003230                HAL_QSPI_MspDeInit
  .text.HAL_CRC_MspInit
-                0x0800305c       0x20 ./src/l2hal/src/l2hal_custom.o
-                0x0800305c                HAL_CRC_MspInit
+                0x080032b0       0x20 ./src/l2hal/src/l2hal_custom.o
+                0x080032b0                HAL_CRC_MspInit
  .text.L2HAL_SetupBacklighTimer
-                0x0800307c       0x4c ./src/l2hal/src/l2hal_custom.o
-                0x0800307c                L2HAL_SetupBacklighTimer
+                0x080032d0       0x4c ./src/l2hal/src/l2hal_custom.o
+                0x080032d0                L2HAL_SetupBacklighTimer
  .text.HAL_TIM_PWM_MspInit
-                0x080030c8       0x50 ./src/l2hal/src/l2hal_custom.o
-                0x080030c8                HAL_TIM_PWM_MspInit
+                0x0800331c       0x50 ./src/l2hal/src/l2hal_custom.o
+                0x0800331c                HAL_TIM_PWM_MspInit
  .text.L2HAL_SetupSPI
-                0x08003118       0x44 ./src/l2hal/src/l2hal_custom.o
-                0x08003118                L2HAL_SetupSPI
+                0x0800336c       0x44 ./src/l2hal/src/l2hal_custom.o
+                0x0800336c                L2HAL_SetupSPI
  .text.HAL_SPI_MspInit
-                0x0800315c      0x130 ./src/l2hal/src/l2hal_custom.o
-                0x0800315c                HAL_SPI_MspInit
+                0x080033b0      0x130 ./src/l2hal/src/l2hal_custom.o
+                0x080033b0                HAL_SPI_MspInit
  .text.L2HAL_DisplayDmaCompleted
-                0x0800328c        0xc ./src/l2hal/src/l2hal_custom.o
-                0x0800328c                L2HAL_DisplayDmaCompleted
+                0x080034e0        0xc ./src/l2hal/src/l2hal_custom.o
+                0x080034e0                L2HAL_DisplayDmaCompleted
  .text.HAL_SD_MspInit
-                0x08003298       0xd0 ./src/l2hal/src/l2hal_custom.o
-                0x08003298                HAL_SD_MspInit
+                0x080034ec       0xf8 ./src/l2hal/src/l2hal_custom.o
+                0x080034ec                HAL_SD_MspInit
  .text.L2HAL_SetupSdcard
-                0x08003368       0x5c ./src/l2hal/src/l2hal_custom.o
-                0x08003368                L2HAL_SetupSdcard
+                0x080035e4       0x58 ./src/l2hal/src/l2hal_custom.o
+                0x080035e4                L2HAL_SetupSdcard
  .text.L2HAL_InitCustomHardware
-                0x080033c4       0x12 ./src/l2hal/src/l2hal_custom.o
-                0x080033c4                L2HAL_InitCustomHardware
- *fill*         0x080033d6        0x2 
+                0x0800363c       0x12 ./src/l2hal/src/l2hal_custom.o
+                0x0800363c                L2HAL_InitCustomHardware
+ *fill*         0x0800364e        0x2 
  .text.L2HAL_Error
-                0x080033d8       0x44 ./src/l2hal/src/l2hal_errors.o
-                0x080033d8                L2HAL_Error
+                0x08003650       0x44 ./src/l2hal/src/l2hal_errors.o
+                0x08003650                L2HAL_Error
  .text.L2HAL_SysTick_Init
-                0x0800341c        0xc ./src/l2hal/src/l2hal_systick.o
-                0x0800341c                L2HAL_SysTick_Init
+                0x08003694        0xc ./src/l2hal/src/l2hal_systick.o
+                0x08003694                L2HAL_SysTick_Init
  .text.L2HAL_SysTick_RegisterHandler
-                0x08003428       0x24 ./src/l2hal/src/l2hal_systick.o
-                0x08003428                L2HAL_SysTick_RegisterHandler
+                0x080036a0       0x24 ./src/l2hal/src/l2hal_systick.o
+                0x080036a0                L2HAL_SysTick_RegisterHandler
  .text.L2HAL_SysTick_Callback
-                0x0800344c       0x24 ./src/l2hal/src/l2hal_systick.o
-                0x0800344c                L2HAL_SysTick_Callback
+                0x080036c4       0x24 ./src/l2hal/src/l2hal_systick.o
+                0x080036c4                L2HAL_SysTick_Callback
  .text.L2HAL_MCU_ClockPortIn
-                0x08003470      0x184 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
-                0x08003470                L2HAL_MCU_ClockPortIn
+                0x080036e8      0x184 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
+                0x080036e8                L2HAL_MCU_ClockPortIn
  .text.L2HAL_LY68L6400_QSPI_SoftSpi_Init
-                0x080035f4       0x90 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x080035f4                L2HAL_LY68L6400_QSPI_SoftSpi_Init
+                0x0800386c       0x90 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x0800386c                L2HAL_LY68L6400_QSPI_SoftSpi_Init
  .text.L2HAL_LY68L6400_QSPI_SoftSpi_SelectChip
-                0x08003684       0x20 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x08003684                L2HAL_LY68L6400_QSPI_SoftSpi_SelectChip
+                0x080038fc       0x20 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x080038fc                L2HAL_LY68L6400_QSPI_SoftSpi_SelectChip
  .text.L2HAL_LY68L6400_QSPI_SoftSpi_SetClockState
-                0x080036a4       0x10 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x080036a4                L2HAL_LY68L6400_QSPI_SoftSpi_SetClockState
+                0x0800391c       0x10 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x0800391c                L2HAL_LY68L6400_QSPI_SoftSpi_SetClockState
  .text.L2HAL_LY68L6400_QSPI_SoftSpi_SetMosiState
-                0x080036b4       0x10 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x080036b4                L2HAL_LY68L6400_QSPI_SoftSpi_SetMosiState
+                0x0800392c       0x10 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x0800392c                L2HAL_LY68L6400_QSPI_SoftSpi_SetMosiState
  .text.L2HAL_LY68L6400_QSPI_SoftSpi_ReadMisoState
-                0x080036c4        0x8 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x080036c4                L2HAL_LY68L6400_QSPI_SoftSpi_ReadMisoState
+                0x0800393c        0x8 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x0800393c                L2HAL_LY68L6400_QSPI_SoftSpi_ReadMisoState
  .text.L2HAL_LY68L6400_QSPI_SoftSpi_SwapBytes
-                0x080036cc       0x60 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x080036cc                L2HAL_LY68L6400_QSPI_SoftSpi_SwapBytes
+                0x08003944       0x60 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x08003944                L2HAL_LY68L6400_QSPI_SoftSpi_SwapBytes
  .text.L2HAL_LY68L6400_QSPI_InitQspi
-                0x0800372c       0x32 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x0800372c                L2HAL_LY68L6400_QSPI_InitQspi
+                0x080039a4       0x32 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x080039a4                L2HAL_LY68L6400_QSPI_InitQspi
  .text.L2HAL_LY68L6400_QSPI_ExitQspiMode
-                0x0800375e       0x34 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x0800375e                L2HAL_LY68L6400_QSPI_ExitQspiMode
+                0x080039d6       0x34 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x080039d6                L2HAL_LY68L6400_QSPI_ExitQspiMode
  .text.L2HAL_LY68L6400_QSPI_Init
-                0x08003792       0xf6 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
-                0x08003792                L2HAL_LY68L6400_QSPI_Init
+                0x08003a0a       0xf6 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x08003a0a                L2HAL_LY68L6400_QSPI_Init
  .text.L2HAL_CRC_Init
-                0x08003888       0x40 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
-                0x08003888                L2HAL_CRC_Init
+                0x08003b00       0x40 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
+                0x08003b00                L2HAL_CRC_Init
  .text.L2HAL_GC9A01_LFB_SelectChip
-                0x080038c8       0x14 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x080038c8                L2HAL_GC9A01_LFB_SelectChip
+                0x08003b40       0x14 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003b40                L2HAL_GC9A01_LFB_SelectChip
  .text.L2HAL_GC9A01_LFB_ResetDisplay
-                0x080038dc       0x34 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x080038dc                L2HAL_GC9A01_LFB_ResetDisplay
+                0x08003b54       0x34 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003b54                L2HAL_GC9A01_LFB_ResetDisplay
  .text.L2HAL_GC9A01_LFB_GetWidth
-                0x08003910        0x4 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003910                L2HAL_GC9A01_LFB_GetWidth
+                0x08003b88        0x4 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003b88                L2HAL_GC9A01_LFB_GetWidth
  .text.L2HAL_GC9A01_LFB_GetHeight
-                0x08003914        0x4 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003914                L2HAL_GC9A01_LFB_GetHeight
+                0x08003b8c        0x4 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003b8c                L2HAL_GC9A01_LFB_GetHeight
  .text.L2HAL_GC9A01_LFB_DrawPixel
-                0x08003918       0x38 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003918                L2HAL_GC9A01_LFB_DrawPixel
+                0x08003b90       0x38 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003b90                L2HAL_GC9A01_LFB_DrawPixel
  .text.L2HAL_GC9A01_LFB_GetPixel
-                0x08003950       0x28 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003950                L2HAL_GC9A01_LFB_GetPixel
+                0x08003bc8       0x28 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003bc8                L2HAL_GC9A01_LFB_GetPixel
  .text.L2HAL_GC9A01_LFB_SetActiveColor
-                0x08003978       0x14 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003978                L2HAL_GC9A01_LFB_SetActiveColor
+                0x08003bf0       0x14 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003bf0                L2HAL_GC9A01_LFB_SetActiveColor
  .text.L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted
-                0x0800398c        0xc ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x0800398c                L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted
+                0x08003c04        0xc ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003c04                L2HAL_GC9A01_LFB_MarkDataTransferAsCompleted
  .text.L2HAL_GC9A01_LFB_WaitForDataTransferCompletion
-                0x08003998       0x1c ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003998                L2HAL_GC9A01_LFB_WaitForDataTransferCompletion
+                0x08003c10       0x1c ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003c10                L2HAL_GC9A01_LFB_WaitForDataTransferCompletion
  .text.L2HAL_GC9A01_LFB_WriteCommand
-                0x080039b4       0x4c ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x080039b4                L2HAL_GC9A01_LFB_WriteCommand
+                0x08003c2c       0x4c ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003c2c                L2HAL_GC9A01_LFB_WriteCommand
  .text.L2HAL_GC9A01_LFB_WriteData
-                0x08003a00       0x4a ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003a00                L2HAL_GC9A01_LFB_WriteData
+                0x08003c78       0x4a ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003c78                L2HAL_GC9A01_LFB_WriteData
  .text.L2HAL_GC9A01_LFB_WriteByteData
-                0x08003a4a       0x16 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003a4a                L2HAL_GC9A01_LFB_WriteByteData
+                0x08003cc2       0x16 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003cc2                L2HAL_GC9A01_LFB_WriteByteData
  .text.L2HAL_GC9A01_LFB_SetColumnsRange
-                0x08003a60       0x2a ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003a60                L2HAL_GC9A01_LFB_SetColumnsRange
+                0x08003cd8       0x2a ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003cd8                L2HAL_GC9A01_LFB_SetColumnsRange
  .text.L2HAL_GC9A01_LFB_SetRowsRange
-                0x08003a8a       0x2a ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003a8a                L2HAL_GC9A01_LFB_SetRowsRange
+                0x08003d02       0x2a ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003d02                L2HAL_GC9A01_LFB_SetRowsRange
  .text.L2HAL_GC9A01_LFB_PushFramebuffer
-                0x08003ab4       0x62 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003ab4                L2HAL_GC9A01_LFB_PushFramebuffer
+                0x08003d2c       0x62 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003d2c                L2HAL_GC9A01_LFB_PushFramebuffer
  .text.L2HAL_GC9A01_LFB_MarkFramebufferAsDirty
-                0x08003b16       0x10 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003b16                L2HAL_GC9A01_LFB_MarkFramebufferAsDirty
- *fill*         0x08003b26        0x2 
+                0x08003d8e       0x10 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003d8e                L2HAL_GC9A01_LFB_MarkFramebufferAsDirty
+ *fill*         0x08003d9e        0x2 
  .text.L2HAL_GC9A01_LFB_ClearFramebuffer
-                0x08003b28       0x1c ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003b28                L2HAL_GC9A01_LFB_ClearFramebuffer
+                0x08003da0       0x1c ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003da0                L2HAL_GC9A01_LFB_ClearFramebuffer
  .text.L2HAL_GC9A01_LFB_ClearDisplay
-                0x08003b44       0x12 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003b44                L2HAL_GC9A01_LFB_ClearDisplay
+                0x08003dbc       0x12 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003dbc                L2HAL_GC9A01_LFB_ClearDisplay
  .text.L2HAL_GC9A01_LFB_Init
-                0x08003b56      0x638 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
-                0x08003b56                L2HAL_GC9A01_LFB_Init
+                0x08003dce      0x638 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x08003dce                L2HAL_GC9A01_LFB_Init
  .text.FMGL_API_AttachToDriver
-                0x0800418e       0x46 ./src/fmgl/src/fmgl.o
-                0x0800418e                FMGL_API_AttachToDriver
+                0x08004406       0x46 ./src/fmgl/src/fmgl.o
+                0x08004406                FMGL_API_AttachToDriver
  .text.FMGL_API_SetActiveColor
-                0x080041d4       0x14 ./src/fmgl/src/fmgl.o
-                0x080041d4                FMGL_API_SetActiveColor
+                0x0800444c       0x14 ./src/fmgl/src/fmgl.o
+                0x0800444c                FMGL_API_SetActiveColor
  .text.FMGL_API_DrawPixel
-                0x080041e8        0x6 ./src/fmgl/src/fmgl.o
-                0x080041e8                FMGL_API_DrawPixel
+                0x08004460        0x6 ./src/fmgl/src/fmgl.o
+                0x08004460                FMGL_API_DrawPixel
  .text.FMGL_API_PushFramebuffer
-                0x080041ee        0x6 ./src/fmgl/src/fmgl.o
-                0x080041ee                FMGL_API_PushFramebuffer
+                0x08004466        0x6 ./src/fmgl/src/fmgl.o
+                0x08004466                FMGL_API_PushFramebuffer
  .text.FMGL_API_RenderXBM
-                0x080041f4       0xe2 ./src/fmgl/src/fmgl.o
-                0x080041f4                FMGL_API_RenderXBM
+                0x0800446c       0xe2 ./src/fmgl/src/fmgl.o
+                0x0800446c                FMGL_API_RenderXBM
  .text.FMGL_API_RenderOneLineDumb
-                0x080042d6       0x76 ./src/fmgl/src/fmgl.o
-                0x080042d6                FMGL_API_RenderOneLineDumb
+                0x0800454e       0x76 ./src/fmgl/src/fmgl.o
+                0x0800454e                FMGL_API_RenderOneLineDumb
  .text.FMGL_API_RenderTextWithLineBreaks
-                0x0800434c       0xb2 ./src/fmgl/src/fmgl.o
-                0x0800434c                FMGL_API_RenderTextWithLineBreaks
+                0x080045c4       0xb2 ./src/fmgl/src/fmgl.o
+                0x080045c4                FMGL_API_RenderTextWithLineBreaks
  .text.FMGL_Priv_IsActiveXBMPixel
-                0x080043fe       0x38 ./src/fmgl/src/fmgl_private.o
-                0x080043fe                FMGL_Priv_IsActiveXBMPixel
+                0x08004676       0x38 ./src/fmgl/src/fmgl_private.o
+                0x08004676                FMGL_Priv_IsActiveXBMPixel
  .text.FMGL_Priv_RenderCharacter
-                0x08004436       0x68 ./src/fmgl/src/fmgl_private.o
-                0x08004436                FMGL_Priv_RenderCharacter
+                0x080046ae       0x68 ./src/fmgl/src/fmgl_private.o
+                0x080046ae                FMGL_Priv_RenderCharacter
  .text.FMGL_Priv_RenderSubstring
-                0x0800449e       0x7e ./src/fmgl/src/fmgl_private.o
-                0x0800449e                FMGL_Priv_RenderSubstring
+                0x08004716       0x7e ./src/fmgl/src/fmgl_private.o
+                0x08004716                FMGL_Priv_RenderSubstring
  .text.FMGL_FontTerminusRegular12GetCharacterWidth
-                0x0800451c        0x4 ./src/fmgl/fonts/src/terminusRegular12.o
-                0x0800451c                FMGL_FontTerminusRegular12GetCharacterWidth
+                0x08004794        0x4 ./src/fmgl/fonts/src/terminusRegular12.o
+                0x08004794                FMGL_FontTerminusRegular12GetCharacterWidth
  .text.FMGL_FontTerminusRegular12GetCharacterRaster
-                0x08004520       0x1c ./src/fmgl/fonts/src/terminusRegular12.o
-                0x08004520                FMGL_FontTerminusRegular12GetCharacterRaster
+                0x08004798       0x1c ./src/fmgl/fonts/src/terminusRegular12.o
+                0x08004798                FMGL_FontTerminusRegular12GetCharacterRaster
  .text.FMGL_FontTerminusRegular12Init
-                0x0800453c       0x18 ./src/fmgl/fonts/src/terminusRegular12.o
-                0x0800453c                FMGL_FontTerminusRegular12Init
+                0x080047b4       0x18 ./src/fmgl/fonts/src/terminusRegular12.o
+                0x080047b4                FMGL_FontTerminusRegular12Init
  .text.HAL_IntiHardware
-                0x08004554      0x150 ./src/hal.o
-                0x08004554                HAL_IntiHardware
+                0x080047cc      0x150 ./src/hal.o
+                0x080047cc                HAL_IntiHardware
  .text.HAL_SetBacklightLevel
-                0x080046a4       0x50 ./src/hal.o
-                0x080046a4                HAL_SetBacklightLevel
+                0x0800491c       0x50 ./src/hal.o
+                0x0800491c                HAL_SetBacklightLevel
  .text.SysTick_Handler
-                0x080046f4        0xe ./src/interrupts.o
-                0x080046f4                SysTick_Handler
- *fill*         0x08004702        0x2 
+                0x0800496c        0xe ./src/interrupts.o
+                0x0800496c                SysTick_Handler
+ *fill*         0x0800497a        0x2 
  .text.QUADSPI_IRQHandler
-                0x08004704        0xc ./src/interrupts.o
-                0x08004704                QUADSPI_IRQHandler
+                0x0800497c        0xc ./src/interrupts.o
+                0x0800497c                QUADSPI_IRQHandler
  .text.DMA2_Stream7_IRQHandler
-                0x08004710        0xc ./src/interrupts.o
-                0x08004710                DMA2_Stream7_IRQHandler
+                0x08004988        0xc ./src/interrupts.o
+                0x08004988                DMA2_Stream7_IRQHandler
  .text.DMA2_Stream3_IRQHandler
-                0x0800471c       0x18 ./src/interrupts.o
-                0x0800471c                DMA2_Stream3_IRQHandler
+                0x08004994       0x18 ./src/interrupts.o
+                0x08004994                DMA2_Stream3_IRQHandler
  .text.DMA2_Stream2_IRQHandler
-                0x08004734        0xc ./src/interrupts.o
-                0x08004734                DMA2_Stream2_IRQHandler
+                0x080049ac        0xc ./src/interrupts.o
+                0x080049ac                DMA2_Stream2_IRQHandler
+ .text.SDMMC1_IRQHandler
+                0x080049b8        0xc ./src/interrupts.o
+                0x080049b8                SDMMC1_IRQHandler
  .text.MainTickHandler
-                0x08004740       0x84 ./src/main.o
-                0x08004740                MainTickHandler
+                0x080049c4       0x84 ./src/main.o
+                0x080049c4                MainTickHandler
  .text.startup.main
-                0x080047c4      0x190 ./src/main.o
-                0x080047c4                main
+                0x08004a48      0x1f0 ./src/main.o
+                0x08004a48                main
+ .text.HAL_SD_RxCpltCallback
+                0x08004c38        0xc ./src/main.o
+                0x08004c38                HAL_SD_RxCpltCallback
+ .text.HAL_SD_TxCpltCallback
+                0x08004c44        0xc ./src/main.o
+                0x08004c44                HAL_SD_TxCpltCallback
  .text.HAL_MspInit
-                0x08004954        0x2 ./src/stm32f7xx_hal_msp.o
-                0x08004954                HAL_MspInit
- *fill*         0x08004956        0x2 
- .text          0x08004958       0x30 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_aeabi_uldivmod.o)
-                0x08004958                __aeabi_uldivmod
+                0x08004c50        0x2 ./src/stm32f7xx_hal_msp.o
+                0x08004c50                HAL_MspInit
+ *fill*         0x08004c52        0x2 
+ .text          0x08004c54       0x30 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_aeabi_uldivmod.o)
+                0x08004c54                __aeabi_uldivmod
  .text.__udivmoddi4
-                0x08004988      0x2bc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_udivmoddi4.o)
-                0x08004988                __udivmoddi4
- .text          0x08004c44        0x4 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_dvmd_tls.o)
-                0x08004c44                __aeabi_ldiv0
-                0x08004c44                __aeabi_idiv0
+                0x08004c84      0x2bc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_udivmoddi4.o)
+                0x08004c84                __udivmoddi4
+ .text          0x08004f40        0x4 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_dvmd_tls.o)
+                0x08004f40                __aeabi_ldiv0
+                0x08004f40                __aeabi_idiv0
  .text.sbrk_aligned
-                0x08004c48       0x44 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x08004f44       0x44 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
  .text._malloc_r
-                0x08004c8c      0x100 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
-                0x08004c8c                _malloc_r
+                0x08004f88      0x100 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x08004f88                _malloc_r
  .text.__malloc_lock
-                0x08004d8c        0xc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mlock.o)
-                0x08004d8c                __malloc_lock
+                0x08005088        0xc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mlock.o)
+                0x08005088                __malloc_lock
  .text.__malloc_unlock
-                0x08004d98        0xc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mlock.o)
-                0x08004d98                __malloc_unlock
+                0x08005094        0xc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mlock.o)
+                0x08005094                __malloc_unlock
  .text._realloc_r
-                0x08004da4       0x5c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-reallocr.o)
-                0x08004da4                _realloc_r
- .text.sprintf  0x08004e00       0x40 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
-                0x08004e00                sprintf
-                0x08004e00                siprintf
- .text.memset   0x08004e40       0x10 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
-                0x08004e40                memset
- .text._sbrk_r  0x08004e50       0x20 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sbrkr.o)
-                0x08004e50                _sbrk_r
- .text.__errno  0x08004e70        0xc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-errno.o)
-                0x08004e70                __errno
+                0x080050a0       0x5c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-reallocr.o)
+                0x080050a0                _realloc_r
+ .text.sprintf  0x080050fc       0x40 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
+                0x080050fc                sprintf
+                0x080050fc                siprintf
+ .text.memcmp   0x0800513c       0x20 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
+                0x0800513c                memcmp
+ .text.memset   0x0800515c       0x10 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
+                0x0800515c                memset
+ .text._sbrk_r  0x0800516c       0x20 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sbrkr.o)
+                0x0800516c                _sbrk_r
+ .text.__errno  0x0800518c        0xc /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-errno.o)
+                0x0800518c                __errno
  .text.__retarget_lock_acquire_recursive
-                0x08004e7c        0x2 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
-                0x08004e7c                __retarget_lock_acquire_recursive
+                0x08005198        0x2 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
+                0x08005198                __retarget_lock_acquire_recursive
  .text.__retarget_lock_release_recursive
-                0x08004e7e        0x2 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
-                0x08004e7e                __retarget_lock_release_recursive
- .text.memcpy   0x08004e80       0x1c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcpy-stub.o)
-                0x08004e80                memcpy
- .text          0x08004e9c       0x10 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
-                0x08004e9c                strlen
- .text._free_r  0x08004eac       0x94 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-freer.o)
-                0x08004eac                _free_r
+                0x0800519a        0x2 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
+                0x0800519a                __retarget_lock_release_recursive
+ .text.memcpy   0x0800519c       0x1c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+                0x0800519c                memcpy
+ .text          0x080051b8       0x10 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
+                0x080051b8                strlen
+ .text._free_r  0x080051c8       0x94 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-freer.o)
+                0x080051c8                _free_r
  .text._malloc_usable_size_r
-                0x08004f40       0x10 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-msizer.o)
-                0x08004f40                _malloc_usable_size_r
+                0x0800525c       0x10 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-msizer.o)
+                0x0800525c                _malloc_usable_size_r
  .text.__ssputs_r
-                0x08004f50       0xb6 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
-                0x08004f50                __ssputs_r
- *fill*         0x08005006        0x2 
+                0x0800526c       0xb6 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x0800526c                __ssputs_r
+ *fill*         0x08005322        0x2 
  .text._svfprintf_r
-                0x08005008      0x1f8 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
-                0x08005008                _svfprintf_r
-                0x08005008                _svfiprintf_r
+                0x08005324      0x1f8 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x08005324                _svfprintf_r
+                0x08005324                _svfiprintf_r
  .text._printf_common
-                0x08005200       0xda /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
-                0x08005200                _printf_common
- *fill*         0x080052da        0x2 
+                0x0800551c       0xda /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x0800551c                _printf_common
+ *fill*         0x080055f6        0x2 
  .text._printf_i
-                0x080052dc      0x23c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
-                0x080052dc                _printf_i
- .text.memmove  0x08005518       0x34 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memmove.o)
-                0x08005518                memmove
- *fill*         0x0800554c        0x4 
- .text          0x08005550       0xa0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
-                0x08005550                memchr
+                0x080055f8      0x23c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x080055f8                _printf_i
+ .text.memmove  0x08005834       0x34 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memmove.o)
+                0x08005834                memmove
+ *fill*         0x08005868        0x8 
+ .text          0x08005870       0xa0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
+                0x08005870                memchr
  *(.rodata .rodata.* .constdata .constdata.*)
  .rodata.flagBitshiftOffset.0
-                0x080055f0        0x8 ./system/src/stm32f7-hal/stm32f7xx_hal_dma.o
+                0x08005910        0x8 ./system/src/stm32f7-hal/stm32f7xx_hal_dma.o
  .rodata.AHBPrescTable
-                0x080055f8       0x10 ./system/src/cmsis/system_stm32f7xx.o
-                0x080055f8                AHBPrescTable
+                0x08005918       0x10 ./system/src/cmsis/system_stm32f7xx.o
+                0x08005918                AHBPrescTable
  .rodata.FMGL_FontTerminusRegular12_WrongCharacterCode
-                0x08005608        0xc ./src/fmgl/fonts/src/terminusRegular12.o
+                0x08005928        0xc ./src/fmgl/fonts/src/terminusRegular12.o
  .rodata.FMGL_FontTerminusRegular12Characters
-                0x08005614      0xa80 ./src/fmgl/fonts/src/terminusRegular12.o
+                0x08005934      0xa80 ./src/fmgl/fonts/src/terminusRegular12.o
  .rodata.MainTickHandler.str1.1
-                0x08006094       0x5e ./src/main.o
+                0x080063b4       0x77 ./src/main.o
                                  0x2b (size before relaxing)
+ .rodata.main.str1.1
+                0x0800642b       0x19 ./src/main.o
  .rodata._svfprintf_r.str1.1
-                0x080060f2       0x11 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x0800642b       0x11 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
  .rodata._printf_i.str1.1
-                0x080060f2       0x22 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x0800642b       0x22 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
  *(vtable)
  *(.eh_frame*)
- *fill*         0x080060f2        0x2 
- .eh_frame      0x080060f4       0x28 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
- .eh_frame      0x0800611c       0x50 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
+ *fill*         0x0800642b        0x1 
+ .eh_frame      0x0800642c       0x28 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
+ .eh_frame      0x08006454       0x50 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
  *(.glue_7)
- .glue_7        0x0800616c        0x0 linker stubs
+ .glue_7        0x080064a4        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0800616c        0x0 linker stubs
+ .glue_7t       0x080064a4        0x0 linker stubs
 
-.vfp11_veneer   0x0800616c        0x0
- .vfp11_veneer  0x0800616c        0x0 linker stubs
+.vfp11_veneer   0x080064a4        0x0
+ .vfp11_veneer  0x080064a4        0x0 linker stubs
 
-.v4_bx          0x0800616c        0x0
- .v4_bx         0x0800616c        0x0 linker stubs
+.v4_bx          0x080064a4        0x0
+ .v4_bx         0x080064a4        0x0 linker stubs
 
-.iplt           0x0800616c        0x0
- .iplt          0x0800616c        0x0 ./system/src/stm32f7-hal/stm32f7xx_hal.o
+.iplt           0x080064a4        0x0
+ .iplt          0x080064a4        0x0 ./system/src/stm32f7-hal/stm32f7xx_hal.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0800616c                        . = ALIGN (0x4)
-                0x0800616c                        __exidx_start = .
+                0x080064a4                        . = ALIGN (0x4)
+                0x080064a4                        __exidx_start = .
 
-.ARM.exidx      0x0800616c        0x8
+.ARM.exidx      0x080064a4        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
  .ARM.exidx.text.__udivmoddi4
-                0x0800616c        0x8 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_udivmoddi4.o)
- .ARM.exidx     0x08006174        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
+                0x080064a4        0x8 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/thumb/v7e-m+dp/hard/libgcc.a(_udivmoddi4.o)
+ .ARM.exidx     0x080064ac        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
                                   0x8 (size before relaxing)
- .ARM.exidx     0x08006174        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
+ .ARM.exidx     0x080064ac        0x0 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
                                   0x8 (size before relaxing)
-                0x08006174                        __exidx_end = .
+                0x080064ac                        __exidx_end = .
 
-.rel.dyn        0x08006174        0x0
- .rel.iplt      0x08006174        0x0 ./system/src/stm32f7-hal/stm32f7xx_hal.o
-                0x08006174                        . = ALIGN (0x4)
-                0x08006174                        _etext = .
-                0x08006174                        __etext = .
+.rel.dyn        0x080064ac        0x0
+ .rel.iplt      0x080064ac        0x0 ./system/src/stm32f7-hal/stm32f7xx_hal.o
+                0x080064ac                        . = ALIGN (0x4)
+                0x080064ac                        _etext = .
+                0x080064ac                        __etext = .
 
-.data_CCMRAM    0x10000000        0x0 load address 0x08006174
+.data_CCMRAM    0x10000000        0x0 load address 0x080064ac
  FILL mask 0xff
  *(.data.CCMRAM .data.CCMRAM.*)
                 0x10000000                        . = ALIGN (0x4)
-                0x08006174                        _sidata = LOADADDR (.data)
+                0x080064ac                        _sidata = LOADADDR (.data)
 
-.data           0x20000000       0x64 load address 0x08006174
+.data           0x20000000       0x64 load address 0x080064ac
  FILL mask 0xff
                 0x20000000                        _sdata = .
                 0x20000000                        __data_start__ = .
@@ -2669,13 +2694,13 @@ END GROUP
                 0x20000064                        _edata = .
                 0x20000064                        __data_end__ = .
 
-.igot.plt       0x20000064        0x0 load address 0x080061d8
+.igot.plt       0x20000064        0x0 load address 0x08006510
  .igot.plt      0x20000064        0x0 ./system/src/stm32f7-hal/stm32f7xx_hal.o
 
 .bss_CCMRAM     0x10000000        0x0
  *(.bss.CCMRAM .bss.CCMRAM.*)
 
-.bss            0x20000064    0x2a6c8
+.bss            0x20000064    0x2a6cc
                 0x20000064                        __bss_start__ = .
                 0x20000064                        _sbss = .
  *(.bss_begin .bss_begin.*)
@@ -2688,85 +2713,92 @@ END GROUP
  *fill*         0x2000006d        0x3 
  .bss.errno     0x20000070        0x4 ./system/src/newlib/syscalls.o
                 0x20000070                errno
+ .bss.SdWaitForWriteCompletion
+                0x20000074        0x1 ./src/main.o
+                0x20000074                SdWaitForWriteCompletion
+ .bss.SdWaitForReadCompletion
+                0x20000075        0x1 ./src/main.o
+                0x20000075                SdWaitForReadCompletion
+ *fill*         0x20000076        0x2 
  .bss.sdcardBytesRead
-                0x20000074        0x4 ./src/main.o
-                0x20000074                sdcardBytesRead
- .bss.sdcardBlockAddress
                 0x20000078        0x4 ./src/main.o
-                0x20000078                sdcardBlockAddress
- .bss.mainTickHandlerCounter
+                0x20000078                sdcardBytesRead
+ .bss.sdcardBlockAddress
                 0x2000007c        0x4 ./src/main.o
-                0x2000007c                mainTickHandlerCounter
- .bss.font      0x20000080       0x18 ./src/main.o
-                0x20000080                font
+                0x2000007c                sdcardBlockAddress
+ .bss.mainTickHandlerCounter
+                0x20000080        0x4 ./src/main.o
+                0x20000080                mainTickHandlerCounter
+ .bss.font      0x20000084       0x18 ./src/main.o
+                0x20000084                font
  .bss.SdcardHandle
-                0x20000098       0x84 ./src/main.o
-                0x20000098                SdcardHandle
+                0x2000009c       0x84 ./src/main.o
+                0x2000009c                SdcardHandle
  .bss.FmglContext
-                0x2000011c       0x28 ./src/main.o
-                0x2000011c                FmglContext
+                0x20000120       0x28 ./src/main.o
+                0x20000120                FmglContext
  .bss.DisplayContext
-                0x20000144    0x2a340 ./src/main.o
-                0x20000144                DisplayContext
+                0x20000148    0x2a340 ./src/main.o
+                0x20000148                DisplayContext
  .bss.Spi1RxDmaHandle
-                0x2002a484       0x60 ./src/main.o
-                0x2002a484                Spi1RxDmaHandle
+                0x2002a488       0x60 ./src/main.o
+                0x2002a488                Spi1RxDmaHandle
  .bss.Spi1TxDmaHandle
-                0x2002a4e4       0x60 ./src/main.o
-                0x2002a4e4                Spi1TxDmaHandle
+                0x2002a4e8       0x60 ./src/main.o
+                0x2002a4e8                Spi1TxDmaHandle
  .bss.Spi1Handle
-                0x2002a544       0x64 ./src/main.o
-                0x2002a544                Spi1Handle
+                0x2002a548       0x64 ./src/main.o
+                0x2002a548                Spi1Handle
  .bss.CRC_Context
-                0x2002a5a8       0x24 ./src/main.o
-                0x2002a5a8                CRC_Context
+                0x2002a5ac       0x24 ./src/main.o
+                0x2002a5ac                CRC_Context
  .bss.BacklightTimerHandle
-                0x2002a5cc       0x40 ./src/main.o
-                0x2002a5cc                BacklightTimerHandle
+                0x2002a5d0       0x40 ./src/main.o
+                0x2002a5d0                BacklightTimerHandle
  .bss.RamContext
-                0x2002a60c       0x24 ./src/main.o
-                0x2002a60c                RamContext
+                0x2002a610       0x24 ./src/main.o
+                0x2002a610                RamContext
  .bss.QspiDmaHandle
-                0x2002a630       0x60 ./src/main.o
-                0x2002a630                QspiDmaHandle
+                0x2002a634       0x60 ./src/main.o
+                0x2002a634                QspiDmaHandle
  .bss.QspiHandle
-                0x2002a690       0x4c ./src/main.o
-                0x2002a690                QspiHandle
+                0x2002a694       0x4c ./src/main.o
+                0x2002a694                QspiHandle
  .bss.L2HAL_SysTick_Context
-                0x2002a6dc       0x44 ./src/main.o
-                0x2002a6dc                L2HAL_SysTick_Context
+                0x2002a6e0       0x44 ./src/main.o
+                0x2002a6e0                L2HAL_SysTick_Context
  .bss.__malloc_sbrk_start
-                0x2002a720        0x4 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
-                0x2002a720                __malloc_sbrk_start
- .bss.__malloc_free_list
                 0x2002a724        0x4 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
-                0x2002a724                __malloc_free_list
+                0x2002a724                __malloc_sbrk_start
+ .bss.__malloc_free_list
+                0x2002a728        0x4 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mallocr.o)
+                0x2002a728                __malloc_free_list
  .bss.__lock___malloc_recursive_mutex
-                0x2002a728        0x1 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
-                0x2002a728                __lock___malloc_recursive_mutex
+                0x2002a72c        0x1 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
+                0x2002a72c                __lock___malloc_recursive_mutex
  *(COMMON)
  *(.bss_end .bss_end.*)
-                0x2002a72c                        . = ALIGN (0x4)
- *fill*         0x2002a729        0x3 
-                0x2002a72c                        __bss_end__ = .
-                0x2002a72c                        _ebss = .
+                0x2002a730                        . = ALIGN (0x4)
+ *fill*         0x2002a72d        0x3 
+                0x2002a730                        __bss_end__ = .
+                0x2002a730                        _ebss = .
 
 .noinit_CCMRAM
  *(.noinit.CCMRAM .noinit.CCMRAM.*)
 
-.noinit         0x2002a72c        0x0
-                0x2002a72c                        _noinit = .
+.noinit         0x2002a730        0x0
+                0x2002a730                        _noinit = .
  *(.noinit .noinit.*)
-                0x2002a72c                        . = ALIGN (0x4)
-                0x2002a72c                        _end_noinit = .
+                0x2002a730                        . = ALIGN (0x4)
+                0x2002a730                        _end_noinit = .
                 [!provide]                        PROVIDE (end = _end_noinit)
                 [!provide]                        PROVIDE (_end = _end_noinit)
                 [!provide]                        PROVIDE (__end = _end_noinit)
                 [!provide]                        PROVIDE (__end__ = _end_noinit)
 
-._check_stack   0x2002a72c      0x100
-                0x2002a82c                        . = (. + _Minimum_Stack_Size)
- *fill*         0x2002a72c      0x100 
+._check_stack   0x2002a730      0x100
+                0x2002a830                        . = (. + _Minimum_Stack_Size)
+ *fill*         0x2002a730      0x100 
 
 .b1text
  *(.b1text)
@@ -2856,6 +2888,7 @@ END GROUP
  .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-mlock.o)
  .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-reallocr.o)
  .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
+ .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
  .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
  .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-impure.o)
  .comment       0x00000039       0x3a /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sbrkr.o)
@@ -2959,31 +2992,33 @@ END GROUP
  .ARM.attributes
                 0x00000842       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sprintf.o)
  .ARM.attributes
-                0x00000874       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
+                0x00000874       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcmp.o)
  .ARM.attributes
-                0x000008a6       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-impure.o)
+                0x000008a6       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memset.o)
  .ARM.attributes
-                0x000008d8       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sbrkr.o)
+                0x000008d8       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-impure.o)
  .ARM.attributes
-                0x0000090a       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-errno.o)
+                0x0000090a       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-sbrkr.o)
  .ARM.attributes
-                0x0000093c       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
+                0x0000093c       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-errno.o)
  .ARM.attributes
-                0x0000096e       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcpy-stub.o)
+                0x0000096e       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-lock.o)
  .ARM.attributes
-                0x000009a0       0x17 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
+                0x000009a0       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memcpy-stub.o)
  .ARM.attributes
-                0x000009b7       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-freer.o)
+                0x000009d2       0x17 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-strlen.o)
  .ARM.attributes
-                0x000009e9       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-msizer.o)
+                0x000009e9       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-freer.o)
  .ARM.attributes
-                0x00000a1b       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
+                0x00000a1b       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-msizer.o)
  .ARM.attributes
-                0x00000a4d       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
+                0x00000a4d       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-svfprintf.o)
  .ARM.attributes
-                0x00000a7f       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memmove.o)
+                0x00000a7f       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-nano-vfprintf_i.o)
  .ARM.attributes
-                0x00000ab1       0x1c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
+                0x00000ab1       0x32 /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memmove.o)
+ .ARM.attributes
+                0x00000ae3       0x1c /home/earlybeasts/.local/xPacks/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+dp/hard/libg_nano.a(libc_a-memchr.o)
 
 .debug
  *(.debug)
@@ -2997,7 +3032,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000     0x13c8
+.debug_aranges  0x00000000     0x13e0
  *(.debug_aranges)
  .debug_aranges
                 0x00000000      0x110 ./system/src/stm32f7-hal/stm32f7xx_hal.o
@@ -3068,16 +3103,16 @@ END GROUP
  .debug_aranges
                 0x00001300       0x28 ./src/hal.o
  .debug_aranges
-                0x00001328       0x40 ./src/interrupts.o
+                0x00001328       0x48 ./src/interrupts.o
  .debug_aranges
-                0x00001368       0x28 ./src/main.o
+                0x00001370       0x38 ./src/main.o
  .debug_aranges
-                0x00001390       0x38 ./src/stm32f7xx_hal_msp.o
+                0x000013a8       0x38 ./src/stm32f7xx_hal_msp.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000    0x1fb47
+.debug_info     0x00000000    0x20083
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xb8b ./system/src/stm32f7-hal/stm32f7xx_hal.o
  .debug_info    0x00000b8b     0x11ee ./system/src/stm32f7-hal/stm32f7xx_hal_cortex.o
@@ -3102,22 +3137,22 @@ END GROUP
  .debug_info    0x000117bd      0x6e8 ./system/src/cmsis/system_stm32f7xx.o
  .debug_info    0x00011ea5      0x10a ./system/src/cmsis/vectors_stm32f767xx.o
  .debug_info    0x00011faf      0xb1a ./src/l2hal/src/l2hal.o
- .debug_info    0x00012ac9     0x2269 ./src/l2hal/src/l2hal_custom.o
- .debug_info    0x00014d32      0x48e ./src/l2hal/src/l2hal_errors.o
- .debug_info    0x000151c0      0x295 ./src/l2hal/src/l2hal_systick.o
- .debug_info    0x00015455      0x4c8 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
- .debug_info    0x0001591d     0x15ab ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
- .debug_info    0x00016ec8      0x641 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
- .debug_info    0x00017509     0x27d1 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
- .debug_info    0x00019cda     0x1576 ./src/fmgl/src/fmgl.o
- .debug_info    0x0001b250      0x7aa ./src/fmgl/src/fmgl_private.o
- .debug_info    0x0001b9fa      0x2d6 ./src/fmgl/fonts/src/terminusRegular12.o
- .debug_info    0x0001bcd0      0xc08 ./src/hal.o
- .debug_info    0x0001c8d8      0x9d7 ./src/interrupts.o
- .debug_info    0x0001d2af     0x27fa ./src/main.o
- .debug_info    0x0001faa9       0x9e ./src/stm32f7xx_hal_msp.o
+ .debug_info    0x00012ac9     0x2297 ./src/l2hal/src/l2hal_custom.o
+ .debug_info    0x00014d60      0x48e ./src/l2hal/src/l2hal_errors.o
+ .debug_info    0x000151ee      0x295 ./src/l2hal/src/l2hal_systick.o
+ .debug_info    0x00015483      0x4c8 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
+ .debug_info    0x0001594b     0x15ab ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+ .debug_info    0x00016ef6      0x641 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
+ .debug_info    0x00017537     0x27d1 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+ .debug_info    0x00019d08     0x1576 ./src/fmgl/src/fmgl.o
+ .debug_info    0x0001b27e      0x7aa ./src/fmgl/src/fmgl_private.o
+ .debug_info    0x0001ba28      0x2d6 ./src/fmgl/fonts/src/terminusRegular12.o
+ .debug_info    0x0001bcfe      0xc08 ./src/hal.o
+ .debug_info    0x0001c906      0xd5c ./src/interrupts.o
+ .debug_info    0x0001d662     0x2983 ./src/main.o
+ .debug_info    0x0001ffe5       0x9e ./src/stm32f7xx_hal_msp.o
 
-.debug_abbrev   0x00000000     0x52d4
+.debug_abbrev   0x00000000     0x5309
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x282 ./system/src/stm32f7-hal/stm32f7xx_hal.o
  .debug_abbrev  0x00000282      0x38f ./system/src/stm32f7-hal/stm32f7xx_hal_cortex.o
@@ -3154,10 +3189,10 @@ END GROUP
  .debug_abbrev  0x000049c7      0x16f ./src/fmgl/fonts/src/terminusRegular12.o
  .debug_abbrev  0x00004b36      0x203 ./src/hal.o
  .debug_abbrev  0x00004d39      0x1d2 ./src/interrupts.o
- .debug_abbrev  0x00004f0b      0x36a ./src/main.o
- .debug_abbrev  0x00005275       0x5f ./src/stm32f7xx_hal_msp.o
+ .debug_abbrev  0x00004f0b      0x39f ./src/main.o
+ .debug_abbrev  0x000052aa       0x5f ./src/stm32f7xx_hal_msp.o
 
-.debug_line     0x00000000    0x13a0a
+.debug_line     0x00000000    0x13b86
  *(.debug_line)
  .debug_line    0x00000000      0x595 ./system/src/stm32f7-hal/stm32f7xx_hal.o
  .debug_line    0x00000595      0x7a1 ./system/src/stm32f7-hal/stm32f7xx_hal_cortex.o
@@ -3182,22 +3217,22 @@ END GROUP
  .debug_line    0x0000f340      0x1dd ./system/src/cmsis/system_stm32f7xx.o
  .debug_line    0x0000f51d       0x95 ./system/src/cmsis/vectors_stm32f767xx.o
  .debug_line    0x0000f5b2      0x3ed ./src/l2hal/src/l2hal.o
- .debug_line    0x0000f99f      0x9ce ./src/l2hal/src/l2hal_custom.o
- .debug_line    0x0001036d      0x1f5 ./src/l2hal/src/l2hal_errors.o
- .debug_line    0x00010562      0x226 ./src/l2hal/src/l2hal_systick.o
- .debug_line    0x00010788      0x236 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
- .debug_line    0x000109be      0x7e7 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
- .debug_line    0x000111a5      0x363 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
- .debug_line    0x00011508      0x8a8 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
- .debug_line    0x00011db0      0x9f8 ./src/fmgl/src/fmgl.o
- .debug_line    0x000127a8      0x33b ./src/fmgl/src/fmgl_private.o
- .debug_line    0x00012ae3      0x1fa ./src/fmgl/fonts/src/terminusRegular12.o
- .debug_line    0x00012cdd      0x386 ./src/hal.o
- .debug_line    0x00013063      0x29b ./src/interrupts.o
- .debug_line    0x000132fe      0x689 ./src/main.o
- .debug_line    0x00013987       0x83 ./src/stm32f7xx_hal_msp.o
+ .debug_line    0x0000f99f      0x9d8 ./src/l2hal/src/l2hal_custom.o
+ .debug_line    0x00010377      0x1f5 ./src/l2hal/src/l2hal_errors.o
+ .debug_line    0x0001056c      0x226 ./src/l2hal/src/l2hal_systick.o
+ .debug_line    0x00010792      0x236 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
+ .debug_line    0x000109c8      0x7e7 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+ .debug_line    0x000111af      0x363 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
+ .debug_line    0x00011512      0x8a8 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+ .debug_line    0x00011dba      0x9f8 ./src/fmgl/src/fmgl.o
+ .debug_line    0x000127b2      0x33b ./src/fmgl/src/fmgl_private.o
+ .debug_line    0x00012aed      0x1fa ./src/fmgl/fonts/src/terminusRegular12.o
+ .debug_line    0x00012ce7      0x386 ./src/hal.o
+ .debug_line    0x0001306d      0x2dd ./src/interrupts.o
+ .debug_line    0x0001334a      0x7b9 ./src/main.o
+ .debug_line    0x00013b03       0x83 ./src/stm32f7xx_hal_msp.o
 
-.debug_frame    0x00000000     0x33dc
+.debug_frame    0x00000000     0x340c
  *(.debug_frame)
  .debug_frame   0x00000000      0x234 ./system/src/stm32f7-hal/stm32f7xx_hal.o
  .debug_frame   0x00000234      0x158 ./system/src/stm32f7-hal/stm32f7xx_hal_cortex.o
@@ -3233,50 +3268,50 @@ END GROUP
  .debug_frame   0x000031a8       0x80 ./src/fmgl/src/fmgl_private.o
  .debug_frame   0x00003228       0x40 ./src/fmgl/fonts/src/terminusRegular12.o
  .debug_frame   0x00003268       0x58 ./src/hal.o
- .debug_frame   0x000032c0       0x78 ./src/interrupts.o
- .debug_frame   0x00003338       0x54 ./src/main.o
- .debug_frame   0x0000338c       0x50 ./src/stm32f7xx_hal_msp.o
+ .debug_frame   0x000032c0       0x88 ./src/interrupts.o
+ .debug_frame   0x00003348       0x74 ./src/main.o
+ .debug_frame   0x000033bc       0x50 ./src/stm32f7xx_hal_msp.o
 
-.debug_str      0x00000000     0x65de
+.debug_str      0x00000000     0x664f
  *(.debug_str)
- .debug_str     0x00000000     0x65de ./system/src/stm32f7-hal/stm32f7xx_hal.o
+ .debug_str     0x00000000     0x664f ./system/src/stm32f7-hal/stm32f7xx_hal.o
                                 0xd60 (size before relaxing)
- .debug_str     0x000065de      0xe34 ./system/src/stm32f7-hal/stm32f7xx_hal_cortex.o
- .debug_str     0x000065de      0x47e ./system/src/stm32f7-hal/stm32f7xx_hal_crc.o
- .debug_str     0x000065de      0x438 ./system/src/stm32f7-hal/stm32f7xx_hal_crc_ex.o
- .debug_str     0x000065de      0x769 ./system/src/stm32f7-hal/stm32f7xx_hal_dma.o
- .debug_str     0x000065de      0x4e5 ./system/src/stm32f7-hal/stm32f7xx_hal_gpio.o
- .debug_str     0x000065de      0x63f ./system/src/stm32f7-hal/stm32f7xx_hal_pwr_ex.o
- .debug_str     0x000065de      0xbd0 ./system/src/stm32f7-hal/stm32f7xx_hal_qspi.o
- .debug_str     0x000065de      0x714 ./system/src/stm32f7-hal/stm32f7xx_hal_rcc.o
- .debug_str     0x000065de     0x10bd ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
- .debug_str     0x000065de      0xc7f ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
- .debug_str     0x000065de     0x1552 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
- .debug_str     0x000065de      0x7cc ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
- .debug_str     0x000065de      0x1d8 ./system/src/newlib/exit.o
- .debug_str     0x000065de      0x205 ./system/src/newlib/sbrk.o
- .debug_str     0x000065de      0x353 ./system/src/newlib/startup.o
- .debug_str     0x000065de      0x20d ./system/src/newlib/syscalls.o
- .debug_str     0x000065de      0x2b7 ./system/src/cortexm/exception-handlers.o
- .debug_str     0x000065de      0x379 ./system/src/cortexm/initialize-hardware.o
- .debug_str     0x000065de      0x33b ./system/src/cortexm/reset-hardware.o
- .debug_str     0x000065de      0x460 ./system/src/cmsis/system_stm32f7xx.o
- .debug_str     0x000065de      0x275 ./system/src/cmsis/vectors_stm32f767xx.o
- .debug_str     0x000065de      0xc72 ./src/l2hal/src/l2hal.o
- .debug_str     0x000065de     0x193b ./src/l2hal/src/l2hal_custom.o
- .debug_str     0x000065de      0x3ee ./src/l2hal/src/l2hal_errors.o
- .debug_str     0x000065de      0x2f0 ./src/l2hal/src/l2hal_systick.o
- .debug_str     0x000065de      0x39c ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
- .debug_str     0x000065de      0xc31 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
- .debug_str     0x000065de      0x4f8 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
- .debug_str     0x000065de      0xdaf ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
- .debug_str     0x000065de      0x85e ./src/fmgl/src/fmgl.o
- .debug_str     0x000065de      0x569 ./src/fmgl/src/fmgl_private.o
- .debug_str     0x000065de      0x32e ./src/fmgl/fonts/src/terminusRegular12.o
- .debug_str     0x000065de      0x854 ./src/hal.o
- .debug_str     0x000065de      0x8e7 ./src/interrupts.o
- .debug_str     0x000065de     0x157d ./src/main.o
- .debug_str     0x000065de      0x1e1 ./src/stm32f7xx_hal_msp.o
+ .debug_str     0x0000664f      0xe34 ./system/src/stm32f7-hal/stm32f7xx_hal_cortex.o
+ .debug_str     0x0000664f      0x47e ./system/src/stm32f7-hal/stm32f7xx_hal_crc.o
+ .debug_str     0x0000664f      0x438 ./system/src/stm32f7-hal/stm32f7xx_hal_crc_ex.o
+ .debug_str     0x0000664f      0x769 ./system/src/stm32f7-hal/stm32f7xx_hal_dma.o
+ .debug_str     0x0000664f      0x4e5 ./system/src/stm32f7-hal/stm32f7xx_hal_gpio.o
+ .debug_str     0x0000664f      0x63f ./system/src/stm32f7-hal/stm32f7xx_hal_pwr_ex.o
+ .debug_str     0x0000664f      0xbd0 ./system/src/stm32f7-hal/stm32f7xx_hal_qspi.o
+ .debug_str     0x0000664f      0x714 ./system/src/stm32f7-hal/stm32f7xx_hal_rcc.o
+ .debug_str     0x0000664f     0x10bd ./system/src/stm32f7-hal/stm32f7xx_hal_sd.o
+ .debug_str     0x0000664f      0xc7f ./system/src/stm32f7-hal/stm32f7xx_hal_spi.o
+ .debug_str     0x0000664f     0x1552 ./system/src/stm32f7-hal/stm32f7xx_hal_tim.o
+ .debug_str     0x0000664f      0x7cc ./system/src/stm32f7-hal/stm32f7xx_ll_sdmmc.o
+ .debug_str     0x0000664f      0x1d8 ./system/src/newlib/exit.o
+ .debug_str     0x0000664f      0x205 ./system/src/newlib/sbrk.o
+ .debug_str     0x0000664f      0x353 ./system/src/newlib/startup.o
+ .debug_str     0x0000664f      0x20d ./system/src/newlib/syscalls.o
+ .debug_str     0x0000664f      0x2b7 ./system/src/cortexm/exception-handlers.o
+ .debug_str     0x0000664f      0x379 ./system/src/cortexm/initialize-hardware.o
+ .debug_str     0x0000664f      0x33b ./system/src/cortexm/reset-hardware.o
+ .debug_str     0x0000664f      0x460 ./system/src/cmsis/system_stm32f7xx.o
+ .debug_str     0x0000664f      0x275 ./system/src/cmsis/vectors_stm32f767xx.o
+ .debug_str     0x0000664f      0xc72 ./src/l2hal/src/l2hal.o
+ .debug_str     0x0000664f     0x193b ./src/l2hal/src/l2hal_custom.o
+ .debug_str     0x0000664f      0x3ee ./src/l2hal/src/l2hal_errors.o
+ .debug_str     0x0000664f      0x2f0 ./src/l2hal/src/l2hal_systick.o
+ .debug_str     0x0000664f      0x39c ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
+ .debug_str     0x0000664f      0xc31 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+ .debug_str     0x0000664f      0x4f8 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
+ .debug_str     0x0000664f      0xdaf ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+ .debug_str     0x0000664f      0x85e ./src/fmgl/src/fmgl.o
+ .debug_str     0x0000664f      0x569 ./src/fmgl/src/fmgl_private.o
+ .debug_str     0x0000664f      0x32e ./src/fmgl/fonts/src/terminusRegular12.o
+ .debug_str     0x0000664f      0x854 ./src/hal.o
+ .debug_str     0x0000664f      0xb30 ./src/interrupts.o
+ .debug_str     0x0000664f     0x1603 ./src/main.o
+ .debug_str     0x0000664f      0x1e1 ./src/stm32f7xx_hal_msp.o
 
 .debug_loc
  *(.debug_loc)
@@ -3366,7 +3401,7 @@ LOAD linker stubs
                 0x0000a8dc       0x48 ./src/main.o
 
 .debug_rnglists
-                0x00000000     0x1353
+                0x00000000     0x1359
  .debug_rnglists
                 0x00000000       0xc7 ./system/src/stm32f7-hal/stm32f7xx_hal.o
  .debug_rnglists
@@ -3414,30 +3449,30 @@ LOAD linker stubs
  .debug_rnglists
                 0x00000e52       0x5f ./src/l2hal/src/l2hal.o
  .debug_rnglists
-                0x00000eb1       0xef ./src/l2hal/src/l2hal_custom.o
+                0x00000eb1       0xe3 ./src/l2hal/src/l2hal_custom.o
  .debug_rnglists
-                0x00000fa0       0x28 ./src/l2hal/src/l2hal_errors.o
+                0x00000f94       0x28 ./src/l2hal/src/l2hal_errors.o
  .debug_rnglists
-                0x00000fc8       0x2e ./src/l2hal/src/l2hal_systick.o
+                0x00000fbc       0x2e ./src/l2hal/src/l2hal_systick.o
  .debug_rnglists
-                0x00000ff6       0x14 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
+                0x00000fea       0x14 ./src/l2hal/mcu_dependent/mcus/stm32f767zit6u/l2hal_stm32f767zit6u.o
  .debug_rnglists
-                0x0000100a       0xa2 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
+                0x00000ffe       0xa2 ./src/l2hal/drivers/ram/ly68l6400_qspi/src/l2hal_ly68l6400_qspi.o
  .debug_rnglists
-                0x000010ac       0x25 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
+                0x000010a0       0x25 ./src/l2hal/drivers/internal/crc/src/l2hal_crc.o
  .debug_rnglists
-                0x000010d1       0xa4 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
+                0x000010c5       0xa4 ./src/l2hal/drivers/display/gc9a01_local_framebuffer/src/l2hal_gc9a01_lfb.o
  .debug_rnglists
-                0x00001175      0x11b ./src/fmgl/src/fmgl.o
+                0x00001169      0x11b ./src/fmgl/src/fmgl.o
  .debug_rnglists
-                0x00001290       0x1f ./src/fmgl/src/fmgl_private.o
+                0x00001284       0x1f ./src/fmgl/src/fmgl_private.o
  .debug_rnglists
-                0x000012af       0x1f ./src/fmgl/fonts/src/terminusRegular12.o
+                0x000012a3       0x1f ./src/fmgl/fonts/src/terminusRegular12.o
  .debug_rnglists
-                0x000012ce       0x1a ./src/hal.o
+                0x000012c2       0x1a ./src/hal.o
  .debug_rnglists
-                0x000012e8       0x2b ./src/interrupts.o
+                0x000012dc       0x31 ./src/interrupts.o
  .debug_rnglists
-                0x00001313       0x1b ./src/main.o
+                0x0000130d       0x27 ./src/main.o
  .debug_rnglists
-                0x0000132e       0x25 ./src/stm32f7xx_hal_msp.o
+                0x00001334       0x25 ./src/stm32f7xx_hal_msp.o

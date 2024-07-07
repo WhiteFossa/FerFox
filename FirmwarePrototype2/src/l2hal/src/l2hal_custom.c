@@ -116,11 +116,11 @@ void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi)
 	HAL_DMA_Init(&QspiDmaHandle);
 
 	/* NVIC configuration for QSPI interrupt */
-	HAL_NVIC_SetPriority(QUADSPI_IRQn, 0x0F, 0);
+	HAL_NVIC_SetPriority(QUADSPI_IRQn, 15, 0);
 	HAL_NVIC_EnableIRQ(QUADSPI_IRQn);
 
 	/* NVIC configuration for DMA interrupt */
-	HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0x00, 0);
+	HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0x0F, 0);
 	HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 }
 
@@ -290,7 +290,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 
 		__HAL_LINKDMA(hspi, hdmatx, Spi1TxDmaHandle);
 
-		HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 1);
+		HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 14, 0);
 		HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
 
 		/* RX DMA */
@@ -315,7 +315,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 
 		__HAL_LINKDMA(hspi, hdmarx, Spi1RxDmaHandle);
 
-		HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 0, 1);
+		HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 14, 0);
 		HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
 	}
 }
@@ -348,6 +348,8 @@ void HAL_SD_MspInit(SD_HandleTypeDef *hsd)
 
 		__HAL_RCC_GPIOC_CLK_ENABLE();
 		__HAL_RCC_GPIOD_CLK_ENABLE();
+
+		__HAL_RCC_DMA2_CLK_ENABLE();
 
 		GPIO_InitTypeDef GPIO_InitStruct;
 
