@@ -132,41 +132,60 @@ int main(int argc, char* argv[])
 	mainTickHandlerCounter = 0;
 	L2HAL_SysTick_RegisterHandler(&MainTickHandler);
 
-	/* SD Card init */
-	#define SD_EXCHANGE_BLOCKS_COUNT 128
-	#define SD_EXCHANGE_BUFFER_SIZE (SD_EXCHANGE_BLOCKS_COUNT * 512)
-	uint8_t sdcardBlockBufferRead[SD_EXCHANGE_BUFFER_SIZE];
-	uint8_t sdcardBlockBufferWrite[SD_EXCHANGE_BUFFER_SIZE];
-	sdcardBlockAddress = 0;
-	sdcardBytesRead = 0;
-
-	memset(sdcardBlockBufferWrite, 0xA5, SD_EXCHANGE_BUFFER_SIZE);
-	sprintf(sdcardBlockBufferWrite, "Yiff! Yuff! Yerf! Ururu!");
-
-	while (true)
+	/* Mounting SD-card filesystem */
+	if (!MountSdCardFs())
 	{
-		if (HAL_SD_WriteBlocks(&SdcardHandle, sdcardBlockBufferWrite, sdcardBlockAddress, SD_EXCHANGE_BLOCKS_COUNT, 1000) != HAL_OK)
+		uint16_t width, height;
+		FMGL_API_DrawRectangleFilled(&FmglContext, 0, 0, 239, 239, OffColor, OffColor);
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, "Failed to mount SD card!");
+		FMGL_API_PushFramebuffer(&FmglContext);
+		L2HAL_Error(Generic);
+	}
+
+	/* Loading animations */
+	for (uint8_t frame = 0; frame < FRAMES_COUNT; frame++)
+	{
+		framebuffersAddresses[frame] = frame * L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE;
+
+		char filename[32];
+		sprintf(filename, "animation%d.jpeg", frame + 1);
+
+		uint16_t width, height;
+		char loadingMessage[32];
+		sprintf(loadingMessage, "Loading %d / %d", frame + 1, FRAMES_COUNT);
+		FMGL_API_DrawRectangleFilled(&FmglContext, 0, 0, 239, 239, OffColor, OffColor);
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, loadingMessage);
+		FMGL_API_PushFramebuffer(&FmglContext);
+
+		LoadJpegFromFile(filename);
+
+		L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
+	}
+
+	uint8_t frame = 0;
+
+	/*fpsCounter = 0;*/
+
+	while(true)
+	{
+		L2HAL_LY68L6400_QSPI_MemoryRead(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
+		L2HAL_GC9A01_LFB_MarkFramebufferAsDirty(&DisplayContext);
+
+		/*uint16_t width, height;
+		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, fpsMessage);*/
+
+		FMGL_API_PushFramebuffer(&FmglContext);
+
+		if (frame == FRAMES_COUNT - 1)
 		{
-			L2HAL_Error(Generic);
+			frame = 0;
 		}
-		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}
-
-		memset(sdcardBlockBufferRead, 0x00, SD_EXCHANGE_BUFFER_SIZE);
-
-		if (HAL_SD_ReadBlocks(&SdcardHandle, sdcardBlockBufferRead, sdcardBlockAddress, SD_EXCHANGE_BLOCKS_COUNT, 1000) != HAL_OK)
+		else
 		{
-			L2HAL_Error(Generic);
-		}
-		while (HAL_SD_GetCardState(&SdcardHandle) != HAL_SD_CARD_TRANSFER) {}
-
-		if (memcmp(sdcardBlockBufferRead, sdcardBlockBufferWrite, SD_EXCHANGE_BUFFER_SIZE) != 0)
-		{
-			L2HAL_Error(Generic);
+			frame ++;
 		}
 
-		sdcardBlockAddress += SD_EXCHANGE_BLOCKS_COUNT;
-		sdcardBytesRead += SD_EXCHANGE_BUFFER_SIZE;
-
+		/*fpsCounter ++;*/
 	}
 }
 
@@ -176,16 +195,11 @@ void MainTickHandler(void)
 	{
 		mainTickHandlerCounter = 0;
 
-		uint8_t charbuff[32];
-		uint16_t width, height;
+		/* Put code, called every second, here */
 
-		sprintf(charbuff, "Block %d, speed %d kBps", sdcardBlockAddress, sdcardBytesRead / 1024);
+/*		sprintf(fpsMessage, "FPS: %d", fpsCounter);
 
-		sdcardBytesRead = 0;
-
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, "                  ");
-		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 32, 112, &width, &height, false, charbuff);
-		FMGL_API_PushFramebuffer(&FmglContext);
+		fpsCounter = 0;*/
 	}
 	else
 	{

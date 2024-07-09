@@ -12,6 +12,7 @@
 #include <l2hal_ly68l6400_qspi.h>
 #include <l2hal_crc.h>
 #include <l2hal_gc9a01_lfb.h>
+#include <ff.h>
 
 /**
  * SysTick driver context.
@@ -74,8 +75,8 @@ FMGL_API_DriverContext FmglContext;
 SD_HandleTypeDef SdcardHandle = { 0 };
 
 /**
- * SD DMA handle
+ * SD card filesystem pointer
  */
-DMA_HandleTypeDef SdDmaHandle = { 0 };
+FATFS* SdFsPtr = NULL;
 
 #endif /* GLOBAL_VARIABLES_H_ */

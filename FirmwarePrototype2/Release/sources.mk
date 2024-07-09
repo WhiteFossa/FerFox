@@ -35,9 +35,11 @@ CPP_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+libs/fatfs \
+libs/tjpgd \
+src \
 src/fmgl/fonts/src \
 src/fmgl/src \
-src \
 src/l2hal/drivers/bluetooth/hc06/src \
 src/l2hal/drivers/dac/ad5245/src \
 src/l2hal/drivers/dds/ad9835/src \

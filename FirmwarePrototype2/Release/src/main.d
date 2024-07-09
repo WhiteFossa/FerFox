@@ -92,7 +92,9 @@ src/main.o: ../src/main.c ../include/main.h \
  ../include/global_variables.h \
  ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h \
  ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h \
- ../src/fmgl/fonts/include/terminusRegular12.h
+ ../src/fmgl/fonts/include/terminusRegular12.h ../include/filesystem.h \
+ ../include/jpeg_decoder.h ../libs/tjpgd/tjpgdcnf.h ../libs/tjpgd/tjpgd.h \
+ ../libs/tjpgd/tjpgdcnf.h
 ../include/main.h:
 ../system/include/diag/trace.h:
 ../include/hal.h:
@@ -193,3 +195,8 @@ src/main.o: ../src/main.c ../include/main.h \
 ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h:
 ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h:
 ../src/fmgl/fonts/include/terminusRegular12.h:
+../include/filesystem.h:
+../include/jpeg_decoder.h:
+../libs/tjpgd/tjpgdcnf.h:
+../libs/tjpgd/tjpgd.h:
+../libs/tjpgd/tjpgdcnf.h:

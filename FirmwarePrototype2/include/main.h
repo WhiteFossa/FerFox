@@ -23,12 +23,19 @@
 #include <fmgl.h>
 #include <terminusRegular12.h>
 
+#include <filesystem.h>
+#include <jpeg_decoder.h>
+
+#define FRAMES_COUNT 16
+
 FMGL_API_FontSettings font;
 
 uint32_t mainTickHandlerCounter;
 
-uint32_t sdcardBlockAddress;
-uint32_t sdcardBytesRead;
+uint32_t framebuffersAddresses[FRAMES_COUNT];
+
+/*uint16_t fpsCounter;
+char fpsMessage[32];*/
 
 void MainTickHandler(void);
 

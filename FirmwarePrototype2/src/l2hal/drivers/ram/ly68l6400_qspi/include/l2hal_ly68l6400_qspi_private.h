@@ -14,7 +14,7 @@
  * Read/write no more than this amount of bytes per transaction
  */
 #define L2HAL_LY68L6400_QSPI_READ_MAX_TRANSACTION_SIZE 64U
-#define L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE 64U
+#define L2HAL_LY68L6400_QSPI_WRITE_MAX_TRANSACTION_SIZE 255U
 
 /**
  * Chip capacity in bytes

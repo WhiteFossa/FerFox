@@ -5417,6 +5417,12 @@
 		(uuid "27186995-6e62-4c80-8084-640a19a02618")
 	)
 	(junction
+		(at 57.15 152.4)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2deee9e1-afc8-42de-97e1-b8dcd8e78bec")
+	)
+	(junction
 		(at 134.62 95.25)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5439,6 +5445,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "57f082a6-98db-49bf-b5fa-087424e89874")
+	)
+	(junction
+		(at 67.31 152.4)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "603fb16e-71f2-4923-9a2b-d7881dc293cf")
 	)
 	(junction
 		(at 144.78 102.87)
@@ -5559,6 +5571,16 @@
 			(type default)
 		)
 		(uuid "1cea7352-3a54-4a08-a061-69e672c94933")
+	)
+	(wire
+		(pts
+			(xy 67.31 146.05) (xy 67.31 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "204d1471-ad22-4656-bb4d-61d97a8904c0")
 	)
 	(wire
 		(pts
@@ -5892,6 +5914,16 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 152.4) (xy 58.42 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d335bd5-36fc-4fe0-a357-baa84bda31fa")
+	)
+	(wire
+		(pts
 			(xy 215.9 186.69) (xy 217.17 186.69)
 		)
 		(stroke
@@ -6072,6 +6104,16 @@
 	)
 	(wire
 		(pts
+			(xy 58.42 146.05) (xy 57.15 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "98ecbeff-b7bf-40f2-8b4d-27f73107b8f0")
+	)
+	(wire
+		(pts
 			(xy 151.13 95.25) (xy 144.78 95.25)
 		)
 		(stroke
@@ -6152,6 +6194,16 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 146.05) (xy 57.15 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b10e4022-7af0-4ffa-af45-2c9f6da10ee8")
+	)
+	(wire
+		(pts
 			(xy 144.78 168.91) (xy 146.05 168.91)
 		)
 		(stroke
@@ -6159,6 +6211,16 @@
 			(type default)
 		)
 		(uuid "b39fe4a5-c64f-44fa-a267-719ae2dc9234")
+	)
+	(wire
+		(pts
+			(xy 66.04 146.05) (xy 67.31 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3e5aa7f-a541-4f3e-a0c5-b75cc06041fe")
 	)
 	(wire
 		(pts
@@ -6372,7 +6434,7 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 152.4) (xy 58.42 152.4)
+			(xy 52.07 152.4) (xy 57.15 152.4)
 		)
 		(stroke
 			(width 0)
@@ -8016,7 +8078,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "270"
 			(at 220.98 214.63 90)
 			(effects
 				(font
@@ -8150,7 +8212,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "270"
 			(at 220.98 196.85 90)
 			(effects
 				(font
@@ -8418,7 +8480,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "270"
 			(at 220.98 186.69 90)
 			(effects
 				(font
@@ -8552,7 +8614,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "270"
 			(at 220.98 194.31 90)
 			(effects
 				(font
@@ -9307,10 +9369,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "5a08393a-17ca-4658-82b2-5acc75dd689e")
 		(property "Reference" "C16"
-			(at 62.23 144.78 90)
+			(at 58.928 150.622 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9318,7 +9379,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 62.23 147.32 90)
+			(at 66.548 150.368 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9429,6 +9490,75 @@
 			(project "FerFox_Prototype2"
 				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
 					(reference "C10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Polarized")
+		(at 62.23 146.05 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5e829ed6-bbbf-4313-93f9-483cc94098a8")
+		(property "Reference" "C5"
+			(at 60.706 144.272 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1000uF 6.3V"
+			(at 76.2 144.272 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 145.0848 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 62.23 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Polarized capacitor"
+			(at 62.23 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4d7d5edf-9e0d-46d9-971c-4c6d7683d659")
+		)
+		(pin "2"
+			(uuid "31bb99b3-9b82-4200-a45a-969f32c5301d")
+		)
+		(instances
+			(project "FerFox_Prototype2"
+				(path "/011f2c64-cf22-44cd-a30f-ff566a75b03a"
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -10344,7 +10474,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "270"
 			(at 220.98 189.23 90)
 			(effects
 				(font
@@ -10512,7 +10642,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "270"
 			(at 220.98 191.77 90)
 			(effects
 				(font
