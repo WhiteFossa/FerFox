@@ -91,6 +91,8 @@ src/main.o: ../src/main.c ../include/main.h \
  ../src/l2hal/include/l2hal_systick_private.h \
  ../include/global_variables.h \
  ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h \
+ ../libs/libhwjpeg/libhwjpeg.h ../libs/libhwjpeg/jpeg_utils.h \
+ ../libs/libhwjpeg/jpeg_utils_conf.h \
  ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h \
  ../src/fmgl/fonts/include/terminusRegular12.h ../include/filesystem.h \
  ../include/jpeg_decoder.h ../libs/tjpgd/tjpgdcnf.h ../libs/tjpgd/tjpgd.h \
@@ -193,6 +195,9 @@ src/main.o: ../src/main.c ../include/main.h \
 ../src/l2hal/include/l2hal_systick_private.h:
 ../include/global_variables.h:
 ../src/l2hal/drivers/ram/ly68l6400_qspi/include/l2hal_ly68l6400_qspi.h:
+../libs/libhwjpeg/libhwjpeg.h:
+../libs/libhwjpeg/jpeg_utils.h:
+../libs/libhwjpeg/jpeg_utils_conf.h:
 ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h:
 ../src/fmgl/fonts/include/terminusRegular12.h:
 ../include/filesystem.h:

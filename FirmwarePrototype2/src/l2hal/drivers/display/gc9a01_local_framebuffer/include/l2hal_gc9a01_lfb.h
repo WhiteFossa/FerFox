@@ -84,11 +84,6 @@ typedef struct
 	 * If true, then data transfer in progress and we must wait for next one
 	 */
 	volatile bool IsDataTransferInProgress;
-
-	/**
-	 * CRC calculation unit context
-	 */
-	L2HAL_CRCContextStruct* CrcContext;
 }
 L2HAL_GC9A01_LFB_ContextStruct;
 
@@ -110,9 +105,7 @@ void L2HAL_GC9A01_LFB_Init
 	GPIO_TypeDef* chipSelectPort,
 	uint16_t chipSelectPin,
 
-	enum L2HAL_GC9A01_LFB_Orientation orientation,
-
-	L2HAL_CRCContextStruct* crcContext
+	enum L2HAL_GC9A01_LFB_Orientation orientation
 );
 
 

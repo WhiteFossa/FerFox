@@ -427,3 +427,17 @@ void L2HAL_SetupSdcard(void)
 		L2HAL_Error(Generic);
 	}
 }
+
+void HAL_JPEG_MspInit(JPEG_HandleTypeDef *hjpeg)
+{
+	__HAL_RCC_JPEG_CLK_ENABLE();
+
+	__HAL_RCC_JPEG_FORCE_RESET();
+	__HAL_RCC_JPEG_RELEASE_RESET();
+}
+
+void HAL_JPEG_MspDeInit(JPEG_HandleTypeDef *hjpeg)
+{
+	__HAL_RCC_JPEG_CLK_DISABLE();
+}
+

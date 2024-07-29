@@ -36,6 +36,7 @@ CPP_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 libs/fatfs \
+libs/libhwjpeg \
 libs/tjpgd \
 src \
 src/fmgl/fonts/src \

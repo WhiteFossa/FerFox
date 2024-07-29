@@ -46,8 +46,6 @@ L2HAL_HC06_ContextStruct L2HAL_HC06_AttachToDevice(UART_HandleTypeDef* uart)
 	}
 
 	return context;
-
-	return context;
 }
 
 void L2HAL_HC06_SetName(L2HAL_HC06_ContextStruct* context, const char* name)

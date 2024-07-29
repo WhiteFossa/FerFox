@@ -96,4 +96,10 @@ void HAL_SD_MspInit(SD_HandleTypeDef *hsd);
 void HAL_SD_MspDeInit(SD_HandleTypeDef *hsd);
 void L2HAL_SetupSdcard(void);
 
+/**
+ * JPEG coded init and de-init
+ */
+void HAL_JPEG_MspInit(JPEG_HandleTypeDef *hjpeg);
+void HAL_JPEG_MspDeInit(JPEG_HandleTypeDef *hjpeg);
+
 #endif /* L2HAL_INCLUDE_L2HAL_CUSTOM_H_ */

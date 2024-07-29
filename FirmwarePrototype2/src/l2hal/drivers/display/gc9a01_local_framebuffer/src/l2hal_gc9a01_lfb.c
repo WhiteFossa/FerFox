@@ -23,9 +23,7 @@ void L2HAL_GC9A01_LFB_Init
 	GPIO_TypeDef* chipSelectPort,
 	uint16_t chipSelectPin,
 
-	enum L2HAL_GC9A01_LFB_Orientation orientation,
-
-	L2HAL_CRCContextStruct* crcContext
+	enum L2HAL_GC9A01_LFB_Orientation orientation
 )
 {
 	context->SPIHandle = spiHandle;
@@ -40,8 +38,6 @@ void L2HAL_GC9A01_LFB_Init
 		context->ChipSelectPin = chipSelectPin;
 
 		context->IsDataTransferInProgress = true;
-
-		context->CrcContext = crcContext;
 
 		L2HAL_GC9A01_LFB_ResetDisplay(context);
 

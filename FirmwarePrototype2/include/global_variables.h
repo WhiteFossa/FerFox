@@ -10,8 +10,8 @@
 
 #include <l2hal_systick.h>
 #include <l2hal_ly68l6400_qspi.h>
-#include <l2hal_crc.h>
 #include <l2hal_gc9a01_lfb.h>
+#include <libhwjpeg.h>
 #include <ff.h>
 
 /**
@@ -38,11 +38,6 @@ L2HAL_LY68L6400_QSPI_ContextStruct RamContext = { 0 };
  * Backlight timer handler
  */
 TIM_HandleTypeDef BacklightTimerHandle = { 0 };
-
-/**
- * CRC calculator context
- */
-L2HAL_CRCContextStruct CRC_Context;
 
 /**
  * SPI1 bus handle.
@@ -78,5 +73,11 @@ SD_HandleTypeDef SdcardHandle = { 0 };
  * SD card filesystem pointer
  */
 FATFS* SdFsPtr = NULL;
+
+/**
+ * JPEG codec handle
+ */
+JPEG_HandleTypeDef JpegCodecHandle = { 0 };
+
 
 #endif /* GLOBAL_VARIABLES_H_ */

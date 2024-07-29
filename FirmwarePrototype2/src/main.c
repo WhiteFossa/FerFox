@@ -67,9 +67,6 @@ int main(int argc, char* argv[])
 		HAL_PSRAM_SIO1_PIN
 	);
 
-	/* CRC calculation unit initialization */
-	CRC_Context = L2HAL_CRC_Init();
-
 	/* Display */
 	HAL_SetBacklightLevel(HAL_DISPLAY_BACKLIGHT_TIMER_PERIOD); /* Full brightness */
 
@@ -88,9 +85,7 @@ int main(int argc, char* argv[])
 		HAL_DISPLAY_CS_PORT,
 		HAL_DISPLAY_CS_PIN,
 
-		L2HAL_GC9A01_LFB_ROTATION_180,
-
-		&CRC_Context
+		L2HAL_GC9A01_LFB_ROTATION_180
 	);
 
 	/* FMGL initialization */
@@ -129,6 +124,10 @@ int main(int argc, char* argv[])
 	font.BackgroundColor = &OffColor;
 	font.Transparency = &transparencyMode;
 
+	/* Hardware JPEG decoder initialization */
+	JpegCodecHandle.Instance = JPEG;
+	LIBHWJPEG_Init(&JpegCodecHandle);
+
 	mainTickHandlerCounter = 0;
 	L2HAL_SysTick_RegisterHandler(&MainTickHandler);
 
@@ -157,9 +156,10 @@ int main(int argc, char* argv[])
 		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, loadingMessage);
 		FMGL_API_PushFramebuffer(&FmglContext);
 
-		LoadJpegFromFile(filename);
+		//LoadJpegFromFile(filename);
+		LIBHWJPEG_DecodeFile(filename, &FmglContext, &OnJpegDecodedHandler, &framebuffersAddresses[frame]);
 
-		L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
+//		L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
 	}
 
 	uint8_t frame = 0;
@@ -187,6 +187,17 @@ int main(int argc, char* argv[])
 
 		/*fpsCounter ++;*/
 	}
+}
+
+void OnJpegDecodedHandler(uint16_t width, uint16_t height, uint8_t* imagePtr, void* arbitraryDataPtr)
+{
+	if (width != SCREEN_WIDTH || height != SCREEN_HEIGHT)
+	{
+		L2HAL_Error(Generic);
+	}
+
+	L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, *(uint32_t*)arbitraryDataPtr, L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, imagePtr);
+	free(imagePtr);
 }
 
 void MainTickHandler(void)

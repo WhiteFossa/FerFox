@@ -26,6 +26,11 @@
 #include <filesystem.h>
 #include <jpeg_decoder.h>
 
+#include <libhwjpeg.h>
+
+#define SCREEN_WIDTH 240
+#define SCREEN_HEIGHT 240
+
 #define FRAMES_COUNT 16
 
 FMGL_API_FontSettings font;
@@ -38,5 +43,7 @@ uint32_t framebuffersAddresses[FRAMES_COUNT];
 char fpsMessage[32];*/
 
 void MainTickHandler(void);
+
+void OnJpegDecodedHandler(uint16_t width, uint16_t height, uint8_t* imagePtr, void* arbitraryDataPtr);
 
 #endif /* INCLUDE_MAIN_H_ */

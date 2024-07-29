@@ -34,6 +34,7 @@ RM := rm -rf
 -include src/fmgl/fonts/src/subdir.mk
 -include src/subdir.mk
 -include libs/tjpgd/subdir.mk
+-include libs/libhwjpeg/subdir.mk
 -include libs/fatfs/subdir.mk
 -include subdir.mk
 -include objects.mk
