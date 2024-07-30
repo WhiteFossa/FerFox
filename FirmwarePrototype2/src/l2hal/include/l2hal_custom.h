@@ -52,6 +52,8 @@ extern DMA_HandleTypeDef Spi1TxDmaHandle;
 extern DMA_HandleTypeDef Spi1RxDmaHandle;
 extern L2HAL_GC9A01_LFB_ContextStruct DisplayContext;
 extern SD_HandleTypeDef SdcardHandle;
+extern DMA_HandleTypeDef JpegInDmaHandle;
+extern DMA_HandleTypeDef JpegOutDmaHandle;
 
 /**
  * Put custom hardware initialization stuff here,

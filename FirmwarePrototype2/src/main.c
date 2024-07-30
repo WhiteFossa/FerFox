@@ -156,10 +156,7 @@ int main(int argc, char* argv[])
 		FMGL_API_RenderTextWithLineBreaks(&FmglContext, &font, 0, 112, &width, &height, false, loadingMessage);
 		FMGL_API_PushFramebuffer(&FmglContext);
 
-		//LoadJpegFromFile(filename);
-		LIBHWJPEG_DecodeFile(filename, &FmglContext, &OnJpegDecodedHandler, &framebuffersAddresses[frame]);
-
-//		L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, framebuffersAddresses[frame], L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, DisplayContext.Framebuffer);
+		JpegDecodeToPsramBlocking(filename, framebuffersAddresses[frame]);
 	}
 
 	uint8_t frame = 0;
@@ -187,17 +184,6 @@ int main(int argc, char* argv[])
 
 		/*fpsCounter ++;*/
 	}
-}
-
-void OnJpegDecodedHandler(uint16_t width, uint16_t height, uint8_t* imagePtr, void* arbitraryDataPtr)
-{
-	if (width != SCREEN_WIDTH || height != SCREEN_HEIGHT)
-	{
-		L2HAL_Error(Generic);
-	}
-
-	L2HAL_LY68L6400_QSPI_MemoryWrite(&RamContext, *(uint32_t*)arbitraryDataPtr, L2HAL_GC9A01_LFB_FRAMEBUFFER_SIZE, imagePtr);
-	free(imagePtr);
 }
 
 void MainTickHandler(void)

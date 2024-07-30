@@ -79,5 +79,14 @@ FATFS* SdFsPtr = NULL;
  */
 JPEG_HandleTypeDef JpegCodecHandle = { 0 };
 
+/**
+ * JPEG codec DMA handle (in)
+ */
+DMA_HandleTypeDef JpegInDmaHandle = { 0 };
+
+/**
+ * JPEG codec DMA handle (out)
+ */
+DMA_HandleTypeDef JpegOutDmaHandle = { 0 };
 
 #endif /* GLOBAL_VARIABLES_H_ */

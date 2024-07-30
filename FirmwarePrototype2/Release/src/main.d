@@ -95,8 +95,7 @@ src/main.o: ../src/main.c ../include/main.h \
  ../libs/libhwjpeg/jpeg_utils_conf.h \
  ../src/l2hal/drivers/display/gc9a01/include/l2hal_gc9a01.h \
  ../src/fmgl/fonts/include/terminusRegular12.h ../include/filesystem.h \
- ../include/jpeg_decoder.h ../libs/tjpgd/tjpgdcnf.h ../libs/tjpgd/tjpgd.h \
- ../libs/tjpgd/tjpgdcnf.h
+ ../include/jpeg_decoder.h
 ../include/main.h:
 ../system/include/diag/trace.h:
 ../include/hal.h:
@@ -202,6 +201,3 @@ src/main.o: ../src/main.c ../include/main.h \
 ../src/fmgl/fonts/include/terminusRegular12.h:
 ../include/filesystem.h:
 ../include/jpeg_decoder.h:
-../libs/tjpgd/tjpgdcnf.h:
-../libs/tjpgd/tjpgd.h:
-../libs/tjpgd/tjpgdcnf.h:

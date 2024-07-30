@@ -116,11 +116,11 @@ void HAL_QSPI_MspInit(QSPI_HandleTypeDef *hqspi)
 	HAL_DMA_Init(&QspiDmaHandle);
 
 	/* NVIC configuration for QSPI interrupt */
-	HAL_NVIC_SetPriority(QUADSPI_IRQn, 15, 0);
+	HAL_NVIC_SetPriority(QUADSPI_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(QUADSPI_IRQn);
 
 	/* NVIC configuration for DMA interrupt */
-	HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0x0F, 0);
+	HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
 }
 
@@ -434,6 +434,59 @@ void HAL_JPEG_MspInit(JPEG_HandleTypeDef *hjpeg)
 
 	__HAL_RCC_JPEG_FORCE_RESET();
 	__HAL_RCC_JPEG_RELEASE_RESET();
+
+	/* Enable DMA clock */
+	__DMA2_CLK_ENABLE();
+
+	HAL_NVIC_SetPriority(JPEG_IRQn, 8, 0);
+	HAL_NVIC_EnableIRQ(JPEG_IRQn);
+
+	/* Input DMA */
+	JpegInDmaHandle.Instance = DMA2_Stream0;
+	JpegInDmaHandle.Init.Channel = DMA_CHANNEL_9;
+	JpegInDmaHandle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+	JpegInDmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
+	JpegInDmaHandle.Init.MemInc = DMA_MINC_ENABLE;
+	JpegInDmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+	JpegInDmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+	JpegInDmaHandle.Init.Mode = DMA_NORMAL;
+	JpegInDmaHandle.Init.Priority = DMA_PRIORITY_HIGH;
+	JpegInDmaHandle.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+	JpegInDmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+	JpegInDmaHandle.Init.MemBurst = DMA_MBURST_INC4;
+	JpegInDmaHandle.Init.PeriphBurst = DMA_PBURST_INC4;
+
+	__HAL_LINKDMA(hjpeg, hdmain, JpegInDmaHandle);
+
+	HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 8, 0);
+	HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+
+	HAL_DMA_DeInit(&JpegInDmaHandle);
+	HAL_DMA_Init(&JpegInDmaHandle);
+
+
+	/* Output DMA */
+	JpegOutDmaHandle.Instance = DMA2_Stream1;
+	JpegOutDmaHandle.Init.Channel = DMA_CHANNEL_9;
+	JpegOutDmaHandle.Init.Direction = DMA_PERIPH_TO_MEMORY;
+	JpegOutDmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;
+	JpegOutDmaHandle.Init.MemInc = DMA_MINC_ENABLE;
+	JpegOutDmaHandle.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+	JpegOutDmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+	JpegOutDmaHandle.Init.Mode = DMA_NORMAL;
+	JpegOutDmaHandle.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+	JpegOutDmaHandle.Init.FIFOMode = DMA_FIFOMODE_ENABLE;
+	JpegOutDmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+	JpegOutDmaHandle.Init.MemBurst = DMA_MBURST_INC4;
+	JpegOutDmaHandle.Init.PeriphBurst = DMA_PBURST_INC4;
+
+	__HAL_LINKDMA(hjpeg, hdmaout, JpegOutDmaHandle);
+
+	HAL_NVIC_SetPriority(DMA2_Stream1_IRQn, 8, 0);
+	HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
+
+	HAL_DMA_DeInit(&JpegOutDmaHandle);
+	HAL_DMA_Init(&JpegOutDmaHandle);
 }
 
 void HAL_JPEG_MspDeInit(JPEG_HandleTypeDef *hjpeg)

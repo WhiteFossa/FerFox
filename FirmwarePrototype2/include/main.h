@@ -44,6 +44,4 @@ char fpsMessage[32];*/
 
 void MainTickHandler(void);
 
-void OnJpegDecodedHandler(uint16_t width, uint16_t height, uint8_t* imagePtr, void* arbitraryDataPtr);
-
 #endif /* INCLUDE_MAIN_H_ */

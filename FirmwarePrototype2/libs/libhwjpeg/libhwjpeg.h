@@ -12,9 +12,9 @@
 #include <l2hal_errors.h>
 #include <stdint.h>
 #include <ff.h>
-#include <fmgl.h>
 #include <jpeg_utils.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * Input buffer size
@@ -62,11 +62,6 @@ static uint32_t LIBHWJPEG_ImageWidth;
 static uint32_t LIBHWJPEG_ImageHeight;
 
 /**
- * Pointer to FMGL context
- */
-static FMGL_API_DriverContext* LIBHWJPEG_FmglContextPtr;
-
-/**
  * Current X coordinate
  */
 static uint16_t LIBHWJPEG_CurrentX;
@@ -97,18 +92,23 @@ static uint32_t LIBHWJPEG_CurrentMcu;
 static uint8_t* LIBHWJPEG_ResultBuffer;
 
 /**
+ * Setting it to true when decoding is complete
+ */
+static bool* LIBHWJPEG_IsReadyPtr;
+
+/**
  * Pointer to arbitrary data, fed to completion handler
  */
 static void* LIBHWJPEG_ResultArbitraryDataPtr;
 
 /**
  * Called when image decoded
- * @param Width
- * @param Height
- * @param Image buffer (RGB)
+ * @param Pointer to image width
+ * @param Pointer to image height
+ * @param Pointer to image buffer (RGB)
  * @param Pointer to arbitrary data
  */
-static void (*LIBHWJPEG_CompletionHandler)(uint16_t, uint16_t, uint8_t*, void*);
+static void (*LIBHWJPEG_CompletionHandler)(uint16_t*, uint16_t*, uint8_t*, void*);
 
 /**
  * Initialize library
@@ -121,8 +121,8 @@ void LIBHWJPEG_Init(JPEG_HandleTypeDef* codec);
 void LIBHWJPEG_DecodeFile
 (
 	const char* path,
-	FMGL_API_DriverContext* fmglContextPtr,
-	void (*completionHandler)(uint16_t, uint16_t, uint8_t*, void*),
+	void (*completionHandler)(uint16_t*, uint16_t*, uint8_t*, void*),
+	bool* isReadyPtr,
 	void* arbitraryDataPtr
 );
 

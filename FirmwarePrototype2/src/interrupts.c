@@ -37,3 +37,20 @@ void DMA2_Stream2_IRQHandler(void)
 	HAL_DMA_IRQHandler(Spi1Handle.hdmarx);
 }
 
+void JPEG_IRQHandler(void)
+{
+  HAL_JPEG_IRQHandler(&JpegCodecHandle);
+}
+
+/* JPEG IN */
+void DMA2_Stream0_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(JpegCodecHandle.hdmain);
+}
+
+/* JPEG OUT */
+void DMA2_Stream1_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(JpegCodecHandle.hdmaout);
+}
+

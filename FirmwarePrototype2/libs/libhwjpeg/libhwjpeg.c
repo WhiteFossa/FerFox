@@ -19,8 +19,8 @@ void LIBHWJPEG_Init(JPEG_HandleTypeDef* codec)
 void LIBHWJPEG_DecodeFile
 (
 	const char* path,
-	FMGL_API_DriverContext* fmglContextPtr,
-	void (*completionHandler)(uint16_t, uint16_t, uint8_t*, void*),
+	void (*completionHandler)(uint16_t*, uint16_t*, uint8_t*, void*),
+	bool* isReadyPtr,
 	void* arbitraryDataPtr
 )
 {
@@ -28,9 +28,9 @@ void LIBHWJPEG_DecodeFile
 	LIBHWJPEG_CurrentX = 0;
 	LIBHWJPEG_CurrentY = 0;
 	LIBHWJPEG_CurrentMcu = 0;
-	LIBHWJPEG_FmglContextPtr = fmglContextPtr;
 	LIBHWJPEG_CompletionHandler = completionHandler;
 	LIBHWJPEG_ResultArbitraryDataPtr = arbitraryDataPtr;
+	LIBHWJPEG_IsReadyPtr = isReadyPtr;
 
 	FRESULT fResult = f_open(&LIBHWJPEG_FileHandler, path, FA_READ);
 	if (fResult != FR_OK)
@@ -41,7 +41,7 @@ void LIBHWJPEG_DecodeFile
 	/* First read */
 	LIBHWJPEG_Private_FileRead(0);
 
-	if (HAL_OK != HAL_JPEG_Decode(LIBHWJPEG_CodecPtr, LIBHWJPEG_InBuffer, LIBHWJPEG_IN_BUFFER_SIZE, LIBHWJPEG_OutBuffer, LIBHWJPEG_OUT_BUFFER_SIZE, 1000))
+	if (HAL_OK != HAL_JPEG_Decode_DMA(LIBHWJPEG_CodecPtr, LIBHWJPEG_InBuffer, LIBHWJPEG_IN_BUFFER_SIZE, LIBHWJPEG_OutBuffer, LIBHWJPEG_OUT_BUFFER_SIZE))
 	{
 		L2HAL_Error(Generic);
 	}
@@ -139,7 +139,9 @@ void HAL_JPEG_DecodeCpltCallback(JPEG_HandleTypeDef *hjpeg)
 		L2HAL_Error(Generic);
 	}
 
-	LIBHWJPEG_CompletionHandler(LIBHWJPEG_ImageWidth, LIBHWJPEG_ImageHeight, LIBHWJPEG_ResultBuffer, LIBHWJPEG_ResultArbitraryDataPtr);
+	LIBHWJPEG_CompletionHandler(&LIBHWJPEG_ImageWidth, &LIBHWJPEG_ImageHeight, LIBHWJPEG_ResultBuffer, LIBHWJPEG_ResultArbitraryDataPtr);
+
+	*LIBHWJPEG_IsReadyPtr = true;
 }
 
 void HAL_JPEG_ErrorCallback(JPEG_HandleTypeDef *hjpeg)
